@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Time Tour System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-bg: #E0E0E0;
+            --secondary-bg: #F0F0F0;
+            --blue-bg: #B8CFF0;
+            --dark-header: #636353;
+            --box-label-bg: #A8A8A8;
+            --box-value-bg: #F7F7F7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--blue-bg);
+            overflow-x: hidden;
+        }
+
+        /* Fixed Headers */
+        .top-banner {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 50px;
+            background-color: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            z-index: 1000;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .nav-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            position: relative;
+            font-weight: bold;
+        }
+
+        .nav-item:hover { background: #d0d0d0; }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1001;
+        }
+
+        .nav-item:hover .dropdown { display: block; }
+
+        .dropdown a {
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            color: black;
+            border-bottom: 1px solid #eee;
+        }
+
+        .second-banner {
+            position: fixed;
+            top: 50px;
+            width: 100%;
+            height: 60px;
+            background-color: var(--secondary-bg);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0 20px;
+            z-index: 999;
+        }
+
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .search-banner {
+            position: fixed;
+            top: 110px;
+            width: 100%;
+            height: 60px;
+            background-color: var(--blue-bg);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 10px;
+            z-index: 998;
+            border-bottom: 1px solid #999;
+        }
+
+        #searchInput {
+            width: 400px; /* Space for 60 chars */
+            padding: 8px;
+            border: 1px solid #999;
+        }
+
+        .search-btn {
+            padding: 8px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Main Content & Table */
+        .main-container {
+            margin-top: 180px;
+            margin-bottom: 250px;
+            padding: 10px;
+            overflow: auto;
+        }
+
+        .table-wrapper {
+            max-height: 500px;
+            overflow: auto;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1500px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        th { background-color: #f2f2f2; position: sticky; top: 0; }
+
+        /* Bottom Taskbar */
+        .bottom-taskbar {
+            position: fixed;
+            bottom: 160px;
+            width: 100%;
+            height: 50px;
+            background-color: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 997;
+        }
+
+        /* Summary Boxes */
+        .summary-banner {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 160px;
+            background-color: var(--blue-bg);
+            display: flex;
+            gap: 5px;
+            padding: 5px;
+            z-index: 996;
+            overflow-x: auto;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 160px;
+            border: 1px solid #999;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .box-header {
+            background: var(--dark-header);
+            color: white;
+            text-align: center;
+            padding: 3px;
+            font-size: 12px;
+        }
+
+        .box-row {
+            display: flex;
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .label-part {
+            width: 70%;
+            background: var(--box-label-bg);
+            font-size: 11px;
+            padding: 2px 5px;
+        }
+
+        .value-part {
+            width: 30%;
+            background: var(--box-value-bg);
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .text-red { color: red; }
+        .text-blue { color: blue; }
+
+    </style>
+</head>
+<body>
+
+    <div class="top-banner">
+        <div class="nav-item">تواناییەکان
+            <div class="dropdown">
+                <a>ڕێکخستنەکان</a><a>پێناسە سەرەتاییەکان</a><a>پەیوەندی لەگەڵ ئامێر</a><a>رۆژمێر</a><a>لادان لەکار</a><a>فەرمانی کەسی (گروپ)</a><a>پێناسەکردنی دەرچوونی فەرمی</a><a>پێناسەکردنی مۆڵەت</a><a>گۆڕینی کۆدی کارمەند</a><a>گۆڕینی وشەی نهێنی</a>
+            </div>
+        </div>
+        <div class="nav-item">شەفت و گروپ
+            <div class="dropdown">
+                <a>پێناسەکردنی گروپ</a><a>پێناسەکردنی شەفت</a><a>پێناسەکردنی خشتەی سوڕانەوەی شەفت</a><a>گۆڕینی شەفت بە شێوەی گروپ</a><a>رێکخستنی شەفت بۆ مەودایەکی دیاریکراو</a><a>هێنانەوەی خشتەی شەفتی سوڕانەوە</a><a>ڕێکخستنی شەفتی کەسی</a>
+            </div>
+        </div>
+        <div class="nav-item">هاتن و دەرچوون <div class="dropdown"><a>بەتاڵ</a></div></div>
+        <div class="nav-item">داتابەیس <div class="dropdown"><a>بەتاڵ</a></div></div>
+        <div class="nav-item">ڕاپۆرتەکان
+            <div class="dropdown">
+                <a>ڕاپۆرتی دەوام</a><a>ڕاپۆرتی گشتی</a><a>ڕاپۆرتی ڕۆژانە</a><a>زانیاری کارمەندان</a><a>ئۆفەرتایم</a><a>مۆڵەتەکان</a>
+            </div>
+        </div>
+        <div class="nav-item">مووچە
+            <div class="dropdown">
+                <a>پێناسەی فەرمانەکان</a><a>ڕێکخستنی گرێبەست</a><a>ئەژماری مووچە</a>
+            </div>
+        </div>
+        <div class="nav-item">دەربارە</div>
+    </div>
+
+    <div class="second-banner">
+        <div class="quick-action"><i class="fa fa-users"></i> زانیاری کارمەند</div>
+        <div class="quick-action"><i class="fa fa-clock"></i> ڕێکخستنی شەفت</div>
+        <div class="quick-action"><i class="fa fa-file-alt"></i> فەرمانەکان</div>
+        <div class="quick-action"><i class="fa fa-plus-circle"></i> ئۆڤەرتایم</div>
+        <div class="quick-action"><i class="fa fa-calendar-check"></i> مۆڵەتەکان</div>
+        <div class="quick-action"><i class="fa fa-sign-out-alt"></i> دەرچوون</div>
+    </div>
+
+    <div class="search-banner">
+        <button class="search-btn">گەڕان</button>
+        <input type="text" id="searchInput" placeholder="ناو، کۆد، یان مۆبایل بنووسە...">
+        <div id="empInfo">
+            <span>گروپ: <b id="grpText">-</b></span> | 
+            <span>جۆری دامەزراندن: <b id="typeText">-</b></span> | 
+            <span>شوێنی کارکردن: <b id="locText">-</b></span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="table-wrapper">
+            <table id="attendanceTable">
+                <thead>
+                    <tr>
+                        <th>ز</th><th>ڕۆژەکانی هەفتە</th><th>شەفت</th><th>کاتی دەوام</th><th>هاتن١</th><th>دەرچوون١</th><th>هاتن٢</th><th>دەرچوون٢</th><th>هاتن٣</th><th>دەرچوون٣</th><th>کۆی ئامادەبوون</th><th>ئامادەبوون</th><th>دواکەوتن</th><th>زوو دەرچوون</th><th>کەمی ئامادەبوون</th><th>کۆی کەمی ئامادەبوون</th><th>کۆی ئۆڤەرتایم</th><th>OT دوای دەوام</th><th>کۆی OT ڕێگە پێنەدراو</th><th>م. کاتژمێری</th><th>دەرچوونی کاتژمێری</th><th>ڕونکردنەوە</th><th>پاداشت</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="bottom-taskbar">
+        <div>
+            <button onclick="changeMonth(-1)"><i class="fa fa-chevron-left"></i> مانگی پێشوو</button>
+            <select id="monthSelect" onchange="updateTable()"></select>
+            <select id="yearSelect" onchange="updateTable()"></select>
+            <button onclick="changeMonth(1)">مانگی دواتر <i class="fa fa-chevron-right"></i></button>
+        </div>
+        <div id="dateTimeDisplay">
+            <span id="kurdishDate"></span> | <span id="clock"></span>
+        </div>
+    </div>
+
+    <div class="summary-banner" id="statsBanner">
+        <div class="stat-box">
+            <div class="box-header">کردار</div>
+            <div class="box-row"><div class="label-part">بڕی دەوام:</div><div class="value-part">0</div></div>
+            <div class="box-row"><div class="label-part">کۆی ئامادەبوون:</div><div class="value-part">0</div></div>
+            <div class="box-row"><div class="label-part text-red">کەمی دەوام:</div><div class="value-part">0</div></div>
+        </div>
+        <div class="stat-box">
+            <div class="box-header">کەمی ئامادەبوون</div>
+            <div class="box-row"><div class="label-part">دواکەوتن:</div><div class="value-part">0</div></div>
+            <div class="box-row"><div class="label-part">زوو دەرچوون:</div><div class="value-part">0</div></div>
+            <div class="box-row"><div class="label-part text-red">کۆی کەمی ئامادەبوون:</div><div class="value-part">0</div></div>
+        </div>
+        <div class="stat-box">
+            <div class="box-header">مۆڵەتەکان</div>
+            <div class="box-row"><div class="label-part">م. کاتژمێری:</div><div class="value-part">0</div></div>
+            <div class="box-row"><div class="label-part text-red">بڕی مۆڵەتی وەرگیراو:</div><div class="value-part">0</div></div>
+            <div class="box-row"><div class="label-part text-blue">بڕی مۆڵەتی ماوە:</div><div class="value-part">0</div></div>
+        </div>
+        </div>
+
+    <script>
+        const monthsKurdish = ["کانونی دووەم", "شوبات", "ئازار", "نیسان", "مایس", "حوزەیران", "تەمموز", "ئاب", "ئەیلول", "تشرینی یەکەم", "تشرینی دووەم", "کانونی یەکەم"];
+        const daysKurdish = ["یەکشەممە", "دووشەممە", "سێشەممە", "چوارشەممە", "پێنجشەممە", "هەینی", "شەممە"];
+
+        function init() {
+            const now = new Date();
+            const mSelect = document.getElementById('monthSelect');
+            const ySelect = document.getElementById('yearSelect');
+
+            // Populate Months
+            monthsKurdish.forEach((m, i) => {
+                let opt = new Option(m, i);
+                if(i === now.getMonth()) opt.selected = true;
+                mSelect.add(opt);
+            });
+
+            // Populate Years (1970 - 2200)
+            for(let y = 1970; y <= 2200; y++) {
+                let opt = new Option(y, y);
+                if(y === now.getFullYear()) opt.selected = true;
+                ySelect.add(opt);
+            }
+
+            updateTable();
+            startClock();
+        }
+
+        function updateTable() {
+            const year = parseInt(document.getElementById('yearSelect').value);
+            const month = parseInt(document.getElementById('monthSelect').value);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const date = new Date(year, month, i);
+                const dayName = daysKurdish[date.getDay()];
+                let row = `<tr>
+                    <td>${i}</td>
+                    <td>${dayName}</td>
+                    ${'<td></td>'.repeat(21)}
+                </tr>`;
+                tbody.innerHTML += row;
+            }
+        }
+
+        function changeMonth(step) {
+            let m = document.getElementById('monthSelect');
+            let y = document.getElementById('yearSelect');
+            let newM = parseInt(m.value) + step;
+            
+            if(newM < 0) { newM = 11; y.value = parseInt(y.value) - 1; }
+            else if(newM > 11) { newM = 0; y.value = parseInt(y.value) + 1; }
+            
+            m.value = newM;
+            updateTable();
+        }
+
+        function startClock() {
+            setInterval(() => {
+                const now = new Date();
+                document.getElementById('clock').innerText = now.toLocaleTimeString('en-GB');
+                // Simple Kurdish Date Logic
+                document.getElementById('kurdishDate').innerText = now.toLocaleDateString('ku-IQ');
+            }, 1000);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
