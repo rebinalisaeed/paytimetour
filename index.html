@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pay Time Tour - چوونە ژوورەوە</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    background: linear-gradient(135deg, #1a2a4a 0%, #2d4a7a 50%, #1a3a6a 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  body::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(184,207,240,0.15) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    border-radius: 50%;
+  }
+  body::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(100,150,220,0.1) 0%, transparent 70%);
+    bottom: -50px; left: -50px;
+    border-radius: 50%;
+  }
+  .login-card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 16px;
+    padding: 48px 40px;
+    width: 420px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 1;
+  }
+  .logo-area {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .logo-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, #2d4a7a, #B8CFF0);
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    box-shadow: 0 8px 24px rgba(45,74,122,0.3);
+  }
+  .logo-icon svg { width: 40px; height: 40px; fill: white; }
+  .logo-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a2a4a;
+    letter-spacing: 1px;
+  }
+  .logo-sub {
+    font-size: 13px;
+    color: #7a8a9a;
+    margin-top: 4px;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3a4a5a;
+    margin-bottom: 8px;
+  }
+  .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #e0e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    color: #1a2a4a;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #f8fafc;
+    direction: rtl;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: #2d4a7a;
+    box-shadow: 0 0 0 3px rgba(45,74,122,0.12);
+    background: white;
+  }
+  .input-icon-wrapper {
+    position: relative;
+  }
+  .input-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9aacbc;
+    font-size: 16px;
+  }
+  .btn-login {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #2d4a7a, #3d6aaa);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 6px 20px rgba(45,74,122,0.35);
+  }
+  .btn-login:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(45,74,122,0.4);
+  }
+  .btn-login:active { transform: translateY(0); }
+  .footer-text {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 12px;
+    color: #9aacbc;
+  }
+  .divider {
+    height: 1px;
+    background: #e8f0f8;
+    margin: 24px 0;
+  }
+</style>
+</head>
+<body>
+<div class="login-card">
+  <div class="logo-area">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+    </div>
+    <div class="logo-title">Pay Time Tour</div>
+    <div class="logo-sub">سیستەمی دەوامی فەرمانبەران</div>
+  </div>
+  <div class="divider"></div>
+  <div class="form-group">
+    <label class="form-label">ناوی بەکارهێنەر</label>
+    <div class="input-icon-wrapper">
+      <input type="text" class="form-input" placeholder="ناوی بەکارهێنەر بنووسە" id="username">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">وشەی نهێنی</label>
+    <div class="input-icon-wrapper">
+      <input type="password" class="form-input" placeholder="وشەی نهێنی بنووسە" id="password">
+    </div>
+  </div>
+  <button class="btn-login" onclick="doLogin()">چوونە ژوورەوە</button>
+  <div class="footer-text">نسخەی ١.٠ &nbsp;|&nbsp; Pay Time Tour &copy; 2025</div>
+</div>
+<script>
+  function doLogin() {
+    const u = document.getElementById('username').value;
+    const p = document.getElementById('password').value;
+    if(u && p) {
+      window.location.href = 'main.html';
+    } else {
+      alert('تکایە ناوی بەکارهێنەر و وشەی نهێنی بنووسە');
+    }
+  }
+  document.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+</script>
+</body>
+</html>
