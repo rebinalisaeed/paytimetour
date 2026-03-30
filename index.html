@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pay Time Tour - پەڕەی سەرەکی</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --nav1: #E0E0E0;
+  --nav2: #F0F0F0;
+  --nav3: #B8CFF0;
+  --taskbar: #E0E0E0;
+  --boxbg: #f7f7f7;
+  --primary: #2d4a7a;
+  --primary-light: #4a6fa5;
+  --red: #d32f2f;
+  --blue: #1565c0;
+  --font: 'Noto Sans Arabic', sans-serif;
+  --nav1-h: 44px;
+  --nav2-h: 40px;
+  --nav3-h: 52px;
+  --taskbar-h: 42px;
+  --header-total: 136px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222; }
+
+/* ===== NAVBAR 1 - TOP ===== */
+#nav1 {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  height:var(--nav1-h);
+  background:var(--nav1);
+  border-bottom:1px solid #ccc;
+  display:flex; align-items:center;
+  padding:0 10px;
+  gap:2px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.12);
+}
+.nav1-brand {
+  font-size:15px; font-weight:800; color:var(--primary);
+  margin-left:16px; margin-right:6px;
+  white-space:nowrap;
+  display:flex; align-items:center; gap:6px;
+}
+.nav1-brand svg { width:20px; height:20px; fill:var(--primary); display:none; }
+.nav1-brand span { display:none; }
+.nav1-sep { width:1px; height:28px; background:#bbb; margin:0 6px; }
+.nav1-spacer { flex:1; }
+.nav1-logout {
+  padding:5px 14px;
+  background:var(--primary);
+  color:white;
+  border:none;
+  border-radius:6px;
+  font-family:var(--font);
+  font-size:12px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+/* Dropdown menus */
+.nav-menu { position:relative; }
+.nav-btn {
+  padding:6px 12px;
+  background:transparent;
+  border:none;
+  font-family:var(--font);
+  font-size:13px;
+  font-weight:600;
+  color:#333;
+  cursor:pointer;
+  border-radius:6px;
+  display:flex; align-items:center; gap:5px;
+  white-space:nowrap;
+  transition:background 0.15s;
+}
+.nav-btn:hover, .nav-btn.open { background:#c8c8c8; }
+.nav-btn svg { width:14px; height:14px; fill:#555; flex-shrink:0; }
+.dropdown {
+  display:none;
+  position:absolute;
+  top:100%;
+  right:0;
+  min-width:200px;
+  background:white;
+  border:1px solid #ddd;
+  border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.15);
+  z-index:2000;
+  padding:4px 0;
+  margin-top:4px;
+}
+.dropdown.open { display:block; }
+.dropdown a {
+  display:flex; align-items:center; gap:8px;
+  padding:9px 16px;
+  text-decoration:none;
+  color:#333;
+  font-size:12.5px;
+  transition:background 0.1s;
+  white-space:nowrap;
+}
+.dropdown a:hover { background:#f0f4ff; color:var(--primary); }
+.dropdown a svg { width:15px; height:15px; fill:currentColor; opacity:0.7; flex-shrink:0; }
+.dropdown-divider { height:1px; background:#eee; margin:4px 8px; }
+
+/* ===== NAVBAR 2 ===== */
+#nav2 {
+  position:fixed; top:var(--nav1-h); left:0; right:0; z-index:990;
+  height:var(--nav2-h);
+  background:var(--nav2);
+  border-bottom:1px solid #ddd;
+  display:flex; align-items:center;
+  padding:0 10px;
+  gap:8px;
+  overflow-x:auto;
+}
+#nav2::-webkit-scrollbar { height:3px; }
+#nav2::-webkit-scrollbar-thumb { background:#ccc; }
+.nav2-btn {
+  display:flex; align-items:center; gap:6px;
+  padding:4px 12px;
+  background:transparent;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-family:var(--font);
+  font-size:11px;
+  color:#444;
+  white-space:nowrap;
+  transition:background 0.15s;
+}
+.nav2-btn:hover { background:#ddd; }
+.nav2-btn svg { width:16px; height:16px; fill:var(--primary); flex-shrink:0; }
+.nav2-sep2 { width:1px; height:28px; background:#ccc; margin:0 4px; flex-shrink:0; }
+
+/* ===== NAVBAR 3 - SEARCH BAR ===== */
+#nav3 {
+  position:fixed; top:calc(var(--nav1-h) + var(--nav2-h)); left:0; right:0; z-index:980;
+  height:var(--nav3-h);
+  background:var(--nav3);
+  border-bottom:2px solid #9ab0d8;
+  display:flex; align-items:center;
+  padding:0 10px;
+  gap:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+.search-btn {
+  padding:7px 14px;
+  background:var(--primary);
+  color:white;
+  border:none;
+  border-radius:7px;
+  font-family:var(--font);
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  white-space:nowrap;
+  display:flex; align-items:center; gap:5px;
+  flex-shrink:0;
+}
+.search-btn svg { width:14px; height:14px; fill:white; }
+.search-input {
+  flex:1;
+  max-width:340px;
+  padding:7px 12px;
+  border:2px solid #9ab0d8;
+  border-radius:7px;
+  font-family:var(--font);
+  font-size:13px;
+  background:white;
+  color:#222;
+  direction:rtl;
+  transition:border-color 0.2s;
+}
+.search-input:focus { outline:none; border-color:var(--primary); }
+.emp-info {
+  display:flex; align-items:center; gap:14px;
+  flex:1;
+  padding:0 10px;
+  font-size:12px;
+}
+.emp-field {
+  display:flex; align-items:center; gap:4px;
+  white-space:nowrap;
+}
+.emp-field-label { font-weight:700; color:#1a3060; }
+.emp-field-value {
+  color:#2d4a7a;
+  background:white;
+  padding:2px 8px;
+  border-radius:4px;
+  min-width:60px;
+  font-size:12px;
+  border:1px solid #b0c4e0;
+  min-height:22px;
+}
+.nav3-right {
+  display:flex; align-items:center; gap:6px;
+  flex-shrink:0;
+  margin-left:auto;
+}
+
+/* ===== TASKBAR BOTTOM ===== */
+#taskbar {
+  position:fixed; bottom:0; left:0; right:0; z-index:980;
+  height:var(--taskbar-h);
+  background:var(--taskbar);
+  border-top:2px solid #bbb;
+  display:flex; align-items:center;
+  padding:0 10px;
+  gap:8px;
+  box-shadow:0 -2px 8px rgba(0,0,0,0.1);
+}
+.prev-month-btn, .next-month-btn {
+  padding:5px 10px;
+  background:var(--primary);
+  color:white;
+  border:none;
+  border-radius:6px;
+  font-family:var(--font);
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  display:flex; align-items:center; gap:4px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.prev-month-btn svg, .next-month-btn svg { width:13px; height:13px; fill:white; }
+.combo-label {
+  font-size:12px;
+  font-weight:600;
+  color:#333;
+  white-space:nowrap;
+}
+.combo-sel {
+  padding:5px 8px;
+  border:1px solid #bbb;
+  border-radius:6px;
+  font-family:var(--font);
+  font-size:12px;
+  background:white;
+  color:#222;
+  direction:rtl;
+}
+.taskbar-dates {
+  margin-right:auto;
+  display:flex; align-items:center; gap:10px;
+  font-size:12px;
+}
+.tz-label { font-weight:700; color:#444; }
+.tz-value { color:var(--primary); font-weight:600; }
+
+/* ===== MAIN CONTENT ===== */
+#content {
+  position:fixed;
+  top:var(--header-total);
+  bottom:var(--taskbar-h);
+  left:0; right:0;
+  overflow:auto;
+  background:#dce8f8;
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+/* ===== ATTENDANCE TABLE ===== */
+#table-container {
+  background:#B8CFF0;
+  border-radius:8px;
+  padding:6px;
+  overflow:auto;
+}
+#att-table {
+  border-collapse:collapse;
+  width:max-content;
+  min-width:100%;
+  font-size:11px;
+  background:white;
+  border-radius:6px;
+  overflow:hidden;
+}
+#att-table th {
+  background:#2d4a7a;
+  color:white;
+  padding:6px 5px;
+  text-align:center;
+  white-space:nowrap;
+  font-weight:600;
+  font-size:11px;
+  border:1px solid #3d5a9a;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+#att-table th:first-child,
+#att-table th:nth-child(2) {
+  position:sticky;
+  left:0;
+  z-index:20;
+  background:#1a3060;
+}
+#att-table th:nth-child(2) { left:34px; }
+#att-table td {
+  padding:4px 5px;
+  text-align:center;
+  border:1px solid #dde8f0;
+  white-space:nowrap;
+  font-size:11px;
+  min-width:34px;
+}
+#att-table td:first-child {
+  position:sticky; left:0; z-index:5;
+  background:#f0f5ff;
+  font-weight:700;
+  color:var(--primary);
+  min-width:34px;
+}
+#att-table td:nth-child(2) {
+  position:sticky; left:34px; z-index:5;
+  background:#f0f5ff;
+  min-width:60px;
+  font-weight:600;
+  color:#2d4a7a;
+}
+#att-table tr:nth-child(even) td { background:#f8fbff; }
+#att-table tr:nth-child(even) td:first-child,
+#att-table tr:nth-child(even) td:nth-child(2) { background:#e8f0ff; }
+#att-table tr:hover td { background:#e0edff !important; }
+#att-table .friday-row td { background:#fff8e1 !important; }
+#att-table .friday-row td:first-child,
+#att-table .friday-row td:nth-child(2) { background:#ffe8a0 !important; }
+
+/* ===== 8 SUMMARY BOXES ===== */
+#boxes-row {
+  display:grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap:6px;
+  margin-top:8px;
+  margin-bottom:0;
+}
+.sum-box {
+  background:white;
+  border-radius:8px;
+  border:1px solid #c8d8e8;
+  overflow:hidden;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  max-height:180px;
+}
+.sum-box-header {
+  background:#636353;
+  color:white;
+  font-size:11.5px;
+  font-weight:700;
+  text-align:center;
+  padding:5px 4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  flex-shrink:0;
+}
+.sum-box-body {
+  display:flex;
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+}
+.sum-box-labels {
+  background:#A8A8A8;
+  flex:0 0 70%;
+  padding:5px 6px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  overflow-y:auto;
+}
+.sum-box-times {
+  background:#F7F7F7;
+  flex:0 0 30%;
+  padding:5px 4px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  overflow-y:auto;
+}
+.sb-label {
+  font-size:10px;
+  color:#444;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  line-height:1.6;
+  flex-shrink:0;
+}
+.sb-label.red { color:var(--red); font-weight:700; }
+.sb-label.blue { color:var(--blue); font-weight:700; }
+.sb-val {
+  font-size:10px;
+  color:#555;
+  text-align:center;
+  line-height:1.6;
+  flex-shrink:0;
+}
+.sb-val.red { color:var(--red); font-weight:700; }
+.sb-val.blue { color:var(--blue); font-weight:700; }
+
+/* responsive adjustments */
+@media (max-width:900px) {
+  #boxes-row { grid-template-columns: repeat(4,1fr); }
+}
+@media (max-width:600px) {
+  #boxes-row { grid-template-columns: repeat(2,1fr); }
+  .emp-field:nth-child(n+2) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR 1 ===== -->
+<nav id="nav1">
+  <div class="nav1-brand">
+    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+    <span>Pay Time Tour</span>
+  </div>
+  <div class="nav1-sep"></div>
+
+  <!-- تواناییەکان -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m1')">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+      تواناییەکان
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m1">
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>ڕێکخستنەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M11 7H6.5C5.12 7 4 8.12 4 9.5S5.12 12 6.5 12H11v2H4v2h7v2h2v-2h.5c1.93 0 3.5-1.57 3.5-3.5S15.43 9 13.5 9H13V7h-2zm0 3v2H6.5C5.67 12 5 11.33 5 10.5S5.67 9 6.5 9H11v1zm3 3h-.5v-2h.5c.83 0 1.5.67 1.5 1.5S14.83 13 14 13z"/></svg>پێناسە سەرەتاییەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>پەیوەندی لەگەڵ ئامێر</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>رۆژمێر</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.87.18-1.33C18 2.54 15.87 1 14 1c-1.74 0-3.41.81-4.5 2.09C8.41 1.81 6.74 1 5 1 3.13 1 1 2.54 1 4.67c0 .46.11.89.18 1.33H0v2h1v11c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8h1V6h-4zm-6-3c.67 0 2 .42 2 1.67 0 .83-.33 1.33-1 1.33H13V4c.31-.63.69-1 1-1z"/></svg>لادان لەکار</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>فەرمانی کەسی (گروپ)</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>پێناسەکردنی دەرچوونی فەرمی</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8-1.41-1.42z"/></svg>پێناسەکردنی مۆڵەت</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>گۆڕینی کۆدی کارمەند</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>گۆڕینی وشەی نهێنی</a>
+    </div>
+  </div>
+
+  <!-- شەفت و گروپ -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m2')">
+      <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      شەفت و گروپ
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m2">
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>پێناسەکردنی گروپ</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>پێناسەکردنی شەفت</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>پێناسەکردنی خشتەی سوڕانەوەی شەفت</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>گۆڕینی شەفت بە شێوەی گروپ</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>رێکخستنی شەفت بۆ مەودایەکی دیاریکراو</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>هێنانەوەی خشتەی شەفتی سوڕانەوە-گروپ</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>ڕێکخستنی شەفتی کەسی</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>ڕێکخستنی شەفت بە شێوەی گروپ</a>
+    </div>
+  </div>
+
+  <!-- هاتن و دەرچوون -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m3')">
+      <svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+      هاتن و دەرچوون
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m3">
+      <a href="#" style="color:#999;font-style:italic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>بەتاڵە - دواتر پر دەبێتەوە</a>
+    </div>
+  </div>
+
+  <!-- داتابەیس -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m4')">
+      <svg viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.59 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm6 14c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V17zm0-4.5c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V12.5zm-6-2.5c-3.87 0-6-1.5-6-2s2.13-2 6-2 6 1.5 6 2-2.13 2-6 2z"/></svg>
+      داتابەیس
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m4">
+      <a href="#" style="color:#999;font-style:italic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>بەتاڵە - دواتر پر دەبێتەوە</a>
+    </div>
+  </div>
+
+  <!-- ڕاپۆرتەکان -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m5')">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+      ڕاپۆرتەکان
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m5">
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>ڕاپۆرتی دەوام</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>ڕاپۆرتی گشتی</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>ڕاپۆرتی دەوامی ڕۆژانە</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>ڕاپۆرتی زانیاری کارمەندان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>ڕاپۆرتی ئۆفەرتایمی هاندەرانە</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>ڕاپۆرتی زیادکەرەوە/کەمکەرەوە مۆڵەت</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8-1.41-1.42z"/></svg>ڕاپۆرتی بڕی ماوەی مۆڵەت</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8-1.41-1.42z"/></svg>ڕاپۆرتی مۆڵەتەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>ڕاپۆرتی دەرچوونە فەرمییە رۆژانەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>ڕاپۆرتی پاداشتە تۆمارکراوەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>ڕاپۆرتی مۆڵەتە تۆمارکراوەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>لیستی هاتن و چوونەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>لیستی گۆرانکاری لەهاتن و چوونەکاندا</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>ڕاپۆرتی فەرمانە تۆمارکراوەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>ڕاپۆرتی ژمارەی شەفتی کارمەندان</a>
+    </div>
+  </div>
+
+  <!-- بەڕێوەبەردن -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m8')">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+      بەڕێوەبەردن
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m8">
+      <a href="#" style="color:#999;font-style:italic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>بەتاڵە - دواتر پر دەبێتەوە</a>
+    </div>
+  </div>
+
+  <!-- مووچە -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m6')">
+      <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+      مووچە
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m6">
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>پێناسەکردنی فەرمانەکانی مووچە</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>ڕێکخستنی گرێبەست</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>زیادکردن و کەمکردنی مووچە</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>ئەژماری مووچە</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>لیستی گرێبەستە بەسەرچووەکان</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>ڕاپۆرتی زیادکردن / کەمکردنەوەی مووچە</a>
+    </div>
+  </div>
+
+  <!-- دەربارە -->
+  <div class="nav-menu">
+    <button class="nav-btn" onclick="toggleMenu('m7')">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      دەربارە
+      <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
+    </button>
+    <div class="dropdown" id="m7">
+      <a href="#" style="color:#999;font-style:italic"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>بەتاڵە - دواتر پر دەبێتەوە</a>
+    </div>
+  </div>
+
+  <div class="nav1-spacer"></div>
+  <button class="nav1-logout" onclick="window.location.href='index.html'">
+    دەرچوون
+  </button>
+</nav>
+
+<!-- ===== NAVBAR 2 ===== -->
+<nav id="nav2">
+  <button class="nav2-btn" title="زانیاری کارمەندان">
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    زانیاری کارمەندان
+  </button>
+  <div class="nav2-sep2"></div>
+  <button class="nav2-btn" title="ڕێکخستنی شەفتی کەسی">
+    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+    ڕێکخستنی شەفتی کەسی
+  </button>
+  <div class="nav2-sep2"></div>
+  <button class="nav2-btn" title="فەرمانە کەسییەکان">
+    <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+    فەرمانە کەسییەکان
+  </button>
+  <div class="nav2-sep2"></div>
+  <button class="nav2-btn" title="ئۆڤەرتایم">
+    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+    ئۆڤەرتایم
+  </button>
+  <div class="nav2-sep2"></div>
+  <button class="nav2-btn" title="مۆڵەتەکان">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8-1.41-1.42z"/></svg>
+    مۆڵەتەکان
+  </button>
+  <div class="nav2-sep2"></div>
+  <button class="nav2-btn" title="دەرچوونە فەرمییەکان">
+    <svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+    دەرچوونە فەرمییەکان
+  </button>
+  <div class="nav2-sep2"></div>
+  <button class="nav2-btn" title="هاتن و چوونی سەرەتایی">
+    <svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59z"/></svg>
+    هاتن و چوونی سەرەتایی
+  </button>
+  <div class="nav2-sep2"></div>
+  <button class="nav2-btn" title="چاپی کەسی">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    چاپی کەسی
+  </button>
+</nav>
+
+<!-- ===== NAVBAR 3 - SEARCH ===== -->
+<nav id="nav3">
+  <button class="search-btn" onclick="doSearch()">
+    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    گەڕان
+  </button>
+  <input type="text" class="search-input" id="searchBox"
+    placeholder="ناوی فەرمانبەر یان ژمارەی کۆد یان ژمارەی مۆبایل بنووسە..." maxlength="60">
+  
+  <div class="emp-info">
+    <div class="emp-field">
+      <span class="emp-field-label">گروپ:</span>
+      <span class="emp-field-value" id="empGroup">—</span>
+    </div>
+    <div class="emp-field">
+      <span class="emp-field-label">جۆری دامەزراندن:</span>
+      <span class="emp-field-value" id="empType">—</span>
+    </div>
+    <div class="emp-field">
+      <span class="emp-field-label">شوێنی کارکردن:</span>
+      <span class="emp-field-value" id="empLocation">—</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div id="content">
+  <!-- Attendance Table -->
+  <div id="table-container">
+    <table id="att-table">
+      <thead>
+        <tr>
+          <th>ز</th>
+          <th>ڕۆژەکانی هەفتە</th>
+          <th>شەفت</th>
+          <th>کاتی دەوام</th>
+          <th>هاتن١</th>
+          <th>دەرچوون١</th>
+          <th>هاتن٢</th>
+          <th>دەرچوون٢</th>
+          <th>هاتن٣</th>
+          <th>دەرچوون٣</th>
+          <th>کۆی ئامادەبوون</th>
+          <th>ئامادەبوون</th>
+          <th>دواکەوتن</th>
+          <th>زوو دەرچوون</th>
+          <th>کەمی ئامادەبوون</th>
+          <th>کۆی کەمی ئامادەبوون</th>
+          <th>کۆی ئۆڤەرتایم</th>
+          <th>OT دوای دەوام</th>
+          <th>کۆی OT ڕێگەپێنەدراو</th>
+          <th>م. کاتژمێری</th>
+          <th>دەرچوونی کاتژمێری</th>
+          <th>ڕونکردنەوە</th>
+          <th>پاداشت</th>
+        </tr>
+      </thead>
+      <tbody id="att-body"></tbody>
+    </table>
+  </div>
+  
+  <!-- 8 Summary Boxes (placed after table) -->
+  <div id="boxes-row">
+    <!-- Box 1: کردار -->
+    <div class="sum-box">
+      <div class="sum-box-header">کردار</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">بڕی دەوام:</div>
+          <div class="sb-label">کۆی ئامادەبوون:</div>
+          <div class="sb-label">دەوام لە شەفت:</div>
+          <div class="sb-label">ئامادەبوونی زیاتر:</div>
+          <div class="sb-label red">کەمی دەوام:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val red">٠٠:٠٠</div>
+        </div>
+      </div>
+    </div>
+    <!-- Box 2: کەمی ئامادەبوون -->
+    <div class="sum-box">
+      <div class="sum-box-header">کەمی ئامادەبوون</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">دواکەوتن:</div>
+          <div class="sb-label">زوو دەرچوون:</div>
+          <div class="sb-label">نێوان شەفت:</div>
+          <div class="sb-label red">کۆی کەمی ئامادەبوون:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val red">٠٠:٠٠</div>
+        </div>
+      </div>
+    </div>
+    <!-- Box 3: ئۆڤەرتایم ڕێگەپێدراو -->
+    <div class="sum-box">
+      <div class="sum-box-header">ئۆڤەرتایم ڕێگەپێدراو</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">OT پێش دەوام:</div>
+          <div class="sb-label">OT دوای دەوام:</div>
+          <div class="sb-label">هیتر:</div>
+          <div class="sb-label">OT دەرچوون:</div>
+          <div class="sb-label red">کۆی ئۆڤەرتایم:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val red">٠٠:٠٠</div>
+        </div>
+      </div>
+    </div>
+    <!-- Box 4: مۆڵەتەکان -->
+    <div class="sum-box">
+      <div class="sum-box-header">مۆڵەتەکان</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">م. کاتژمێری:</div>
+          <div class="sb-label">م. رۆژانە:</div>
+          <div class="sb-label">م. نەخۆشی:</div>
+          <div class="sb-label">م. بێ مووچە:</div>
+          <div class="sb-label red">بڕی ماوەی مۆڵەتی پێدراو:</div>
+          <div class="sb-label blue">بڕی مۆڵەتی ماوە:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val red">٠٠:٠٠</div>
+          <div class="sb-val blue">٠٠:٠٠</div>
+        </div>
+      </div>
+    </div>
+    <!-- Box 5: دەرچوونە فەرمییەکان -->
+    <div class="sum-box">
+      <div class="sum-box-header">دەرچوونە فەرمییەکان</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">دەرچوونی کاتژمێر:</div>
+          <div class="sb-label">رۆژانە:</div>
+          <div class="sb-label">ڕۆشتن:</div>
+          <div class="sb-label red">کۆی دەرچوون:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val red">٠٠:٠٠</div>
+        </div>
+      </div>
+    </div>
+    <!-- Box 6: ڕۆژەکان -->
+    <div class="sum-box">
+      <div class="sum-box-header">ڕۆژەکان</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">هاتن و چوونی نان...</div>
+          <div class="sb-label">ئامادە نەبوون:</div>
+          <div class="sb-label">نەبوون لە شەفت:</div>
+          <div class="sb-label">پشوو:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠</div>
+          <div class="sb-val">٠</div>
+          <div class="sb-val">٠</div>
+          <div class="sb-val">٠</div>
+        </div>
+      </div>
+    </div>
+    <!-- Box 7: ئۆڤەرتایم ڕێگەپێنەدراو -->
+    <div class="sum-box">
+      <div class="sum-box-header">ئۆڤەرتایم ڕێگەپێنەدراو</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">OT پێش دەوام ڕێگەپێنەدراو:</div>
+          <div class="sb-label">OT دوای دەوام ڕێگەپێنەدراو:</div>
+          <div class="sb-label">OT ڕۆژانەی ڕێگەپێنەدراو:</div>
+          <div class="sb-label red">کۆی OT ڕێگەپێنەدراو:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val red">٠٠:٠٠</div>
+        </div>
+      </div>
+    </div>
+    <!-- Box 8: هیتر -->
+    <div class="sum-box">
+      <div class="sum-box-header">هیتر</div>
+      <div class="sum-box-body">
+        <div class="sum-box-labels">
+          <div class="sb-label">پشووی دەوام:</div>
+          <div class="sb-label">کاری شەو:</div>
+          <div class="sb-label">کەمی ڕێگەپێدراو:</div>
+        </div>
+        <div class="sum-box-times">
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+          <div class="sb-val">٠٠:٠٠</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TASKBAR ===== -->
+<div id="taskbar">
+  <button class="prev-month-btn" onclick="changeMonth(-1)">
+    <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+    مانگی پێشوو
+  </button>
+
+  <select class="combo-sel" id="monthSel" onchange="updateTable()">
+    <option value="1">کانوونی دووەم</option>
+    <option value="2">شوبات</option>
+    <option value="3">ئازار</option>
+    <option value="4">نیسان</option>
+    <option value="5">مایس</option>
+    <option value="6">حوزەیران</option>
+    <option value="7">تەمموز</option>
+    <option value="8">ئاب</option>
+    <option value="9">ئەیلول</option>
+    <option value="10">تشرینی یەکەم</option>
+    <option value="11">تشرینی دووەم</option>
+    <option value="12">کانوونی یەکەم</option>
+  </select>
+
+  <select class="combo-sel" id="yearSel" onchange="updateTable()"></select>
+
+  <button class="next-month-btn" onclick="changeMonth(1)">
+    مانگی دواتر
+    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+  </button>
+
+  <div class="taskbar-dates">
+    <span class="tz-label">زاینی:</span>
+    <span class="tz-value" id="tbGregorian"></span>
+    <span class="tz-label">&nbsp;|&nbsp; کوردی:</span>
+    <span class="tz-value" id="tbKurdish"></span>
+    <span class="tz-label">&nbsp;|&nbsp;</span>
+    <span class="tz-value" id="tbTime"></span>
+  </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const kurdishDays = ['شەممە','یەک شەممە','دوو شەممە','سێ شەممە','چوار شەممە','پێنج شەممە','هەینی'];
+const gregorianMonths = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const gregorianMonthsKurdish = ['کانوونی دووەم','شوبات','ئازار','نیسان','مایس','حوزەیران','تەمموز','ئاب','ئەیلول','تشرینی یەکەم','تشرینی دووەم','کانوونی یەکەم'];
+const kurdishMonthsFull = ['نەورۆز','گوڵان','جۆزەردان','پووشپەڕ','خەرمانان','گەلاوێژ','ڕەزبەر','گەڵاڕێزان','سەرماوەرز','بەفرانبار','ڕێبەندان','ڕەشەمێ'];
+
+// Kurdish year offset: 21 March 2026 = 1 Nawroz 2726
+// So 2026 -> 2726, difference = 700
+const KURDISH_YEAR_OFFSET = 700;
+
+// Fake employee data for search demo
+const employees = [
+  { name:'ئەحمەد علی', code:'1001', mobile:'07501234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی' },
+  { name:'سارا محمد', code:'1002', mobile:'07701234567', group:'گروپ B', type:'بەکارهاتوو', location:'لقی باکور' },
+  { name:'کارزان حسێن', code:'1003', mobile:'07801234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی' },
+];
+
+// ===================== CLOCK & DATES =====================
+function pad(n){ return n<10?'0'+n:n; }
+
+function getKurdishDate(d){
+  const day = d.getDate();
+  const month = d.getMonth() + 1;
+  const year = d.getFullYear();
+  
+  // Calculate Kurdish month and day based on the Kurdish calendar rules
+  let kMonth, kDay, kYear;
+  
+  // Define start dates of Kurdish months
+  const kurdishMonthStarts = [
+    { month: 1, day: 21, gregMonth: 3 },  // Nawroz
+    { month: 2, day: 21, gregMonth: 4 },  // Gulan
+    { month: 3, day: 22, gregMonth: 5 },  // Jozerdan
+    { month: 4, day: 22, gregMonth: 6 },  // Pooshper
+    { month: 5, day: 23, gregMonth: 7 },  // Xermanan
+    { month: 6, day: 23, gregMonth: 8 },  // Gelawêj
+    { month: 7, day: 23, gregMonth: 9 },  // Rezber
+    { month: 8, day: 23, gregMonth: 10 }, // Gellarêzan
+    { month: 9, day: 22, gregMonth: 11 }, // Sarmawerz
+    { month: 10, day: 22, gregMonth: 12 }, // Befranbar
+    { month: 11, day: 21, gregMonth: 1 },  // Rêbendan (next year)
+    { month: 12, day: 20, gregMonth: 2 }   // Reshemê (next year)
+  ];
+  
+  let targetYear = year;
+  let found = false;
+  
+  for(let i = 0; i < kurdishMonthStarts.length; i++) {
+    const start = kurdishMonthStarts[i];
+    let startYear = year;
+    if(start.gregMonth <= 2 && i >= 10) {
+      startYear = year - 1;
+    }
+    
+    let compareDate = new Date(startYear, start.gregMonth - 1, start.day);
+    let nextStartYear = startYear;
+    let nextMonthIdx = i + 1;
+    let compareNext;
+    
+    if(nextMonthIdx < kurdishMonthStarts.length) {
+      const nextStart = kurdishMonthStarts[nextMonthIdx];
+      let nextYear = startYear;
+      if(nextStart.gregMonth <= 2 && nextMonthIdx >= 10) {
+        nextYear = startYear + 1;
+      }
+      compareNext = new Date(nextYear, nextStart.gregMonth - 1, nextStart.day);
+    } else {
+      // Last month, next is next year's first month
+      const firstMonth = kurdishMonthStarts[0];
+      compareNext = new Date(startYear + 1, firstMonth.gregMonth - 1, firstMonth.day);
+    }
+    
+    if(d >= compareDate && d < compareNext) {
+      kMonth = start.month;
+      kDay = d.getDate() - compareDate.getDate() + 1;
+      kYear = startYear + KURDISH_YEAR_OFFSET;
+      found = true;
+      break;
+    }
+  }
+  
+  if(!found) {
+    // Default fallback
+    kMonth = 1;
+    kDay = day;
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  
+  return `${kDay} ${kurdishMonthsFull[kMonth-1]} ${kYear}`;
+}
+
+function updateClock(){
+  const now = new Date();
+  const h = pad(now.getHours()), mi = pad(now.getMinutes()), s = pad(now.getSeconds());
+  const timeStr = `${h}:${mi}:${s}`;
+  const greg = `${now.getDate()} ${gregorianMonthsKurdish[now.getMonth()]} ${now.getFullYear()}`;
+  const kurd = getKurdishDate(now);
+  
+  document.getElementById('tbGregorian').textContent = greg;
+  document.getElementById('tbKurdish').textContent = kurd;
+  document.getElementById('tbTime').textContent = timeStr;
+}
+
+// ===================== YEAR COMBO =====================
+function populateYears(){
+  const sel = document.getElementById('yearSel');
+  const curY = new Date().getFullYear();
+  for(let y=1970; y<=2200; y++){
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    if(y === curY) opt.selected = true;
+    sel.appendChild(opt);
+  }
+}
+
+function setCurrentMonth(){
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  document.getElementById('monthSel').value = currentMonth;
+}
+
+// ===================== MONTH CHANGE =====================
+function changeMonth(dir){
+  const ms = document.getElementById('monthSel');
+  const ys = document.getElementById('yearSel');
+  let m = parseInt(ms.value);
+  let y = parseInt(ys.value);
+  m += dir;
+  if(m < 1){ m = 12; y--; }
+  if(m > 12){ m = 1; y++; }
+  ms.value = m;
+  ys.value = y;
+  updateTable();
+}
+
+// ===================== DAYS IN MONTH =====================
+function daysInMonth(m, y){
+  return new Date(y, m, 0).getDate();
+}
+
+// Day of week: 0=Sun,1=Mon,...,6=Sat
+function dayName(jsDay){
+  const map = [1,2,3,4,5,6,0];
+  return kurdishDays[map[jsDay]];
+}
+
+// ===================== BUILD TABLE =====================
+function updateTable(){
+  const m = parseInt(document.getElementById('monthSel').value);
+  const y = parseInt(document.getElementById('yearSel').value);
+  const days = daysInMonth(m, y);
+  const tbody = document.getElementById('att-body');
+  tbody.innerHTML = '';
+  
+  for(let d=1; d<=days; d++){
+    const date = new Date(y, m-1, d);
+    const jsDay = date.getDay();
+    const dayN = dayName(jsDay);
+    const isFriday = (jsDay === 5);
+    
+    const tr = document.createElement('tr');
+    if(isFriday) tr.className = 'friday-row';
+    
+    const cols = [
+      d,       // ز
+      dayN,    // رۆژەکانی هەفتە
+      '',      // شەفت
+      '',      // کاتی دەوام
+      '',      // هاتن١
+      '',      // دەرچوون١
+      '',      // هاتن٢
+      '',      // دەرچوون٢
+      '',      // هاتن٣
+      '',      // دەرچوون٣
+      '',      // کۆی ئامادەبوون
+      '',      // ئامادەبوون
+      '',      // دواکەوتن
+      '',      // زوو دەرچوون
+      '',      // کەمی ئامادەبوون
+      '',      // کۆی کەمی ئامادەبوون
+      '',      // کۆی ئۆڤەرتایم
+      '',      // OT دوای دەوام
+      '',      // کۆی OT ڕێگەپێنەدراو
+      '',      // م. کاتژمێری
+      '',      // دەرچوونی کاتژمێری
+      '',      // ڕونکردنەوە
+      '',      // پاداشت
+    ];
+    
+    cols.forEach((c,i) => {
+      const td = document.createElement('td');
+      td.textContent = c;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  }
+}
+
+// ===================== SEARCH =====================
+function doSearch(){
+  const q = document.getElementById('searchBox').value.trim().toLowerCase();
+  if(!q){ clearEmpInfo(); return; }
+  const found = employees.find(e =>
+    e.name.includes(q) || e.code.includes(q) || e.mobile.includes(q)
+  );
+  if(found){
+    document.getElementById('empGroup').textContent = found.group;
+    document.getElementById('empType').textContent = found.type;
+    document.getElementById('empLocation').textContent = found.location;
+  } else {
+    clearEmpInfo();
+    alert('کارمەند نەدۆزرایەوە');
+  }
+}
+
+function clearEmpInfo(){
+  document.getElementById('empGroup').textContent = '—';
+  document.getElementById('empType').textContent = '—';
+  document.getElementById('empLocation').textContent = '—';
+}
+
+document.getElementById('searchBox').addEventListener('keydown', e => {
+  if(e.key === 'Enter') doSearch();
+});
+
+// ===================== MENU TOGGLE =====================
+function toggleMenu(id){
+  document.querySelectorAll('.dropdown').forEach(d => {
+    if(d.id !== id) { d.classList.remove('open'); }
+  });
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if(b.getAttribute('onclick') !== `toggleMenu('${id}')`) b.classList.remove('open');
+  });
+  const menu = document.getElementById(id);
+  menu.classList.toggle('open');
+  const btn = document.querySelector(`[onclick="toggleMenu('${id}')"]`);
+  if(btn) btn.classList.toggle('open', menu.classList.contains('open'));
+}
+
+document.addEventListener('click', e => {
+  if(!e.target.closest('.nav-menu')){
+    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('open'));
+  }
+});
+
+// ===================== INIT =====================
+populateYears();
+setCurrentMonth();
+updateTable();
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+  </html>
