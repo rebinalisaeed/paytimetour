@@ -220,16 +220,10 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 .modal-content {
   background-color: white;
   border-radius: 12px;
-  padding: 25px;
-  width: 400px;
+  width: 500px;
   max-width: 90%;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  text-align: center;
-}
-.modal-content h3 {
-  margin-bottom: 20px;
-  color: var(--primary);
-  font-size: 18px;
+  overflow: hidden;
 }
 .modal-search-input {
   width: 100%;
@@ -272,6 +266,215 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 }
 .modal-btn-cancel:hover {
   background: #bbb;
+}
+
+/* ===== EMPLOYEE INFO MODAL (NEW) ===== */
+.employee-modal {
+  display: none;
+  position: fixed;
+  z-index: 2001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+}
+.employee-modal-content {
+  background-color: white;
+  width: 750px;
+  max-width: 90%;
+  height: 600px;
+  max-height: 80vh;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+.employee-modal-content.fullscreen {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0;
+}
+/* Modal Title Bar */
+.modal-title-bar {
+  background: var(--nav2);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  cursor: move;
+}
+.modal-title-bar h3 {
+  font-size: 16px;
+  color: var(--primary);
+  margin: 0;
+}
+.modal-controls {
+  display: flex;
+  gap: 12px;
+}
+.modal-controls button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #555;
+  padding: 0 5px;
+  transition: 0.2s;
+}
+.modal-controls button:hover {
+  color: var(--primary);
+}
+/* Modal Action Bar */
+.modal-action-bar {
+  background: var(--nav2);
+  padding: 10px 15px;
+  display: flex;
+  gap: 15px;
+  border-bottom: 1px solid #ddd;
+  flex-wrap: wrap;
+}
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  transition: 0.2s;
+}
+.action-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+.action-btn:hover svg {
+  fill: white;
+}
+.action-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #555;
+}
+/* Modal Search Bar */
+.modal-search-bar {
+  background: #B8CFF0;
+  padding: 10px 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-bottom: 1px solid #9ab0d8;
+}
+.modal-search-bar .search-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #9ab0d8;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  direction: rtl;
+  background: white;
+  cursor: text;
+  max-width: none;
+}
+.modal-search-bar .search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.modal-search-bar .search-btn {
+  padding: 6px 15px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font);
+  font-size: 12px;
+}
+/* Modal Tabs */
+.modal-tabs {
+  display: flex;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+  padding: 0 10px;
+  gap: 5px;
+}
+.tab-btn {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  transition: 0.2s;
+  border-bottom: 3px solid transparent;
+}
+.tab-btn:hover {
+  color: var(--primary);
+}
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: white;
+}
+/* Modal Body */
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background: #f9f9f9;
+}
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+.info-row {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+}
+.info-label {
+  width: 140px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.info-value {
+  flex: 1;
+  color: #333;
+  border-bottom: 1px dashed #ccc;
+  padding: 5px 0;
+}
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+.empty-state svg {
+  width: 60px;
+  height: 60px;
+  fill: #ccc;
+  margin-bottom: 15px;
 }
 
 /* ===== TASKBAR BOTTOM ===== */
@@ -488,6 +691,8 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 @media (max-width:600px) {
   #boxes-row { grid-template-columns: repeat(2,1fr); }
   .emp-field:nth-child(n+2) { display:none; }
+  .modal-action-bar { gap: 8px; }
+  .action-btn { padding: 4px 10px; font-size: 11px; }
 }
 </style>
 </head>
@@ -640,7 +845,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 
 <!-- ===== NAVBAR 2 ===== -->
 <nav id="nav2">
-  <button class="nav2-btn" title="زانیاری کارمەندان">
+  <button class="nav2-btn" title="زانیاری کارمەندان" onclick="openEmployeeModal()">
     <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
     زانیاری کارمەندان
   </button>
@@ -705,14 +910,86 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   </div>
 </nav>
 
-<!-- ===== MODAL SEARCH POPUP ===== -->
+<!-- ===== MODAL SEARCH POPUP (small) ===== -->
 <div id="searchModal" class="modal">
-  <div class="modal-content">
-    <h3>گەڕانی کارمەند</h3>
-    <input type="text" id="modalSearchInput" class="modal-search-input" placeholder="ناوی فەرمانبەر یان ژمارەی کۆد یان ژمارەی مۆبایل بنووسە..." autocomplete="off">
-    <div class="modal-buttons">
-      <button class="modal-btn modal-btn-search" onclick="performSearch()">گەڕان</button>
-      <button class="modal-btn modal-btn-cancel" onclick="closeSearchModal()">پاشگەزبوونەوە</button>
+  <div class="modal-content" style="width: 400px;">
+    <div style="padding: 20px;">
+      <h3 style="margin-bottom: 20px; color: var(--primary);">گەڕانی کارمەند</h3>
+      <input type="text" id="modalSearchInput" class="modal-search-input" placeholder="ناوی فەرمانبەر یان ژمارەی کۆد یان ژمارەی مۆبایل بنووسە..." autocomplete="off">
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-search" onclick="performSearch()">گەڕان</button>
+        <button class="modal-btn modal-btn-cancel" onclick="closeSearchModal()">پاشگەزبوونەوە</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EMPLOYEE INFO MODAL (main) ===== -->
+<div id="employeeModal" class="employee-modal">
+  <div class="employee-modal-content" id="employeeModalContent">
+    <!-- Title Bar -->
+    <div class="modal-title-bar" id="modalTitleBar">
+      <h3>زانیاری کارمەندان</h3>
+      <div class="modal-controls">
+        <button onclick="minimizeEmployeeModal()" title="لابردن (کەمکردنەوە)">➖</button>
+        <button onclick="toggleFullscreenEmployeeModal()" title="گەورەکردن">🔲</button>
+        <button onclick="closeEmployeeModal()" title="داخستن">❌</button>
+      </div>
+    </div>
+    <!-- Action Bar -->
+    <div class="modal-action-bar">
+      <button class="action-btn" onclick="alert('پەنجەرەی نوێی کارمەند دەکرێتەوە')">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        نوێ
+      </button>
+      <button class="action-btn" onclick="alert('گۆڕانکاری لە زانیاری کارمەند')">
+        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+        گۆڕانکاری
+      </button>
+      <button class="action-btn" onclick="alert('سڕینەوەی کارمەند')">
+        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        سڕینەوە
+      </button>
+      <button class="action-btn" onclick="alert('ناچالاککردنی کارمەند')">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>
+        لادان لەکار
+      </button>
+    </div>
+    <!-- Search Bar inside modal -->
+    <div class="modal-search-bar">
+      <input type="text" id="modalEmployeeSearchInput" class="search-input" placeholder="ناوی کارمەند بگەڕێ..." style="background: white; cursor: text;">
+      <button class="search-btn" onclick="searchEmployeeInModal()">گەڕان</button>
+    </div>
+    <!-- Tabs -->
+    <div class="modal-tabs">
+      <button class="tab-btn active" data-tab="tab1">زانیاری کارمەندا</button>
+      <button class="tab-btn" data-tab="tab2">ڕێکخستنی شەفت و گروپ</button>
+      <button class="tab-btn" data-tab="tab3">ڕێکستنی جۆری دامەزراندن</button>
+      <button class="tab-btn" data-tab="tab4">ڕێکستنی شوێنی دەوام</button>
+      <button class="tab-btn" data-tab="tab5">زانیاریەکانی تر</button>
+    </div>
+    <!-- Body -->
+    <div class="modal-body">
+      <div id="tab1" class="tab-content active">
+        <div id="employeeInfoDisplay">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <p>تکایە لە سەرەوە ناوی کارمەند بگەڕێ</p>
+          </div>
+        </div>
+      </div>
+      <div id="tab2" class="tab-content">
+        <div class="empty-state"><p>ڕێکخستنی شەفت و گروپ - بەتاڵە</p></div>
+      </div>
+      <div id="tab3" class="tab-content">
+        <div class="empty-state"><p>ڕێکستنی جۆری دامەزراندن - بەتاڵە</p></div>
+      </div>
+      <div id="tab4" class="tab-content">
+        <div class="empty-state"><p>ڕێکستنی شوێنی دەوام - بەتاڵە</p></div>
+      </div>
+      <div id="tab5" class="tab-content">
+        <div class="empty-state"><p>زانیاریەکانی تر - بەتاڵە</p></div>
+      </div>
     </div>
   </div>
 </div>
@@ -957,6 +1234,7 @@ const employees = [
 
 // Variable to store current searched name
 let currentSearchName = '';
+let currentEmployeeData = null;
 
 // ===================== KURDISH DATE FUNCTION =====================
 function getKurdishDate(gregorianDate) {
@@ -1179,7 +1457,7 @@ function updateTable() {
   }
 }
 
-// ===================== MODAL SEARCH FUNCTIONS =====================
+// ===================== MODAL SEARCH FUNCTIONS (small) =====================
 function openSearchModal() {
   const modal = document.getElementById('searchModal');
   const input = document.getElementById('modalSearchInput');
@@ -1208,23 +1486,140 @@ function performSearch() {
   );
   
   if (found) {
-    // Store the searched name
     currentSearchName = found.name;
-    
-    // Display in the locked search box
+    currentEmployeeData = found;
     document.getElementById('searchBox').value = found.name;
-    
-    // Update employee info fields
     document.getElementById('empGroup').textContent = found.group;
     document.getElementById('empType').textContent = found.type;
     document.getElementById('empLocation').textContent = found.location;
-    
-    // Close modal
     closeSearchModal();
   } else {
     alert('کارمەند نەدۆزرایەوە');
   }
 }
+
+// ===================== EMPLOYEE MODAL FUNCTIONS =====================
+let isModalFullscreen = false;
+let isModalMinimized = false;
+
+function openEmployeeModal() {
+  const modal = document.getElementById('employeeModal');
+  const content = document.getElementById('employeeModalContent');
+  modal.style.display = 'flex';
+  isModalFullscreen = false;
+  isModalMinimized = false;
+  content.classList.remove('fullscreen');
+  content.style.display = 'flex';
+  
+  // If there's a searched employee, display their info
+  if (currentEmployeeData) {
+    displayEmployeeInfo(currentEmployeeData);
+    document.getElementById('modalEmployeeSearchInput').value = currentEmployeeData.name;
+  } else {
+    document.getElementById('employeeInfoDisplay').innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <p>تکایە لە سەرەوە ناوی کارمەند بگەڕێ</p>
+      </div>
+    `;
+    document.getElementById('modalEmployeeSearchInput').value = '';
+  }
+}
+
+function closeEmployeeModal() {
+  const modal = document.getElementById('employeeModal');
+  modal.style.display = 'none';
+}
+
+function minimizeEmployeeModal() {
+  const content = document.getElementById('employeeModalContent');
+  if (content.style.display === 'none') {
+    content.style.display = 'flex';
+    isModalMinimized = false;
+  } else {
+    content.style.display = 'none';
+    isModalMinimized = true;
+  }
+}
+
+function toggleFullscreenEmployeeModal() {
+  const content = document.getElementById('employeeModalContent');
+  if (isModalFullscreen) {
+    content.classList.remove('fullscreen');
+    isModalFullscreen = false;
+  } else {
+    content.classList.add('fullscreen');
+    isModalFullscreen = true;
+  }
+}
+
+function displayEmployeeInfo(employee) {
+  const container = document.getElementById('employeeInfoDisplay');
+  container.innerHTML = `
+    <div class="info-row">
+      <div class="info-label">ناوی کارمەند:</div>
+      <div class="info-value">${employee.name}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">ژمارەی کۆد:</div>
+      <div class="info-value">${employee.code}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">ژمارەی مۆبایل:</div>
+      <div class="info-value">${employee.mobile}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">گروپ:</div>
+      <div class="info-value">${employee.group}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">جۆری دامەزراندن:</div>
+      <div class="info-value">${employee.type}</div>
+    </div>
+    <div class="info-row">
+      <div class="info-label">شوێنی کارکردن:</div>
+      <div class="info-value">${employee.location}</div>
+    </div>
+  `;
+}
+
+function searchEmployeeInModal() {
+  const q = document.getElementById('modalEmployeeSearchInput').value.trim().toLowerCase();
+  if (!q) {
+    alert('تکایە ناوی کارمەند بنووسە');
+    return;
+  }
+  
+  const found = employees.find(e =>
+    e.name.toLowerCase().includes(q) || 
+    e.code.includes(q) || 
+    e.mobile.includes(q)
+  );
+  
+  if (found) {
+    currentEmployeeData = found;
+    displayEmployeeInfo(found);
+  } else {
+    alert('کارمەند نەدۆزرایەوە');
+    document.getElementById('employeeInfoDisplay').innerHTML = `
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <p>کارمەند نەدۆزرایەوە</p>
+      </div>
+    `;
+  }
+}
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tabId = btn.getAttribute('data-tab');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+  });
+});
 
 // Allow Enter key in modal input
 document.getElementById('modalSearchInput').addEventListener('keydown', function(e) {
@@ -1233,19 +1628,49 @@ document.getElementById('modalSearchInput').addEventListener('keydown', function
   }
 });
 
-// Close modal when clicking outside
+document.getElementById('modalEmployeeSearchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    searchEmployeeInModal();
+  }
+});
+
+// Close modals when clicking outside
 window.onclick = function(event) {
-  const modal = document.getElementById('searchModal');
-  if (event.target === modal) {
+  const searchModal = document.getElementById('searchModal');
+  const employeeModal = document.getElementById('employeeModal');
+  if (event.target === searchModal) {
     closeSearchModal();
+  }
+  if (event.target === employeeModal) {
+    closeEmployeeModal();
   }
 }
 
-function clearEmpInfo() {
-  document.getElementById('empGroup').textContent = '—';
-  document.getElementById('empType').textContent = '—';
-  document.getElementById('empLocation').textContent = '—';
-}
+// Draggable modal
+const modalContent = document.getElementById('employeeModalContent');
+const titleBar = document.getElementById('modalTitleBar');
+let isDragging = false;
+let offsetX, offsetY;
+
+titleBar.addEventListener('mousedown', (e) => {
+  if (isModalFullscreen) return;
+  isDragging = true;
+  offsetX = e.clientX - modalContent.offsetLeft;
+  offsetY = e.clientY - modalContent.offsetTop;
+  modalContent.style.position = 'absolute';
+  modalContent.style.margin = '0';
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (isDragging && !isModalFullscreen) {
+    modalContent.style.left = (e.clientX - offsetX) + 'px';
+    modalContent.style.top = (e.clientY - offsetY) + 'px';
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+});
 
 // ===================== MENU TOGGLE =====================
 function toggleMenu(id) {
