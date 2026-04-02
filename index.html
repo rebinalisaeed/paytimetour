@@ -171,9 +171,8 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   font-family:var(--font);
   font-size:13px;
   background:#f0f0f0;
-  color:#999;
+  color:#555;
   direction:rtl;
-  transition:border-color 0.2s;
   cursor:not-allowed;
   user-select:none;
 }
@@ -748,7 +747,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
           <th>دەرچوونی کاتژمێری</th>
           <th>ڕونکردنەوە</th>
           <th>پاداشت</th>
-        </table>
+        </tr>
       </thead>
       <tbody id="att-body"></tbody>
     </table>
@@ -1185,7 +1184,7 @@ function openSearchModal() {
   const modal = document.getElementById('searchModal');
   const input = document.getElementById('modalSearchInput');
   modal.style.display = 'flex';
-  input.value = currentSearchName;
+  input.value = '';
   input.focus();
 }
 
