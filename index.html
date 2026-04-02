@@ -170,12 +170,14 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   border-radius:7px;
   font-family:var(--font);
   font-size:13px;
-  background:white;
-  color:#222;
+  background:#f0f0f0;
+  color:#999;
   direction:rtl;
   transition:border-color 0.2s;
+  cursor:not-allowed;
+  user-select:none;
 }
-.search-input:focus { outline:none; border-color:var(--primary); }
+.search-input:focus { outline:none; border-color:#9ab0d8; }
 .emp-info {
   display:flex; align-items:center; gap:14px;
   flex:1;
@@ -201,6 +203,76 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   display:flex; align-items:center; gap:6px;
   flex-shrink:0;
   margin-left:auto;
+}
+
+/* ===== MODAL SEARCH POPUP ===== */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  text-align: center;
+}
+.modal-content h3 {
+  margin-bottom: 20px;
+  color: var(--primary);
+  font-size: 18px;
+}
+.modal-search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #9ab0d8;
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 14px;
+  direction: rtl;
+  margin-bottom: 20px;
+}
+.modal-search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.modal-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.modal-btn-search {
+  background: var(--primary);
+  color: white;
+}
+.modal-btn-cancel {
+  background: #ccc;
+  color: #333;
+}
+.modal-btn-search:hover {
+  background: var(--primary-light);
+}
+.modal-btn-cancel:hover {
+  background: #bbb;
 }
 
 /* ===== TASKBAR BOTTOM ===== */
@@ -610,14 +682,13 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   </button>
 </nav>
 
-<!-- ===== NAVBAR 3 - SEARCH ===== -->
+<!-- ===== NAVBAR 3 - SEARCH BAR ===== -->
 <nav id="nav3">
-  <button class="search-btn" onclick="doSearch()">
+  <button class="search-btn" onclick="openSearchModal()">
     <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
     گەڕان
   </button>
-  <input type="text" class="search-input" id="searchBox"
-    placeholder="ناوی فەرمانبەر یان ژمارەی کۆد یان ژمارەی مۆبایل بنووسە..." maxlength="60">
+  <input type="text" class="search-input" id="searchBox" readonly disabled placeholder="ناوی کارمەند لێرە نمایش دەکرێت..." maxlength="60">
   
   <div class="emp-info">
     <div class="emp-field">
@@ -634,6 +705,18 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
     </div>
   </div>
 </nav>
+
+<!-- ===== MODAL SEARCH POPUP ===== -->
+<div id="searchModal" class="modal">
+  <div class="modal-content">
+    <h3>گەڕانی کارمەند</h3>
+    <input type="text" id="modalSearchInput" class="modal-search-input" placeholder="ناوی فەرمانبەر یان ژمارەی کۆد یان ژمارەی مۆبایل بنووسە..." autocomplete="off">
+    <div class="modal-buttons">
+      <button class="modal-btn modal-btn-search" onclick="performSearch()">گەڕان</button>
+      <button class="modal-btn modal-btn-cancel" onclick="closeSearchModal()">پاشگەزبوونەوە</button>
+    </div>
+  </div>
+</div>
 
 <!-- ===== MAIN CONTENT ===== -->
 <div id="content">
@@ -665,7 +748,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
           <th>دەرچوونی کاتژمێری</th>
           <th>ڕونکردنەوە</th>
           <th>پاداشت</th>
-        </tr>
+        </table>
       </thead>
       <tbody id="att-body"></tbody>
     </table>
@@ -873,8 +956,10 @@ const employees = [
   { name:'کارزان حسێن', code:'1003', mobile:'07801234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی' },
 ];
 
+// Variable to store current searched name
+let currentSearchName = '';
+
 // ===================== KURDISH DATE FUNCTION =====================
-// Simple conversion: Kurdish date = Gregorian date - 20 (for Nawroz month)
 function getKurdishDate(gregorianDate) {
   const day = gregorianDate.getDate();
   const month = gregorianDate.getMonth() + 1;
@@ -884,17 +969,17 @@ function getKurdishDate(gregorianDate) {
   
   // For Nawroz month (March 21 - April 20)
   if ((month === 3 && day >= 21) || (month === 4 && day <= 20)) {
-    kMonth = 1; // Nawroz
+    kMonth = 1;
     if (month === 3) {
-      kDay = day - 20; // 21 Mar = 1, 22 Mar = 2, ..., 31 Mar = 11
+      kDay = day - 20;
     } else {
-      kDay = day + 11; // 1 Apr = 12, 2 Apr = 13, ..., 20 Apr = 31
+      kDay = day + 11;
     }
     kYear = year + KURDISH_YEAR_OFFSET;
   }
   // For Gulan month (April 21 - May 21)
   else if ((month === 4 && day >= 21) || (month === 5 && day <= 21)) {
-    kMonth = 2; // Gulan
+    kMonth = 2;
     if (month === 4) {
       kDay = day - 20;
     } else {
@@ -1095,20 +1180,65 @@ function updateTable() {
   }
 }
 
-// ===================== SEARCH =====================
-function doSearch() {
-  const q = document.getElementById('searchBox').value.trim().toLowerCase();
-  if (!q) { clearEmpInfo(); return; }
+// ===================== MODAL SEARCH FUNCTIONS =====================
+function openSearchModal() {
+  const modal = document.getElementById('searchModal');
+  const input = document.getElementById('modalSearchInput');
+  modal.style.display = 'flex';
+  input.value = currentSearchName;
+  input.focus();
+}
+
+function closeSearchModal() {
+  const modal = document.getElementById('searchModal');
+  modal.style.display = 'none';
+  document.getElementById('modalSearchInput').value = '';
+}
+
+function performSearch() {
+  const q = document.getElementById('modalSearchInput').value.trim().toLowerCase();
+  if (!q) {
+    alert('تکایە ناو یان کۆد یان ژمارەی مۆبایل بنووسە');
+    return;
+  }
+  
   const found = employees.find(e =>
-    e.name.includes(q) || e.code.includes(q) || e.mobile.includes(q)
+    e.name.toLowerCase().includes(q) || 
+    e.code.includes(q) || 
+    e.mobile.includes(q)
   );
+  
   if (found) {
+    // Store the searched name
+    currentSearchName = found.name;
+    
+    // Display in the locked search box
+    document.getElementById('searchBox').value = found.name;
+    
+    // Update employee info fields
     document.getElementById('empGroup').textContent = found.group;
     document.getElementById('empType').textContent = found.type;
     document.getElementById('empLocation').textContent = found.location;
+    
+    // Close modal
+    closeSearchModal();
   } else {
-    clearEmpInfo();
     alert('کارمەند نەدۆزرایەوە');
+  }
+}
+
+// Allow Enter key in modal input
+document.getElementById('modalSearchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    performSearch();
+  }
+});
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+  const modal = document.getElementById('searchModal');
+  if (event.target === modal) {
+    closeSearchModal();
   }
 }
 
@@ -1117,10 +1247,6 @@ function clearEmpInfo() {
   document.getElementById('empType').textContent = '—';
   document.getElementById('empLocation').textContent = '—';
 }
-
-document.getElementById('searchBox').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doSearch();
-});
 
 // ===================== MENU TOGGLE =====================
 function toggleMenu(id) {
@@ -1151,4 +1277,4 @@ updateClock();
 setInterval(updateClock, 1000);
 </script>
 </body>
-    </html>
+</html>
