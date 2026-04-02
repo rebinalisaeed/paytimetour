@@ -863,24 +863,8 @@ const kurdishDays = ['شەممە','یەک شەممە','دوو شەممە','سێ 
 const gregorianMonthsKurdish = ['کانوونی دووەم','شوبات','ئازار','نیسان','مایس','حوزەیران','تەمموز','ئاب','ئەیلول','تشرینی یەکەم','تشرینی دووەم','کانوونی یەکەم'];
 const kurdishMonthsFull = ['نەورۆز','گوڵان','جۆزەردان','پووشپەڕ','خەرمانان','گەلاوێژ','ڕەزبەر','گەڵاڕێزان','سەرماوەرز','بەفرانبار','ڕێبەندان','ڕەشەمێ'];
 
-// Kurdish year offset: 21 March 2026 = 1 Nawroz 2726
+// Kurdish year offset
 const KURDISH_YEAR_OFFSET = 700;
-
-// Define start dates of Kurdish months
-const kurdishMonthStarts = [
-  { month: 1, startDay: 21, startMonth: 3, name: 'نەورۆز', days: 31 },
-  { month: 2, startDay: 21, startMonth: 4, name: 'گوڵان', days: 31 },
-  { month: 3, startDay: 22, startMonth: 5, name: 'جۆزەردان', days: 31 },
-  { month: 4, startDay: 22, startMonth: 6, name: 'پووشپەڕ', days: 31 },
-  { month: 5, startDay: 23, startMonth: 7, name: 'خەرمانان', days: 31 },
-  { month: 6, startDay: 23, startMonth: 8, name: 'گەلاوێژ', days: 31 },
-  { month: 7, startDay: 23, startMonth: 9, name: 'ڕەزبەر', days: 30 },
-  { month: 8, startDay: 23, startMonth: 10, name: 'گەڵاڕێزان', days: 30 },
-  { month: 9, startDay: 22, startMonth: 11, name: 'سەرماوەرز', days: 30 },
-  { month: 10, startDay: 22, startMonth: 12, name: 'بەفرانبار', days: 30 },
-  { month: 11, startDay: 21, startMonth: 1, name: 'ڕێبەندان', days: 30 },
-  { month: 12, startDay: 20, startMonth: 2, name: 'ڕەشەمێ', days: 29 }
-];
 
 // Fake employee data
 const employees = [
@@ -890,45 +874,136 @@ const employees = [
 ];
 
 // ===================== KURDISH DATE FUNCTION =====================
-function getKurdishDate(d) {
-  const year = d.getFullYear();
+// Simple conversion: Kurdish date = Gregorian date - 20 (for Nawroz month)
+function getKurdishDate(gregorianDate) {
+  const day = gregorianDate.getDate();
+  const month = gregorianDate.getMonth() + 1;
+  const year = gregorianDate.getFullYear();
   
-  for (let i = 0; i < kurdishMonthStarts.length; i++) {
-    const start = kurdishMonthStarts[i];
-    let startYear = year;
-    
-    // For months that start in next year (January and February)
-    if (start.startMonth <= 2 && i >= 10) {
-      startYear = year - 1;
-    }
-    
-    const startDate = new Date(startYear, start.startMonth - 1, start.startDay);
-    
-    // Calculate end date
-    let endDate;
-    if (i < kurdishMonthStarts.length - 1) {
-      const nextStart = kurdishMonthStarts[i + 1];
-      let nextYear = startYear;
-      if (nextStart.startMonth <= 2 && (i + 1) >= 10) {
-        nextYear = startYear + 1;
-      }
-      endDate = new Date(nextYear, nextStart.startMonth - 1, nextStart.startDay);
+  let kDay, kMonth, kYear;
+  
+  // For Nawroz month (March 21 - April 20)
+  if ((month === 3 && day >= 21) || (month === 4 && day <= 20)) {
+    kMonth = 1; // Nawroz
+    if (month === 3) {
+      kDay = day - 20; // 21 Mar = 1, 22 Mar = 2, ..., 31 Mar = 11
     } else {
-      // Last month, end is next year's first month start
-      const firstMonth = kurdishMonthStarts[0];
-      endDate = new Date(startYear + 1, firstMonth.startMonth - 1, firstMonth.startDay);
+      kDay = day + 11; // 1 Apr = 12, 2 Apr = 13, ..., 20 Apr = 31
     }
-    
-    // Check if date is within this Kurdish month
-    if (d >= startDate && d < endDate) {
-      const kDay = d.getDate() - startDate.getDate() + 1;
-      const kYear = startYear + KURDISH_YEAR_OFFSET;
-      return `${kDay} ${kurdishMonthsFull[start.month - 1]} ${kYear}`;
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Gulan month (April 21 - May 21)
+  else if ((month === 4 && day >= 21) || (month === 5 && day <= 21)) {
+    kMonth = 2; // Gulan
+    if (month === 4) {
+      kDay = day - 20;
+    } else {
+      kDay = day + 10;
     }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Jozerdan month (May 22 - June 21)
+  else if ((month === 5 && day >= 22) || (month === 6 && day <= 21)) {
+    kMonth = 3;
+    if (month === 5) {
+      kDay = day - 21;
+    } else {
+      kDay = day + 10;
+    }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Pooshper month (June 22 - July 22)
+  else if ((month === 6 && day >= 22) || (month === 7 && day <= 22)) {
+    kMonth = 4;
+    if (month === 6) {
+      kDay = day - 21;
+    } else {
+      kDay = day + 9;
+    }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Xermanan month (July 23 - August 22)
+  else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) {
+    kMonth = 5;
+    if (month === 7) {
+      kDay = day - 22;
+    } else {
+      kDay = day + 9;
+    }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Gelawêj month (August 23 - September 22)
+  else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) {
+    kMonth = 6;
+    if (month === 8) {
+      kDay = day - 22;
+    } else {
+      kDay = day + 9;
+    }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Rezber month (September 23 - October 22)
+  else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) {
+    kMonth = 7;
+    if (month === 9) {
+      kDay = day - 22;
+    } else {
+      kDay = day + 8;
+    }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Gellarêzan month (October 23 - November 21)
+  else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) {
+    kMonth = 8;
+    if (month === 10) {
+      kDay = day - 22;
+    } else {
+      kDay = day + 9;
+    }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Sarmawerz month (November 22 - December 21)
+  else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) {
+    kMonth = 9;
+    if (month === 11) {
+      kDay = day - 21;
+    } else {
+      kDay = day + 10;
+    }
+    kYear = year + KURDISH_YEAR_OFFSET;
+  }
+  // For Befranbar month (December 22 - January 20)
+  else if ((month === 12 && day >= 22) || (month === 1 && day <= 20)) {
+    kMonth = 10;
+    if (month === 12) {
+      kDay = day - 21;
+    } else {
+      kDay = day + 10;
+    }
+    kYear = (month === 12 ? year : year - 1) + KURDISH_YEAR_OFFSET;
+  }
+  // For Rêbendan month (January 21 - February 19)
+  else if ((month === 1 && day >= 21) || (month === 2 && day <= 19)) {
+    kMonth = 11;
+    if (month === 1) {
+      kDay = day - 20;
+    } else {
+      kDay = day + 11;
+    }
+    kYear = year - 1 + KURDISH_YEAR_OFFSET;
+  }
+  // For Reshemê month (February 20 - March 20)
+  else {
+    kMonth = 12;
+    if (month === 2) {
+      kDay = day - 19;
+    } else {
+      kDay = day + 10;
+    }
+    kYear = year - 1 + KURDISH_YEAR_OFFSET;
   }
   
-  // Fallback (should not happen)
-  return `1 ${kurdishMonthsFull[0]} ${year + KURDISH_YEAR_OFFSET}`;
+  return `${kDay} ${kurdishMonthsFull[kMonth - 1]} ${kYear}`;
 }
 
 // ===================== CLOCK & DATES =====================
@@ -984,7 +1059,7 @@ function daysInMonth(m, y) {
   return new Date(y, m, 0).getDate();
 }
 
-// Day of week: 0=Sun,1=Mon,...,6=Sat
+// Day of week
 function dayName(jsDay) {
   const map = [1, 2, 3, 4, 5, 6, 0];
   return kurdishDays[map[jsDay]];
@@ -1076,4 +1151,4 @@ updateClock();
 setInterval(updateClock, 1000);
 </script>
 </body>
-</html>
+    </html>
