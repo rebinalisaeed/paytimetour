@@ -302,7 +302,6 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   max-height: 100%;
   border-radius: 0;
 }
-/* Modal Title Bar */
 .modal-title-bar {
   background: var(--nav2);
   padding: 10px 15px;
@@ -312,28 +311,10 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   border-bottom: 1px solid #ddd;
   cursor: move;
 }
-.modal-title-bar h3 {
-  font-size: 15px;
-  color: var(--primary);
-  margin: 0;
-}
-.modal-controls {
-  display: flex;
-  gap: 12px;
-}
-.modal-controls button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  color: #555;
-  padding: 0 5px;
-  transition: 0.2s;
-}
-.modal-controls button:hover {
-  color: var(--primary);
-}
-/* Modal Action Bar */
+.modal-title-bar h3 { font-size: 15px; color: var(--primary); margin: 0; }
+.modal-controls { display: flex; gap: 12px; }
+.modal-controls button { background: none; border: none; font-size: 16px; cursor: pointer; color: #555; padding: 0 5px; transition: 0.2s; }
+.modal-controls button:hover { color: var(--primary); }
 .modal-action-bar {
   background: var(--nav2);
   padding: 8px 15px;
@@ -357,28 +338,11 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   color: #333;
   transition: 0.2s;
 }
-.action-btn:hover {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-.action-btn:hover svg {
-  fill: white;
-}
-.action-btn svg {
-  width: 14px;
-  height: 14px;
-  fill: #555;
-}
-.action-btn.edit-mode {
-  background: var(--green);
-  color: white;
-  border-color: var(--green);
-}
-.action-btn.edit-mode svg {
-  fill: white;
-}
-/* Modal Search Bar */
+.action-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+.action-btn:hover svg { fill: white; }
+.action-btn svg { width: 14px; height: 14px; fill: #555; }
+.action-btn.edit-mode { background: var(--green); color: white; border-color: var(--green); }
+.action-btn.edit-mode svg { fill: white; }
 .modal-search-bar {
   background: #B8CFF0;
   padding: 8px 15px;
@@ -399,10 +363,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   cursor: text;
   max-width: 250px;
 }
-.modal-search-bar .search-input:focus {
-  outline: none;
-  border-color: var(--primary);
-}
+.modal-search-bar .search-input:focus { outline: none; border-color: var(--primary); }
 .modal-search-bar .search-btn {
   padding: 5px 12px;
   background: var(--primary);
@@ -416,7 +377,6 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   font-family: var(--font);
   font-size: 11px;
 }
-/* Modal Tabs */
 .modal-tabs {
   display: flex;
   background: #2d4a7a;
@@ -435,39 +395,19 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   transition: 0.2s;
   border-radius: 6px 6px 0 0;
 }
-.tab-btn:hover {
-  background: #4a6fa5;
-}
-.tab-btn.active {
-  background: #f9f9f9;
-  color: var(--primary);
-}
-/* Modal Body */
+.tab-btn:hover { background: #4a6fa5; }
+.tab-btn.active { background: #f9f9f9; color: var(--primary); }
 .modal-body {
   flex: 1;
   overflow-y: auto;
   padding: 15px;
   background: #f9f9f9;
 }
-.tab-content {
-  display: none;
-}
-.tab-content.active {
-  display: block;
-}
-/* Two column layout for tab1 */
-.tab1-layout {
-  display: flex;
-  gap: 20px;
-}
-.tab1-right {
-  width: 20%;
-  text-align: center;
-}
-.tab1-left {
-  width: 80%;
-}
-/* Profile Image - Rectangle with height 10% more than width */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.tab1-layout { display: flex; gap: 20px; }
+.tab1-right { width: 20%; text-align: center; }
+.tab1-left { width: 80%; }
 .profile-image {
   width: 120px;
   height: 132px;
@@ -480,21 +420,9 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   border: 2px solid var(--primary);
   border-radius: 8px;
 }
-.profile-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.profile-image span {
-  font-size: 50px;
-  color: #999;
-}
-.image-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 10px;
-}
+.profile-image img { width: 100%; height: 100%; object-fit: cover; }
+.profile-image span { font-size: 50px; color: #999; }
+.image-buttons { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
 .image-btn {
   padding: 6px 12px;
   border: none;
@@ -504,95 +432,23 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   font-size: 11px;
   font-weight: 600;
 }
-.image-btn-upload {
-  background: var(--primary);
-  color: white;
-}
-.image-btn-upload:hover {
-  background: var(--primary-light);
-}
-.image-btn-delete {
-  background: #ccc;
-  color: #333;
-}
-.image-btn-delete:hover {
-  background: #bbb;
-}
-.image-btn-delete:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-/* Info rows */
-.info-row {
-  display: flex;
-  margin-bottom: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.info-label {
-  width: 140px;
-  font-weight: 700;
-  color: var(--primary);
-  font-size: 12px;
-}
-.info-value {
-  flex: 1;
-  color: #333;
-  border-bottom: 1px dashed #ccc;
-  padding: 4px 0;
-  font-size: 12px;
-}
-.info-value input, .info-value span {
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-family: var(--font);
-  font-size: 12px;
-  color: #333;
-}
-.info-value input:focus {
-  outline: none;
-  border-bottom: 1px solid var(--primary);
-}
-.info-value input:disabled {
-  background: #f0f0f0;
-  color: #666;
-  cursor: not-allowed;
-}
-/* Two column group for names */
-.name-group {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-.name-group .info-row {
-  flex: 1;
-  margin-bottom: 0;
-}
-/* Silver box */
-.silver-box {
-  background: #e8e8e8;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-.silver-box .info-row {
-  margin-bottom: 10px;
-}
-.silver-box .info-label {
-  width: 160px;
-}
-/* Sub Tabs for Tab5 */
-.sub-tabs {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-}
+.image-btn-upload { background: var(--primary); color: white; }
+.image-btn-upload:hover { background: var(--primary-light); }
+.image-btn-delete { background: #ccc; color: #333; }
+.image-btn-delete:hover { background: #bbb; }
+.image-btn-delete:disabled { opacity: 0.5; cursor: not-allowed; }
+.info-row { display: flex; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
+.info-label { width: 140px; font-weight: 700; color: var(--primary); font-size: 12px; }
+.info-value { flex: 1; color: #333; border-bottom: 1px dashed #ccc; padding: 4px 0; font-size: 12px; }
+.info-value input, .info-value span { width: 100%; border: none; background: transparent; font-family: var(--font); font-size: 12px; color: #333; }
+.info-value input:focus { outline: none; border-bottom: 1px solid var(--primary); }
+.info-value input:disabled { background: #f0f0f0; color: #666; cursor: not-allowed; }
+.name-group { display: flex; gap: 15px; margin-bottom: 12px; flex-wrap: wrap; }
+.name-group .info-row { flex: 1; margin-bottom: 0; }
+.silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+.silver-box .info-row { margin-bottom: 10px; }
+.silver-box .info-label { width: 160px; }
+.sub-tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
 .sub-tab-btn {
   padding: 8px 16px;
   background: #e0e0e0;
@@ -605,31 +461,12 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   color: #333;
   transition: 0.2s;
 }
-.sub-tab-btn:hover {
-  background: #ccc;
-}
-.sub-tab-btn.active {
-  background: var(--primary);
-  color: white;
-}
-.sub-tab-content {
-  display: none;
-}
-.sub-tab-content.active {
-  display: block;
-}
-/* Empty state */
-.empty-state {
-  text-align: center;
-  padding: 40px;
-  color: #999;
-}
-.empty-state svg {
-  width: 60px;
-  height: 60px;
-  fill: #ccc;
-  margin-bottom: 15px;
-}
+.sub-tab-btn:hover { background: #ccc; }
+.sub-tab-btn.active { background: var(--primary); color: white; }
+.sub-tab-content { display: none; }
+.sub-tab-content.active { display: block; }
+.empty-state { text-align: center; padding: 40px; color: #999; }
+.empty-state svg { width: 60px; height: 60px; fill: #ccc; margin-bottom: 15px; }
 
 /* ===== TASKBAR BOTTOM ===== */
 #taskbar {
@@ -657,12 +494,6 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   flex-shrink:0;
 }
 .prev-month-btn svg, .next-month-btn svg { width:13px; height:13px; fill:white; }
-.combo-label {
-  font-size:12px;
-  font-weight:600;
-  color:#333;
-  white-space:nowrap;
-}
 .combo-sel {
   padding:5px 8px;
   border:1px solid #bbb;
@@ -701,6 +532,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   border-radius:8px;
   padding:6px;
   overflow:auto;
+  position:relative;
 }
 #att-table {
   border-collapse:collapse;
@@ -709,7 +541,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   font-size:11px;
   background:white;
   border-radius:6px;
-  overflow:hidden;
+  overflow:visible;
 }
 #att-table th {
   background:#2d4a7a;
@@ -724,14 +556,21 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   top:0;
   z-index:10;
 }
-#att-table th:first-child,
-#att-table th:nth-child(2) {
+/* First column (ز) - sticky horizontally */
+#att-table th:first-child {
   position:sticky;
   left:0;
   z-index:20;
   background:#1a3060;
 }
-#att-table th:nth-child(2) { left:34px; }
+/* Second column (ڕۆژەکانی هەفتە) - sticky horizontally */
+#att-table th:nth-child(2) {
+  position:sticky;
+  left:34px;
+  z-index:20;
+  background:#1a3060;
+}
+/* All other th - normal scroll */
 #att-table td {
   padding:4px 5px;
   text-align:center;
@@ -740,27 +579,42 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   font-size:11px;
   min-width:34px;
 }
+/* First column cells - sticky horizontally */
 #att-table td:first-child {
-  position:sticky; left:0; z-index:5;
+  position:sticky;
+  left:0;
+  z-index:5;
   background:#f0f5ff;
   font-weight:700;
   color:var(--primary);
   min-width:34px;
 }
+/* Second column cells - sticky horizontally */
 #att-table td:nth-child(2) {
-  position:sticky; left:34px; z-index:5;
+  position:sticky;
+  left:34px;
+  z-index:5;
   background:#f0f5ff;
   min-width:60px;
   font-weight:600;
   color:#2d4a7a;
 }
-#att-table tr:nth-child(even) td { background:#f8fbff; }
+/* Ensure sticky cells have proper background */
 #att-table tr:nth-child(even) td:first-child,
-#att-table tr:nth-child(even) td:nth-child(2) { background:#e8f0ff; }
+#att-table tr:nth-child(even) td:nth-child(2) {
+  background:#e8f0ff;
+}
+#att-table tr:hover td:first-child,
+#att-table tr:hover td:nth-child(2) {
+  background:#e0edff;
+}
+#att-table .friday-row td:first-child,
+#att-table .friday-row td:nth-child(2) {
+  background:#ffe8a0;
+}
+#att-table tr:nth-child(even) td { background:#f8fbff; }
 #att-table tr:hover td { background:#e0edff !important; }
 #att-table .friday-row td { background:#fff8e1 !important; }
-#att-table .friday-row td:first-child,
-#att-table .friday-row td:nth-child(2) { background:#ffe8a0 !important; }
 
 /* ===== 8 SUMMARY BOXES ===== */
 #boxes-row {
@@ -1054,22 +908,13 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   <input type="text" class="search-input" id="searchBox" readonly disabled placeholder="ناوی کارمەند لێرە نمایش دەکرێت..." maxlength="60">
   
   <div class="emp-info">
-    <div class="emp-field">
-      <span class="emp-field-label">گروپ:</span>
-      <span class="emp-field-value" id="empGroup">—</span>
-    </div>
-    <div class="emp-field">
-      <span class="emp-field-label">جۆری دامەزراندن:</span>
-      <span class="emp-field-value" id="empType">—</span>
-    </div>
-    <div class="emp-field">
-      <span class="emp-field-label">شوێنی کارکردن:</span>
-      <span class="emp-field-value" id="empLocation">—</span>
-    </div>
+    <div class="emp-field"><span class="emp-field-label">گروپ:</span><span class="emp-field-value" id="empGroup">—</span></div>
+    <div class="emp-field"><span class="emp-field-label">جۆری دامەزراندن:</span><span class="emp-field-value" id="empType">—</span></div>
+    <div class="emp-field"><span class="emp-field-label">شوێنی کارکردن:</span><span class="emp-field-value" id="empLocation">—</span></div>
   </div>
 </nav>
 
-<!-- ===== MODAL SEARCH POPUP (small) ===== -->
+<!-- ===== MODAL SEARCH POPUP ===== -->
 <div id="searchModal" class="modal">
   <div class="modal-content" style="width: 400px;">
     <div style="padding: 20px;">
@@ -1086,40 +931,24 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 <!-- ===== EMPLOYEE INFO MODAL ===== -->
 <div id="employeeModal" class="employee-modal">
   <div class="employee-modal-content" id="employeeModalContent">
-    <!-- Title Bar -->
     <div class="modal-title-bar" id="modalTitleBar">
       <h3>زانیاری کارمەندان</h3>
       <div class="modal-controls">
-        <button onclick="minimizeEmployeeModal()" title="لابردن (کەمکردنەوە)">➖</button>
+        <button onclick="minimizeEmployeeModal()" title="لابردن">➖</button>
         <button onclick="toggleFullscreenEmployeeModal()" title="گەورەکردن">🔲</button>
         <button onclick="closeEmployeeModal()" title="داخستن">✖</button>
       </div>
     </div>
-    <!-- Action Bar -->
     <div class="modal-action-bar">
-      <button class="action-btn" id="newBtn" onclick="alert('پەنجەرەی نوێی کارمەند دەکرێتەوە')">
-        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-        نوێ
-      </button>
-      <button class="action-btn" id="editBtn" onclick="toggleEditMode()">
-        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-        گۆڕانکاری
-      </button>
-      <button class="action-btn" onclick="alert('سڕینەوەی کارمەند')">
-        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-        سڕینەوە
-      </button>
-      <button class="action-btn" onclick="alert('ناچالاککردنی کارمەند')">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>
-        لادان لەکار
-      </button>
+      <button class="action-btn" id="newBtn" onclick="alert('پەنجەرەی نوێی کارمەند دەکرێتەوە')"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>نوێ</button>
+      <button class="action-btn" id="editBtn" onclick="toggleEditMode()"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>گۆڕانکاری</button>
+      <button class="action-btn" onclick="alert('سڕینەوەی کارمەند')"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>سڕینەوە</button>
+      <button class="action-btn" onclick="alert('ناچالاککردنی کارمەند')"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg>لادان لەکار</button>
     </div>
-    <!-- Search Bar inside modal -->
     <div class="modal-search-bar">
       <input type="text" id="modalEmployeeSearchInput" class="search-input" placeholder="ناوی کارمەند بگەڕێ..." style="background: white; cursor: text; max-width: 250px;">
       <button class="search-btn" onclick="searchEmployeeInModal()">گەڕان</button>
     </div>
-    <!-- Tabs -->
     <div class="modal-tabs">
       <button class="tab-btn active" data-tab="tab1">زانیاری کارمەندان</button>
       <button class="tab-btn" data-tab="tab2">ڕێکخستنی شەفت و گروپ</button>
@@ -1127,61 +956,22 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
       <button class="tab-btn" data-tab="tab4">ڕێکخستنی شوێنی دەوام</button>
       <button class="tab-btn" data-tab="tab5">زانیاریەکانی تر</button>
     </div>
-    <!-- Body -->
     <div class="modal-body">
-      <div id="tab1" class="tab-content active">
-        <div id="employeeInfoDisplay"></div>
-      </div>
-      <div id="tab2" class="tab-content">
-        <div class="empty-state"><p>ڕێکخستنی شەفت و گروپ - بەتاڵە</p></div>
-      </div>
-      <div id="tab3" class="tab-content">
-        <div class="empty-state"><p>ڕیکخستنی جۆری دامەزراندن - بەتاڵە</p></div>
-      </div>
-      <div id="tab4" class="tab-content">
-        <div class="empty-state"><p>ڕێکخستنی شوێنی دەوام - بەتاڵە</p></div>
-      </div>
+      <div id="tab1" class="tab-content active"><div id="employeeInfoDisplay"></div></div>
+      <div id="tab2" class="tab-content"><div class="empty-state"><p>ڕێکخستنی شەفت و گروپ - بەتاڵە</p></div></div>
+      <div id="tab3" class="tab-content"><div class="empty-state"><p>ڕیکخستنی جۆری دامەزراندن - بەتاڵە</p></div></div>
+      <div id="tab4" class="tab-content"><div class="empty-state"><p>ڕێکخستنی شوێنی دەوام - بەتاڵە</p></div></div>
       <div id="tab5" class="tab-content">
-        <!-- Sub Tabs inside Tab5 -->
         <div class="sub-tabs">
           <button class="sub-tab-btn active" data-subtab="sub1">ئاستی خوێندن و زانیاری کار و زمان</button>
           <button class="sub-tab-btn" data-subtab="sub2">بەڵگەنامەکانی کەسیەتی و نیشتەجێبوون</button>
           <button class="sub-tab-btn" data-subtab="sub3">زانیاری باری کۆمەڵاتی و تەندروستی</button>
           <button class="sub-tab-btn" data-subtab="sub4">زانیاری سیستەمی کەسی</button>
         </div>
-        <div id="sub1" class="sub-tab-content active">
-          <div class="silver-box">
-            <div class="info-row"><div class="info-label">ئاستی خوێندن:</div><div class="info-value"><input type="text" id="eduLevel" value="بەکالۆریۆس" disabled></div></div>
-            <div class="info-row"><div class="info-label">بەشی خوێندن:</div><div class="info-value"><input type="text" id="eduField" value="کۆمپیوتەر" disabled></div></div>
-            <div class="info-row"><div class="info-label">زمانەکان:</div><div class="info-value"><input type="text" id="languages" value="کوردی، عەرەبی، ئینگلیزی" disabled></div></div>
-            <div class="info-row"><div class="info-label">ئاستی زمان:</div><div class="info-value"><input type="text" id="langLevel" value="باش" disabled></div></div>
-            <div class="info-row"><div class="info-label">کارپێکردنی کۆمپیوتەر:</div><div class="info-value"><input type="text" id="computerSkills" value="باش" disabled></div></div>
-          </div>
-        </div>
-        <div id="sub2" class="sub-tab-content">
-          <div class="silver-box">
-            <div class="info-row"><div class="info-label">ژمارەی پاسپۆرت:</div><div class="info-value"><input type="text" id="passportNo" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">بەرواری دەرچوون:</div><div class="info-value"><input type="text" id="passportExpiry" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">ژمارەی کارتی نیشتەجێبوون:</div><div class="info-value"><input type="text" id="residenceCard" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">بەرواری کۆتایی:</div><div class="info-value"><input type="text" id="residenceExpiry" value="—" disabled></div></div>
-          </div>
-        </div>
-        <div id="sub3" class="sub-tab-content">
-          <div class="silver-box">
-            <div class="info-row"><div class="info-label">باری کۆمەڵاتی:</div><div class="info-value"><input type="text" id="socialStatus" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">باری تەندروستی:</div><div class="info-value"><input type="text" id="healthStatus" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">خوێن:</div><div class="info-value"><input type="text" id="bloodType" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">نەخۆشییە تایبەتییەکان:</div><div class="info-value"><input type="text" id="diseases" value="—" disabled></div></div>
-          </div>
-        </div>
-        <div id="sub4" class="sub-tab-content">
-          <div class="silver-box">
-            <div class="info-row"><div class="info-label">ناوی بەکارهێنەر:</div><div class="info-value"><input type="text" id="username" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">ئیمەیڵ:</div><div class="info-value"><input type="text" id="email" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">ئیمەیڵی سیستەم:</div><div class="info-value"><input type="text" id="systemEmail" value="—" disabled></div></div>
-            <div class="info-row"><div class="info-label">مۆبایلی کار:</div><div class="info-value"><input type="text" id="workPhone" value="—" disabled></div></div>
-          </div>
-        </div>
+        <div id="sub1" class="sub-tab-content active"><div class="silver-box"><div class="info-row"><div class="info-label">ئاستی خوێندن:</div><div class="info-value"><input type="text" id="eduLevel" value="بەکالۆریۆس" disabled></div></div><div class="info-row"><div class="info-label">بەشی خوێندن:</div><div class="info-value"><input type="text" id="eduField" value="کۆمپیوتەر" disabled></div></div><div class="info-row"><div class="info-label">زمانەکان:</div><div class="info-value"><input type="text" id="languages" value="کوردی، عەرەبی، ئینگلیزی" disabled></div></div><div class="info-row"><div class="info-label">ئاستی زمان:</div><div class="info-value"><input type="text" id="langLevel" value="باش" disabled></div></div><div class="info-row"><div class="info-label">کارپێکردنی کۆمپیوتەر:</div><div class="info-value"><input type="text" id="computerSkills" value="باش" disabled></div></div></div></div>
+        <div id="sub2" class="sub-tab-content"><div class="silver-box"><div class="info-row"><div class="info-label">ژمارەی پاسپۆرت:</div><div class="info-value"><input type="text" id="passportNo" value="—" disabled></div></div><div class="info-row"><div class="info-label">بەرواری دەرچوون:</div><div class="info-value"><input type="text" id="passportExpiry" value="—" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی کارتی نیشتەجێبوون:</div><div class="info-value"><input type="text" id="residenceCard" value="—" disabled></div></div><div class="info-row"><div class="info-label">بەرواری کۆتایی:</div><div class="info-value"><input type="text" id="residenceExpiry" value="—" disabled></div></div></div></div>
+        <div id="sub3" class="sub-tab-content"><div class="silver-box"><div class="info-row"><div class="info-label">باری کۆمەڵاتی:</div><div class="info-value"><input type="text" id="socialStatus" value="—" disabled></div></div><div class="info-row"><div class="info-label">باری تەندروستی:</div><div class="info-value"><input type="text" id="healthStatus" value="—" disabled></div></div><div class="info-row"><div class="info-label">خوێن:</div><div class="info-value"><input type="text" id="bloodType" value="—" disabled></div></div><div class="info-row"><div class="info-label">نەخۆشییە تایبەتییەکان:</div><div class="info-value"><input type="text" id="diseases" value="—" disabled></div></div></div></div>
+        <div id="sub4" class="sub-tab-content"><div class="silver-box"><div class="info-row"><div class="info-label">ناوی بەکارهێنەر:</div><div class="info-value"><input type="text" id="username" value="—" disabled></div></div><div class="info-row"><div class="info-label">ئیمەیڵ:</div><div class="info-value"><input type="text" id="email" value="—" disabled></div></div><div class="info-row"><div class="info-label">ئیمەیڵی سیستەم:</div><div class="info-value"><input type="text" id="systemEmail" value="—" disabled></div></div><div class="info-row"><div class="info-label">مۆبایلی کار:</div><div class="info-value"><input type="text" id="workPhone" value="—" disabled></div></div></div></div>
       </div>
     </div>
   </div>
@@ -1189,41 +979,14 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 
 <!-- ===== MAIN CONTENT ===== -->
 <div id="content">
-  <!-- Attendance Table -->
   <div id="table-container">
     <table id="att-table">
       <thead>
-        <tr>
-          <th>ز</th>
-          <th>ڕۆژەکانی هەفتە</th>
-          <th>شەفت</th>
-          <th>کاتی دەوام</th>
-          <th>هاتن١</th>
-          <th>دەرچوون١</th>
-          <th>هاتن٢</th>
-          <th>دەرچوون٢</th>
-          <th>هاتن٣</th>
-          <th>دەرچوون٣</th>
-          <th>کۆی ئامادەبوون</th>
-          <th>ئامادەبوون</th>
-          <th>دواکەوتن</th>
-          <th>زوو دەرچوون</th>
-          <th>کەمی ئامادەبوون</th>
-          <th>کۆی کەمی ئامادەبوون</th>
-          <th>کۆی ئۆڤەرتایم</th>
-          <th>OT دوای دەوام</th>
-          <th>کۆی OT ڕێگەپێنەدراو</th>
-          <th>م. کاتژمێری</th>
-          <th>دەرچوونی کاتژمێری</th>
-          <th>ڕونکردنەوە</th>
-          <th>پاداشت</th>
-        </tr>
+        <tr><th>ز</th><th>ڕۆژەکانی هەفتە</th><th>شەفت</th><th>کاتی دەوام</th><th>هاتن١</th><th>دەرچوون١</th><th>هاتن٢</th><th>دەرچوون٢</th><th>هاتن٣</th><th>دەرچوون٣</th><th>کۆی ئامادەبوون</th><th>ئامادەبوون</th><th>دواکەوتن</th><th>زوو دەرچوون</th><th>کەمی ئامادەبوون</th><th>کۆی کەمی ئامادەبوون</th><th>کۆی ئۆڤەرتایم</th><th>OT دوای دەوام</th><th>کۆی OT ڕێگەپێنەدراو</th><th>م. کاتژمێری</th><th>دەرچوونی کاتژمێری</th><th>ڕونکردنەوە</th><th>پاداشت</th></tr>
       </thead>
       <tbody id="att-body"></tbody>
     </table>
   </div>
-  
-  <!-- 8 Summary Boxes -->
   <div id="boxes-row">
     <div class="sum-box"><div class="sum-box-header">کردار</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">بڕی دەوام:</div><div class="sb-label">کۆی ئامادەبوون:</div><div class="sb-label">دەوام لە شەفت:</div><div class="sb-label">ئامادەبوونی زیاتر:</div><div class="sb-label red">کەمی دەوام:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div></div></div></div>
     <div class="sum-box"><div class="sum-box-header">کەمی ئامادەبوون</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">دواکەوتن:</div><div class="sb-label">زوو دەرچوون:</div><div class="sb-label">نێوان شەفت:</div><div class="sb-label red">کۆی کەمی ئامادەبوون:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div></div></div></div>
@@ -1238,33 +1001,18 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 
 <!-- ===== TASKBAR ===== -->
 <div id="taskbar">
-  <button class="prev-month-btn" onclick="changeMonth(-1)">
-    <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
-    مانگی پێشوو
-  </button>
-  <select class="combo-sel" id="monthSel" onchange="updateTable()">
-    <option value="1">کانوونی دووەم</option><option value="2">شوبات</option><option value="3">ئازار</option><option value="4">نیسان</option><option value="5">مایس</option><option value="6">حوزەیران</option><option value="7">تەمموز</option><option value="8">ئاب</option><option value="9">ئەیلول</option><option value="10">تشرینی یەکەم</option><option value="11">تشرینی دووەم</option><option value="12">کانوونی یەکەم</option>
-  </select>
+  <button class="prev-month-btn" onclick="changeMonth(-1)"><svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>مانگی پێشوو</button>
+  <select class="combo-sel" id="monthSel" onchange="updateTable()"><option value="1">کانوونی دووەم</option><option value="2">شوبات</option><option value="3">ئازار</option><option value="4">نیسان</option><option value="5">مایس</option><option value="6">حوزەیران</option><option value="7">تەمموز</option><option value="8">ئاب</option><option value="9">ئەیلول</option><option value="10">تشرینی یەکەم</option><option value="11">تشرینی دووەم</option><option value="12">کانوونی یەکەم</option></select>
   <select class="combo-sel" id="yearSel" onchange="updateTable()"></select>
-  <button class="next-month-btn" onclick="changeMonth(1)">
-    مانگی دواتر
-    <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-  </button>
-  <div class="taskbar-dates">
-    <span class="tz-label">زاینی:</span><span class="tz-value" id="tbGregorian"></span>
-    <span class="tz-label">&nbsp;|&nbsp; کوردی:</span><span class="tz-value" id="tbKurdish"></span>
-    <span class="tz-label">&nbsp;|&nbsp;</span><span class="tz-value" id="tbTime"></span>
-  </div>
+  <button class="next-month-btn" onclick="changeMonth(1)">مانگی دواتر<svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></button>
+  <div class="taskbar-dates"><span class="tz-label">زاینی:</span><span class="tz-value" id="tbGregorian"></span><span class="tz-label">&nbsp;|&nbsp; کوردی:</span><span class="tz-value" id="tbKurdish"></span><span class="tz-label">&nbsp;|&nbsp;</span><span class="tz-value" id="tbTime"></span></div>
 </div>
 
 <script>
-// ===================== DATA =====================
 const kurdishDays = ['شەممە','یەک شەممە','دوو شەممە','سێ شەممە','چوار شەممە','پێنج شەممە','هەینی'];
 const gregorianMonthsKurdish = ['کانوونی دووەم','شوبات','ئازار','نیسان','مایس','حوزەیران','تەمموز','ئاب','ئەیلول','تشرینی یەکەم','تشرینی دووەم','کانوونی یەکەم'];
 const kurdishMonthsFull = ['نەورۆز','گوڵان','جۆزەردان','پووشپەڕ','خەرمانان','گەلاوێژ','ڕەزبەر','گەڵاڕێزان','سەرماوەرز','بەفرانبار','ڕێبەندان','ڕەشەمێ'];
-
 const KURDISH_YEAR_OFFSET = 700;
-
 const employees = [
   { name:'ئەحمەد علی', code:'1001', mobile:'07501234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی',
     fatherName:'عەلی محەمەد', grandfatherName:'محەمەد حەسەن', motherName:'فەریدە حسێن', nationalId:'12345678901',
@@ -1279,15 +1027,10 @@ const employees = [
     gender:'نێر', englishName:'Karzan Huseyn', upn:'KARZAN003', address:'شەقامی کوردستان، هەولێر', cardNumber:'7654321098',
     startDate:'2021-06-20', position:'تەکنیکار' },
 ];
+let currentSearchName = '', currentEmployeeData = null, hasImage = false, isEditMode = false;
 
-let currentSearchName = '';
-let currentEmployeeData = null;
-let hasImage = false;
-let isEditMode = false;
-
-// ===================== KURDISH DATE FUNCTION =====================
-function getKurdishDate(gregorianDate) {
-  const day = gregorianDate.getDate(), month = gregorianDate.getMonth() + 1, year = gregorianDate.getFullYear();
+function getKurdishDate(d) {
+  const day = d.getDate(), month = d.getMonth() + 1, year = d.getFullYear();
   let kDay, kMonth, kYear;
   if ((month === 3 && day >= 21) || (month === 4 && day <= 20)) { kMonth = 1; kDay = month === 3 ? day - 20 : day + 11; kYear = year + KURDISH_YEAR_OFFSET; }
   else if ((month === 4 && day >= 21) || (month === 5 && day <= 21)) { kMonth = 2; kDay = month === 4 ? day - 20 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
@@ -1303,25 +1046,22 @@ function getKurdishDate(gregorianDate) {
   else { kMonth = 12; kDay = month === 2 ? day - 19 : day + 10; kYear = year - 1 + KURDISH_YEAR_OFFSET; }
   return `${kDay} ${kurdishMonthsFull[kMonth - 1]} ${kYear}`;
 }
-
 function pad(n) { return n < 10 ? '0' + n : n; }
 function updateClock() {
-  const now = new Date();
-  document.getElementById('tbGregorian').textContent = `${now.getDate()} ${gregorianMonthsKurdish[now.getMonth()]} ${now.getFullYear()}`;
-  document.getElementById('tbKurdish').textContent = getKurdishDate(now);
-  document.getElementById('tbTime').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const n = new Date();
+  document.getElementById('tbGregorian').textContent = `${n.getDate()} ${gregorianMonthsKurdish[n.getMonth()]} ${n.getFullYear()}`;
+  document.getElementById('tbKurdish').textContent = getKurdishDate(n);
+  document.getElementById('tbTime').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
 }
-
 function populateYears() {
-  const sel = document.getElementById('yearSel');
-  const curY = new Date().getFullYear();
-  for (let y = 1970; y <= 2200; y++) { const opt = document.createElement('option'); opt.value = y; opt.textContent = y; if (y === curY) opt.selected = true; sel.appendChild(opt); }
+  const s = document.getElementById('yearSel'), y = new Date().getFullYear();
+  for (let i = 1970; i <= 2200; i++) { const o = document.createElement('option'); o.value = i; o.textContent = i; if (i === y) o.selected = true; s.appendChild(o); }
 }
 function setCurrentMonth() { document.getElementById('monthSel').value = new Date().getMonth() + 1; }
-function changeMonth(dir) {
+function changeMonth(d) {
   const ms = document.getElementById('monthSel'), ys = document.getElementById('yearSel');
   let m = parseInt(ms.value), y = parseInt(ys.value);
-  m += dir; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
+  m += d; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
   ms.value = m; ys.value = y; updateTable();
 }
 function daysInMonth(m, y) { return new Date(y, m, 0).getDate(); }
@@ -1338,7 +1078,6 @@ function updateTable() {
     tbody.appendChild(tr);
   }
 }
-
 function openSearchModal() { document.getElementById('searchModal').style.display = 'flex'; document.getElementById('modalSearchInput').focus(); }
 function closeSearchModal() { document.getElementById('searchModal').style.display = 'none'; document.getElementById('modalSearchInput').value = ''; }
 function performSearch() {
@@ -1354,7 +1093,6 @@ function performSearch() {
     closeSearchModal();
   } else { alert('کارمەند نەدۆزرایەوە'); }
 }
-
 let isModalFullscreen = false, isModalMinimized = false;
 function openEmployeeModal() {
   const modal = document.getElementById('employeeModal'), content = document.getElementById('employeeModalContent');
@@ -1367,72 +1105,40 @@ function openEmployeeModal() {
 function closeEmployeeModal() { document.getElementById('employeeModal').style.display = 'none'; if (isEditMode) toggleEditMode(); }
 function minimizeEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.style.display = c.style.display === 'none' ? 'flex' : 'none'; }
 function toggleFullscreenEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.classList.toggle('fullscreen'); isModalFullscreen = !isModalFullscreen; }
-
 function toggleEditMode() {
   isEditMode = !isEditMode;
-  const editBtn = document.getElementById('editBtn');
-  const allInputs = document.querySelectorAll('#employeeModal input:not(.search-input)');
-  const subInputs = document.querySelectorAll('#tab5 input');
-  const allInputsInModal = [...allInputs, ...subInputs];
-  
-  allInputsInModal.forEach(input => { input.disabled = !isEditMode; });
-  if (isEditMode) {
-    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> سەیڤکردن';
-    editBtn.classList.add('edit-mode');
-  } else {
-    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> گۆڕانکاری';
-    editBtn.classList.remove('edit-mode');
-    alert('گۆڕانکارییەکان پاشەکەوت کران!');
-  }
+  const editBtn = document.getElementById('editBtn'), allInputs = document.querySelectorAll('#employeeModal input:not(.search-input)'), subInputs = document.querySelectorAll('#tab5 input'), allInputsInModal = [...allInputs, ...subInputs];
+  allInputsInModal.forEach(i => { i.disabled = !isEditMode; });
+  if (isEditMode) { editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> سەیڤکردن'; editBtn.classList.add('edit-mode'); }
+  else { editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> گۆڕانکاری'; editBtn.classList.remove('edit-mode'); alert('گۆڕانکارییەکان پاشەکەوت کران!'); }
 }
-
 function uploadImage() {
-  const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
-  input.onchange = function(e) {
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+  inp.onchange = function(e) {
     const file = e.target.files[0];
-    if (file) { const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
-        img.src = event.target.result; img.style.display = 'block';
-        if (placeholder) placeholder.style.display = 'none';
-        document.getElementById('uploadImageBtn').textContent = 'گۆڕینی وێنە';
-        document.getElementById('deleteImageBtn').disabled = false;
-        hasImage = true;
-      }; reader.readAsDataURL(file);
-    }
-  }; input.click();
+    if (file) { const r = new FileReader(); r.onload = function(ev) {
+      const img = document.getElementById('profileImg'), ph = document.getElementById('profilePlaceholder');
+      img.src = ev.target.result; img.style.display = 'block'; if (ph) ph.style.display = 'none';
+      document.getElementById('uploadImageBtn').textContent = 'گۆڕینی وێنە';
+      document.getElementById('deleteImageBtn').disabled = false; hasImage = true;
+    }; r.readAsDataURL(file); }
+  }; inp.click();
 }
 function deleteImage() {
   if (hasImage) {
-    const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
-    img.src = ''; img.style.display = 'none';
-    if (placeholder) placeholder.style.display = 'block';
+    const img = document.getElementById('profileImg'), ph = document.getElementById('profilePlaceholder');
+    img.src = ''; img.style.display = 'none'; if (ph) ph.style.display = 'block';
     document.getElementById('uploadImageBtn').textContent = 'دانانی وێنە';
-    document.getElementById('deleteImageBtn').disabled = true;
-    hasImage = false;
+    document.getElementById('deleteImageBtn').disabled = true; hasImage = false;
   }
 }
-
-function displayEmployeeInfo(employee) {
-  document.getElementById('employeeInfoDisplay').innerHTML = `
-    <div class="tab1-layout">
-      <div class="tab1-right">
-        <div class="profile-image"><img id="profileImg" src="" style="display: none;"><span id="profilePlaceholder" style="font-size: 50px;">👤</span></div>
-        <div class="image-buttons"><button class="image-btn image-btn-upload" id="uploadImageBtn" onclick="uploadImage()">دانانی وێنە</button><button class="image-btn image-btn-delete" id="deleteImageBtn" onclick="deleteImage()" disabled>سڕینەوەی وێنە</button></div>
-      </div>
-      <div class="tab1-left">
-        <div class="info-row"><div class="info-label">کۆدی کارمەند:</div><div class="info-value"><input type="text" value="${employee.code}" disabled></div><div class="info-label" style="margin-right:15px;">ژمارەی کارت:</div><div class="info-value"><input type="text" value="${employee.cardNumber || '—'}" disabled></div></div>
-        <div class="name-group"><div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" value="${employee.name}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باوک:</div><div class="info-value"><input type="text" value="${employee.fatherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باپیر:</div><div class="info-value"><input type="text" value="${employee.grandfatherName || '—'}" disabled></div></div></div>
-        <div class="silver-box"><div class="info-row"><div class="info-label">ژمارەی کارتی نیشتمانی:</div><div class="info-value"><input type="text" value="${employee.nationalId || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕەگەز:</div><div class="info-value"><input type="text" value="${employee.gender || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی دایک:</div><div class="info-value"><input type="text" value="${employee.motherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی تەواو بە ئینگلیزی:</div><div class="info-value"><input type="text" value="${employee.englishName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی UPN:</div><div class="info-value"><input type="text" value="${employee.upn || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" value="${employee.address || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی مۆبایل:</div><div class="info-value"><input type="text" value="${employee.mobile}" disabled></div></div></div>
-        <div class="silver-box"><div class="info-row"><div class="info-label">ڕێکەوتی دامەزراندن:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕێکەوتی دەست بەکاربوون:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">پلە:</div><div class="info-value"><input type="text" value="${employee.position || '—'}" disabled></div></div></div>
-      </div>
-    </div>`;
-  hasImage = false; const img = document.getElementById('profileImg'); const ph = document.getElementById('profilePlaceholder');
+function displayEmployeeInfo(e) {
+  document.getElementById('employeeInfoDisplay').innerHTML = `<div class="tab1-layout"><div class="tab1-right"><div class="profile-image"><img id="profileImg" src="" style="display: none;"><span id="profilePlaceholder" style="font-size: 50px;">👤</span></div><div class="image-buttons"><button class="image-btn image-btn-upload" id="uploadImageBtn" onclick="uploadImage()">دانانی وێنە</button><button class="image-btn image-btn-delete" id="deleteImageBtn" onclick="deleteImage()" disabled>سڕینەوەی وێنە</button></div></div><div class="tab1-left"><div class="info-row"><div class="info-label">کۆدی کارمەند:</div><div class="info-value"><input type="text" value="${e.code}" disabled></div><div class="info-label" style="margin-right:15px;">ژمارەی کارت:</div><div class="info-value"><input type="text" value="${e.cardNumber || '—'}" disabled></div></div><div class="name-group"><div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" value="${e.name}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باوک:</div><div class="info-value"><input type="text" value="${e.fatherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باپیر:</div><div class="info-value"><input type="text" value="${e.grandfatherName || '—'}" disabled></div></div></div><div class="silver-box"><div class="info-row"><div class="info-label">ژمارەی کارتی نیشتمانی:</div><div class="info-value"><input type="text" value="${e.nationalId || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕەگەز:</div><div class="info-value"><input type="text" value="${e.gender || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی دایک:</div><div class="info-value"><input type="text" value="${e.motherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی تەواو بە ئینگلیزی:</div><div class="info-value"><input type="text" value="${e.englishName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی UPN:</div><div class="info-value"><input type="text" value="${e.upn || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" value="${e.address || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی مۆبایل:</div><div class="info-value"><input type="text" value="${e.mobile}" disabled></div></div></div><div class="silver-box"><div class="info-row"><div class="info-label">ڕێکەوتی دامەزراندن:</div><div class="info-value"><input type="text" value="${e.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕێکەوتی دەست بەکاربوون:</div><div class="info-value"><input type="text" value="${e.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">پلە:</div><div class="info-value"><input type="text" value="${e.position || '—'}" disabled></div></div></div></div></div>`;
+  hasImage = false; const img = document.getElementById('profileImg'), ph = document.getElementById('profilePlaceholder');
   if (img) img.style.display = 'none'; if (ph) ph.style.display = 'block';
-  const upBtn = document.getElementById('uploadImageBtn'); const delBtn = document.getElementById('deleteImageBtn');
-  if (upBtn) upBtn.textContent = 'دانانی وێنە'; if (delBtn) delBtn.disabled = true;
+  const ub = document.getElementById('uploadImageBtn'), db = document.getElementById('deleteImageBtn');
+  if (ub) ub.textContent = 'دانانی وێنە'; if (db) db.disabled = true;
 }
-
 function searchEmployeeInModal() {
   const q = document.getElementById('modalEmployeeSearchInput').value.trim().toLowerCase();
   if (!q) { alert('تکایە ناوی کارمەند بنووسە'); return; }
@@ -1440,44 +1146,38 @@ function searchEmployeeInModal() {
   if (found) { currentEmployeeData = found; displayEmployeeInfo(found); }
   else { alert('کارمەند نەدۆزرایەوە'); document.getElementById('employeeInfoDisplay').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><p>کارمەند نەدۆزرایەوە</p></div>`; }
 }
-
 document.querySelectorAll('.tab-btn').forEach(btn => { btn.addEventListener('click', () => {
-  const tabId = btn.getAttribute('data-tab');
+  const id = btn.getAttribute('data-tab');
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }); });
-
 document.querySelectorAll('.sub-tab-btn').forEach(btn => { btn.addEventListener('click', () => {
-  const subTabId = btn.getAttribute('data-subtab');
+  const id = btn.getAttribute('data-subtab');
   document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.sub-tab-content').forEach(tab => tab.classList.remove('active'));
-  document.getElementById(subTabId).classList.add('active');
+  document.querySelectorAll('.sub-tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }); });
-
 document.getElementById('modalSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
 document.getElementById('modalEmployeeSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') searchEmployeeInModal(); });
-window.onclick = function(event) {
-  if (event.target === document.getElementById('searchModal')) closeSearchModal();
-  if (event.target === document.getElementById('employeeModal')) closeEmployeeModal();
+window.onclick = function(e) {
+  if (e.target === document.getElementById('searchModal')) closeSearchModal();
+  if (e.target === document.getElementById('employeeModal')) closeEmployeeModal();
 }
-
-const modalContent = document.getElementById('employeeModalContent'), titleBar = document.getElementById('modalTitleBar');
-let isDragging = false, offsetX, offsetY;
-if (titleBar) { titleBar.addEventListener('mousedown', (e) => { if (isModalFullscreen) return; isDragging = true; offsetX = e.clientX - modalContent.offsetLeft; offsetY = e.clientY - modalContent.offsetTop; modalContent.style.position = 'absolute'; modalContent.style.margin = '0'; }); }
-document.addEventListener('mousemove', (e) => { if (isDragging && !isModalFullscreen && modalContent) { modalContent.style.left = (e.clientX - offsetX) + 'px'; modalContent.style.top = (e.clientY - offsetY) + 'px'; } });
-document.addEventListener('mouseup', () => { isDragging = false; });
-
+const modalC = document.getElementById('employeeModalContent'), titleB = document.getElementById('modalTitleBar');
+let isDrag = false, offX, offY;
+if (titleB) { titleB.addEventListener('mousedown', (e) => { if (isModalFullscreen) return; isDrag = true; offX = e.clientX - modalC.offsetLeft; offY = e.clientY - modalC.offsetTop; modalC.style.position = 'absolute'; modalC.style.margin = '0'; }); }
+document.addEventListener('mousemove', (e) => { if (isDrag && !isModalFullscreen && modalC) { modalC.style.left = (e.clientX - offX) + 'px'; modalC.style.top = (e.clientY - offY) + 'px'; } });
+document.addEventListener('mouseup', () => { isDrag = false; });
 function toggleMenu(id) {
   document.querySelectorAll('.dropdown').forEach(d => { if (d.id !== id) d.classList.remove('open'); });
   document.querySelectorAll('.nav-btn').forEach(b => { if (b.getAttribute('onclick') !== `toggleMenu('${id}')`) b.classList.remove('open'); });
-  const menu = document.getElementById(id); menu.classList.toggle('open');
-  const btn = document.querySelector(`[onclick="toggleMenu('${id}')"]`); if (btn) btn.classList.toggle('open', menu.classList.contains('open'));
+  const m = document.getElementById(id); m.classList.toggle('open');
+  const btn = document.querySelector(`[onclick="toggleMenu('${id}')"]`); if (btn) btn.classList.toggle('open', m.classList.contains('open'));
 }
 document.addEventListener('click', e => { if (!e.target.closest('.nav-menu')) { document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('open')); } });
-
 populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(updateClock, 1000);
 </script>
 </body>
