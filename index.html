@@ -16,6 +16,7 @@
   --primary-light: #4a6fa5;
   --red: #d32f2f;
   --blue: #1565c0;
+  --green: #2e7d32;
   --font: 'Noto Sans Arabic', sans-serif;
   --nav1-h: 44px;
   --nav2-h: 40px;
@@ -268,7 +269,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   background: #bbb;
 }
 
-/* ===== EMPLOYEE INFO MODAL (NEW) ===== */
+/* ===== EMPLOYEE INFO MODAL ===== */
 .employee-modal {
   display: none;
   position: fixed;
@@ -283,10 +284,10 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 }
 .employee-modal-content {
   background-color: white;
-  width: 900px;
+  width: 1000px;
   max-width: 90%;
-  height: 650px;
-  max-height: 80vh;
+  height: 700px;
+  max-height: 85vh;
   border-radius: 10px;
   overflow: hidden;
   display: flex;
@@ -369,6 +370,14 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   height: 14px;
   fill: #555;
 }
+.action-btn.edit-mode {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}
+.action-btn.edit-mode svg {
+  fill: white;
+}
 /* Modal Search Bar */
 .modal-search-bar {
   background: #B8CFF0;
@@ -388,7 +397,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   direction: rtl;
   background: white;
   cursor: text;
-  max-width: 300px;
+  max-width: 250px;
 }
 .modal-search-bar .search-input:focus {
   outline: none;
@@ -458,11 +467,10 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 .tab1-left {
   width: 80%;
 }
-/* Profile Image */
+/* Profile Image - Rectangle with height 10% more than width */
 .profile-image {
   width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  height: 132px;
   background: #ddd;
   margin: 0 auto 15px;
   display: flex;
@@ -470,6 +478,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   justify-content: center;
   overflow: hidden;
   border: 2px solid var(--primary);
+  border-radius: 8px;
 }
 .profile-image img {
   width: 100%;
@@ -477,7 +486,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   object-fit: cover;
 }
 .profile-image span {
-  font-size: 40px;
+  font-size: 50px;
   color: #999;
 }
 .image-buttons {
@@ -521,7 +530,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   flex-wrap: wrap;
 }
 .info-label {
-  width: 130px;
+  width: 140px;
   font-weight: 700;
   color: var(--primary);
   font-size: 12px;
@@ -544,6 +553,11 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 .info-value input:focus {
   outline: none;
   border-bottom: 1px solid var(--primary);
+}
+.info-value input:disabled {
+  background: #f0f0f0;
+  color: #666;
+  cursor: not-allowed;
 }
 /* Two column group for names */
 .name-group {
@@ -568,7 +582,41 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   margin-bottom: 10px;
 }
 .silver-box .info-label {
-  width: 140px;
+  width: 160px;
+}
+/* Sub Tabs for Tab5 */
+.sub-tabs {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+.sub-tab-btn {
+  padding: 8px 16px;
+  background: #e0e0e0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  transition: 0.2s;
+}
+.sub-tab-btn:hover {
+  background: #ccc;
+}
+.sub-tab-btn.active {
+  background: var(--primary);
+  color: white;
+}
+.sub-tab-content {
+  display: none;
+}
+.sub-tab-content.active {
+  display: block;
 }
 /* Empty state */
 .empty-state {
@@ -795,6 +843,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   #boxes-row { grid-template-columns: repeat(4,1fr); }
   .tab1-layout { flex-direction: column; }
   .tab1-right, .tab1-left { width: 100%; }
+  .sub-tabs { justify-content: center; }
 }
 @media (max-width:600px) {
   #boxes-row { grid-template-columns: repeat(2,1fr); }
@@ -802,6 +851,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   .modal-action-bar { gap: 8px; }
   .action-btn { padding: 4px 10px; font-size: 10px; }
   .name-group { flex-direction: column; gap: 10px; }
+  .sub-tab-btn { padding: 6px 12px; font-size: 11px; }
 }
 </style>
 </head>
@@ -1033,7 +1083,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   </div>
 </div>
 
-<!-- ===== EMPLOYEE INFO MODAL (main) ===== -->
+<!-- ===== EMPLOYEE INFO MODAL ===== -->
 <div id="employeeModal" class="employee-modal">
   <div class="employee-modal-content" id="employeeModalContent">
     <!-- Title Bar -->
@@ -1047,11 +1097,11 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
     </div>
     <!-- Action Bar -->
     <div class="modal-action-bar">
-      <button class="action-btn" onclick="alert('پەنجەرەی نوێی کارمەند دەکرێتەوە')">
+      <button class="action-btn" id="newBtn" onclick="alert('پەنجەرەی نوێی کارمەند دەکرێتەوە')">
         <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
         نوێ
       </button>
-      <button class="action-btn" onclick="alert('گۆڕانکاری لە زانیاری کارمەند')">
+      <button class="action-btn" id="editBtn" onclick="toggleEditMode()">
         <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
         گۆڕانکاری
       </button>
@@ -1080,9 +1130,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
     <!-- Body -->
     <div class="modal-body">
       <div id="tab1" class="tab-content active">
-        <div id="employeeInfoDisplay">
-          <!-- Will be filled by JavaScript -->
-        </div>
+        <div id="employeeInfoDisplay"></div>
       </div>
       <div id="tab2" class="tab-content">
         <div class="empty-state"><p>ڕێکخستنی شەفت و گروپ - بەتاڵە</p></div>
@@ -1094,7 +1142,46 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
         <div class="empty-state"><p>ڕێکخستنی شوێنی دەوام - بەتاڵە</p></div>
       </div>
       <div id="tab5" class="tab-content">
-        <div class="empty-state"><p>زانیاریەکانی تر - بەتاڵە</p></div>
+        <!-- Sub Tabs inside Tab5 -->
+        <div class="sub-tabs">
+          <button class="sub-tab-btn active" data-subtab="sub1">ئاستی خوێندن و زانیاری کار و زمان</button>
+          <button class="sub-tab-btn" data-subtab="sub2">بەڵگەنامەکانی کەسیەتی و نیشتەجێبوون</button>
+          <button class="sub-tab-btn" data-subtab="sub3">زانیاری باری کۆمەڵاتی و تەندروستی</button>
+          <button class="sub-tab-btn" data-subtab="sub4">زانیاری سیستەمی کەسی</button>
+        </div>
+        <div id="sub1" class="sub-tab-content active">
+          <div class="silver-box">
+            <div class="info-row"><div class="info-label">ئاستی خوێندن:</div><div class="info-value"><input type="text" id="eduLevel" value="بەکالۆریۆس" disabled></div></div>
+            <div class="info-row"><div class="info-label">بەشی خوێندن:</div><div class="info-value"><input type="text" id="eduField" value="کۆمپیوتەر" disabled></div></div>
+            <div class="info-row"><div class="info-label">زمانەکان:</div><div class="info-value"><input type="text" id="languages" value="کوردی، عەرەبی، ئینگلیزی" disabled></div></div>
+            <div class="info-row"><div class="info-label">ئاستی زمان:</div><div class="info-value"><input type="text" id="langLevel" value="باش" disabled></div></div>
+            <div class="info-row"><div class="info-label">کارپێکردنی کۆمپیوتەر:</div><div class="info-value"><input type="text" id="computerSkills" value="باش" disabled></div></div>
+          </div>
+        </div>
+        <div id="sub2" class="sub-tab-content">
+          <div class="silver-box">
+            <div class="info-row"><div class="info-label">ژمارەی پاسپۆرت:</div><div class="info-value"><input type="text" id="passportNo" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">بەرواری دەرچوون:</div><div class="info-value"><input type="text" id="passportExpiry" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">ژمارەی کارتی نیشتەجێبوون:</div><div class="info-value"><input type="text" id="residenceCard" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">بەرواری کۆتایی:</div><div class="info-value"><input type="text" id="residenceExpiry" value="—" disabled></div></div>
+          </div>
+        </div>
+        <div id="sub3" class="sub-tab-content">
+          <div class="silver-box">
+            <div class="info-row"><div class="info-label">باری کۆمەڵاتی:</div><div class="info-value"><input type="text" id="socialStatus" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">باری تەندروستی:</div><div class="info-value"><input type="text" id="healthStatus" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">خوێن:</div><div class="info-value"><input type="text" id="bloodType" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">نەخۆشییە تایبەتییەکان:</div><div class="info-value"><input type="text" id="diseases" value="—" disabled></div></div>
+          </div>
+        </div>
+        <div id="sub4" class="sub-tab-content">
+          <div class="silver-box">
+            <div class="info-row"><div class="info-label">ناوی بەکارهێنەر:</div><div class="info-value"><input type="text" id="username" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">ئیمەیڵ:</div><div class="info-value"><input type="text" id="email" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">ئیمەیڵی سیستەم:</div><div class="info-value"><input type="text" id="systemEmail" value="—" disabled></div></div>
+            <div class="info-row"><div class="info-label">مۆبایلی کار:</div><div class="info-value"><input type="text" id="workPhone" value="—" disabled></div></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1138,148 +1225,14 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   
   <!-- 8 Summary Boxes -->
   <div id="boxes-row">
-    <div class="sum-box">
-      <div class="sum-box-header">کردار</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">بڕی دەوام:</div>
-          <div class="sb-label">کۆی ئامادەبوون:</div>
-          <div class="sb-label">دەوام لە شەفت:</div>
-          <div class="sb-label">ئامادەبوونی زیاتر:</div>
-          <div class="sb-label red">کەمی دەوام:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val red">٠٠:٠٠</div>
-        </div>
-      </div>
-    </div>
-    <div class="sum-box">
-      <div class="sum-box-header">کەمی ئامادەبوون</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">دواکەوتن:</div>
-          <div class="sb-label">زوو دەرچوون:</div>
-          <div class="sb-label">نێوان شەفت:</div>
-          <div class="sb-label red">کۆی کەمی ئامادەبوون:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val red">٠٠:٠٠</div>
-        </div>
-      </div>
-    </div>
-    <div class="sum-box">
-      <div class="sum-box-header">ئۆڤەرتایم ڕێگەپێدراو</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">OT پێش دەوام:</div>
-          <div class="sb-label">OT دوای دەوام:</div>
-          <div class="sb-label">هیتر:</div>
-          <div class="sb-label">OT دەرچوون:</div>
-          <div class="sb-label red">کۆی ئۆڤەرتایم:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val red">٠٠:٠٠</div>
-        </div>
-      </div>
-    </div>
-    <div class="sum-box">
-      <div class="sum-box-header">مۆڵەتەکان</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">م. کاتژمێری:</div>
-          <div class="sb-label">م. رۆژانە:</div>
-          <div class="sb-label">م. نەخۆشی:</div>
-          <div class="sb-label">م. بێ مووچە:</div>
-          <div class="sb-label red">بڕی ماوەی مۆڵەتی پێدراو:</div>
-          <div class="sb-label blue">بڕی مۆڵەتی ماوە:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val red">٠٠:٠٠</div>
-          <div class="sb-val blue">٠٠:٠٠</div>
-        </div>
-      </div>
-    </div>
-    <div class="sum-box">
-      <div class="sum-box-header">دەرچوونە فەرمییەکان</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">دەرچوونی کاتژمێر:</div>
-          <div class="sb-label">رۆژانە:</div>
-          <div class="sb-label">ڕۆشتن:</div>
-          <div class="sb-label red">کۆی دەرچوون:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val red">٠٠:٠٠</div>
-        </div>
-      </div>
-    </div>
-    <div class="sum-box">
-      <div class="sum-box-header">ڕۆژەکان</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">هاتن و چوونی نان...</div>
-          <div class="sb-label">ئامادە نەبوون:</div>
-          <div class="sb-label">نەبوون لە شەفت:</div>
-          <div class="sb-label">پشوو:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠</div>
-          <div class="sb-val">٠</div>
-          <div class="sb-val">٠</div>
-          <div class="sb-val">٠</div>
-        </div>
-      </div>
-    </div>
-    <div class="sum-box">
-      <div class="sum-box-header">ئۆڤەرتایم ڕێگەپێنەدراو</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">OT پێش دەوام ڕێگەپێنەدراو:</div>
-          <div class="sb-label">OT دوای دەوام ڕێگەپێنەدراو:</div>
-          <div class="sb-label">OT ڕۆژانەی ڕێگەپێنەدراو:</div>
-          <div class="sb-label red">کۆی OT ڕێگەپێنەدراو:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val red">٠٠:٠٠</div>
-        </div>
-      </div>
-    </div>
-    <div class="sum-box">
-      <div class="sum-box-header">هیتر</div>
-      <div class="sum-box-body">
-        <div class="sum-box-labels">
-          <div class="sb-label">پشووی دەوام:</div>
-          <div class="sb-label">کاری شەو:</div>
-          <div class="sb-label">کەمی ڕێگەپێدراو:</div>
-        </div>
-        <div class="sum-box-times">
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-          <div class="sb-val">٠٠:٠٠</div>
-        </div>
-      </div>
-    </div>
+    <div class="sum-box"><div class="sum-box-header">کردار</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">بڕی دەوام:</div><div class="sb-label">کۆی ئامادەبوون:</div><div class="sb-label">دەوام لە شەفت:</div><div class="sb-label">ئامادەبوونی زیاتر:</div><div class="sb-label red">کەمی دەوام:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div></div></div></div>
+    <div class="sum-box"><div class="sum-box-header">کەمی ئامادەبوون</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">دواکەوتن:</div><div class="sb-label">زوو دەرچوون:</div><div class="sb-label">نێوان شەفت:</div><div class="sb-label red">کۆی کەمی ئامادەبوون:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div></div></div></div>
+    <div class="sum-box"><div class="sum-box-header">ئۆڤەرتایم ڕێگەپێدراو</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">OT پێش دەوام:</div><div class="sb-label">OT دوای دەوام:</div><div class="sb-label">هیتر:</div><div class="sb-label">OT دەرچوون:</div><div class="sb-label red">کۆی ئۆڤەرتایم:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div></div></div></div>
+    <div class="sum-box"><div class="sum-box-header">مۆڵەتەکان</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">م. کاتژمێری:</div><div class="sb-label">م. رۆژانە:</div><div class="sb-label">م. نەخۆشی:</div><div class="sb-label">م. بێ مووچە:</div><div class="sb-label red">بڕی ماوەی مۆڵەتی پێدراو:</div><div class="sb-label blue">بڕی مۆڵەتی ماوە:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div><div class="sb-val blue">٠٠:٠٠</div></div></div></div>
+    <div class="sum-box"><div class="sum-box-header">دەرچوونە فەرمییەکان</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">دەرچوونی کاتژمێر:</div><div class="sb-label">رۆژانە:</div><div class="sb-label">ڕۆشتن:</div><div class="sb-label red">کۆی دەرچوون:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div></div></div></div>
+    <div class="sum-box"><div class="sum-box-header">ڕۆژەکان</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">هاتن و چوونی نان...</div><div class="sb-label">ئامادە نەبوون:</div><div class="sb-label">نەبوون لە شەفت:</div><div class="sb-label">پشوو:</div></div><div class="sum-box-times"><div class="sb-val">٠</div><div class="sb-val">٠</div><div class="sb-val">٠</div><div class="sb-val">٠</div></div></div></div>
+    <div class="sum-box"><div class="sum-box-header">ئۆڤەرتایم ڕێگەپێنەدراو</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">OT پێش دەوام ڕێگەپێنەدراو:</div><div class="sb-label">OT دوای دەوام ڕێگەپێنەدراو:</div><div class="sb-label">OT ڕۆژانەی ڕێگەپێنەدراو:</div><div class="sb-label red">کۆی OT ڕێگەپێنەدراو:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val red">٠٠:٠٠</div></div></div></div>
+    <div class="sum-box"><div class="sum-box-header">هیتر</div><div class="sum-box-body"><div class="sum-box-labels"><div class="sb-label">پشووی دەوام:</div><div class="sb-label">کاری شەو:</div><div class="sb-label">کەمی ڕێگەپێدراو:</div></div><div class="sum-box-times"><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div><div class="sb-val">٠٠:٠٠</div></div></div></div>
   </div>
 </div>
 
@@ -1289,36 +1242,18 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
     <svg viewBox="0 0 24 24"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
     مانگی پێشوو
   </button>
-
   <select class="combo-sel" id="monthSel" onchange="updateTable()">
-    <option value="1">کانوونی دووەم</option>
-    <option value="2">شوبات</option>
-    <option value="3">ئازار</option>
-    <option value="4">نیسان</option>
-    <option value="5">مایس</option>
-    <option value="6">حوزەیران</option>
-    <option value="7">تەمموز</option>
-    <option value="8">ئاب</option>
-    <option value="9">ئەیلول</option>
-    <option value="10">تشرینی یەکەم</option>
-    <option value="11">تشرینی دووەم</option>
-    <option value="12">کانوونی یەکەم</option>
+    <option value="1">کانوونی دووەم</option><option value="2">شوبات</option><option value="3">ئازار</option><option value="4">نیسان</option><option value="5">مایس</option><option value="6">حوزەیران</option><option value="7">تەمموز</option><option value="8">ئاب</option><option value="9">ئەیلول</option><option value="10">تشرینی یەکەم</option><option value="11">تشرینی دووەم</option><option value="12">کانوونی یەکەم</option>
   </select>
-
   <select class="combo-sel" id="yearSel" onchange="updateTable()"></select>
-
   <button class="next-month-btn" onclick="changeMonth(1)">
     مانگی دواتر
     <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
   </button>
-
   <div class="taskbar-dates">
-    <span class="tz-label">زاینی:</span>
-    <span class="tz-value" id="tbGregorian"></span>
-    <span class="tz-label">&nbsp;|&nbsp; کوردی:</span>
-    <span class="tz-value" id="tbKurdish"></span>
-    <span class="tz-label">&nbsp;|&nbsp;</span>
-    <span class="tz-value" id="tbTime"></span>
+    <span class="tz-label">زاینی:</span><span class="tz-value" id="tbGregorian"></span>
+    <span class="tz-label">&nbsp;|&nbsp; کوردی:</span><span class="tz-value" id="tbKurdish"></span>
+    <span class="tz-label">&nbsp;|&nbsp;</span><span class="tz-value" id="tbTime"></span>
   </div>
 </div>
 
@@ -1328,596 +1263,222 @@ const kurdishDays = ['شەممە','یەک شەممە','دوو شەممە','سێ 
 const gregorianMonthsKurdish = ['کانوونی دووەم','شوبات','ئازار','نیسان','مایس','حوزەیران','تەمموز','ئاب','ئەیلول','تشرینی یەکەم','تشرینی دووەم','کانوونی یەکەم'];
 const kurdishMonthsFull = ['نەورۆز','گوڵان','جۆزەردان','پووشپەڕ','خەرمانان','گەلاوێژ','ڕەزبەر','گەڵاڕێزان','سەرماوەرز','بەفرانبار','ڕێبەندان','ڕەشەمێ'];
 
-// Kurdish year offset
 const KURDISH_YEAR_OFFSET = 700;
 
-// Fake employee data (expanded)
 const employees = [
-  { 
-    name:'ئەحمەد علی', code:'1001', mobile:'07501234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی',
+  { name:'ئەحمەد علی', code:'1001', mobile:'07501234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی',
     fatherName:'عەلی محەمەد', grandfatherName:'محەمەد حەسەن', motherName:'فەریدە حسێن', nationalId:'12345678901',
     gender:'نێر', englishName:'Ahmad Ali', upn:'AHMAD001', address:'شەقامی سەعدون، ناوەندی شار', cardNumber:'9876543210',
-    startDate:'2020-01-01', position:'ئەندازیار'
-  },
-  { 
-    name:'سارا محمد', code:'1002', mobile:'07701234567', group:'گروپ B', type:'بەکارهاتوو', location:'لقی باکور',
+    startDate:'2020-01-01', position:'ئەندازیار' },
+  { name:'سارا محمد', code:'1002', mobile:'07701234567', group:'گروپ B', type:'بەکارهاتوو', location:'لقی باکور',
     fatherName:'محەمەد رەحیم', grandfatherName:'رەحیم کەریم', motherName:'نەسرین عەلی', nationalId:'23456789012',
     gender:'مێ', englishName:'Sara Mohammad', upn:'SARA002', address:'شەقامی گولان، سلێمانی', cardNumber:'8765432109',
-    startDate:'2019-03-15', position:'بەڕێوەبەر'
-  },
-  { 
-    name:'کارزان حسێن', code:'1003', mobile:'07801234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی',
+    startDate:'2019-03-15', position:'بەڕێوەبەر' },
+  { name:'کارزان حسێن', code:'1003', mobile:'07801234567', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی',
     fatherName:'حسێن عەزیز', grandfatherName:'عەزیز مستەفا', motherName:'سووزان محەمەد', nationalId:'34567890123',
     gender:'نێر', englishName:'Karzan Huseyn', upn:'KARZAN003', address:'شەقامی کوردستان، هەولێر', cardNumber:'7654321098',
-    startDate:'2021-06-20', position:'تەکنیکار'
-  },
+    startDate:'2021-06-20', position:'تەکنیکار' },
 ];
 
-// Variable to store current searched name
 let currentSearchName = '';
 let currentEmployeeData = null;
 let hasImage = false;
+let isEditMode = false;
 
 // ===================== KURDISH DATE FUNCTION =====================
 function getKurdishDate(gregorianDate) {
-  const day = gregorianDate.getDate();
-  const month = gregorianDate.getMonth() + 1;
-  const year = gregorianDate.getFullYear();
-  
+  const day = gregorianDate.getDate(), month = gregorianDate.getMonth() + 1, year = gregorianDate.getFullYear();
   let kDay, kMonth, kYear;
-  
-  if ((month === 3 && day >= 21) || (month === 4 && day <= 20)) {
-    kMonth = 1;
-    if (month === 3) {
-      kDay = day - 20;
-    } else {
-      kDay = day + 11;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 4 && day >= 21) || (month === 5 && day <= 21)) {
-    kMonth = 2;
-    if (month === 4) {
-      kDay = day - 20;
-    } else {
-      kDay = day + 10;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 5 && day >= 22) || (month === 6 && day <= 21)) {
-    kMonth = 3;
-    if (month === 5) {
-      kDay = day - 21;
-    } else {
-      kDay = day + 10;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 6 && day >= 22) || (month === 7 && day <= 22)) {
-    kMonth = 4;
-    if (month === 6) {
-      kDay = day - 21;
-    } else {
-      kDay = day + 9;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) {
-    kMonth = 5;
-    if (month === 7) {
-      kDay = day - 22;
-    } else {
-      kDay = day + 9;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) {
-    kMonth = 6;
-    if (month === 8) {
-      kDay = day - 22;
-    } else {
-      kDay = day + 9;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) {
-    kMonth = 7;
-    if (month === 9) {
-      kDay = day - 22;
-    } else {
-      kDay = day + 8;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) {
-    kMonth = 8;
-    if (month === 10) {
-      kDay = day - 22;
-    } else {
-      kDay = day + 9;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) {
-    kMonth = 9;
-    if (month === 11) {
-      kDay = day - 21;
-    } else {
-      kDay = day + 10;
-    }
-    kYear = year + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 12 && day >= 22) || (month === 1 && day <= 20)) {
-    kMonth = 10;
-    if (month === 12) {
-      kDay = day - 21;
-    } else {
-      kDay = day + 10;
-    }
-    kYear = (month === 12 ? year : year - 1) + KURDISH_YEAR_OFFSET;
-  }
-  else if ((month === 1 && day >= 21) || (month === 2 && day <= 19)) {
-    kMonth = 11;
-    if (month === 1) {
-      kDay = day - 20;
-    } else {
-      kDay = day + 11;
-    }
-    kYear = year - 1 + KURDISH_YEAR_OFFSET;
-  }
-  else {
-    kMonth = 12;
-    if (month === 2) {
-      kDay = day - 19;
-    } else {
-      kDay = day + 10;
-    }
-    kYear = year - 1 + KURDISH_YEAR_OFFSET;
-  }
-  
+  if ((month === 3 && day >= 21) || (month === 4 && day <= 20)) { kMonth = 1; kDay = month === 3 ? day - 20 : day + 11; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 4 && day >= 21) || (month === 5 && day <= 21)) { kMonth = 2; kDay = month === 4 ? day - 20 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 5 && day >= 22) || (month === 6 && day <= 21)) { kMonth = 3; kDay = month === 5 ? day - 21 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 6 && day >= 22) || (month === 7 && day <= 22)) { kMonth = 4; kDay = month === 6 ? day - 21 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) { kMonth = 5; kDay = month === 7 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) { kMonth = 6; kDay = month === 8 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) { kMonth = 7; kDay = month === 9 ? day - 22 : day + 8; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) { kMonth = 8; kDay = month === 10 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) { kMonth = 9; kDay = month === 11 ? day - 21 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 12 && day >= 22) || (month === 1 && day <= 20)) { kMonth = 10; kDay = month === 12 ? day - 21 : day + 10; kYear = (month === 12 ? year : year - 1) + KURDISH_YEAR_OFFSET; }
+  else if ((month === 1 && day >= 21) || (month === 2 && day <= 19)) { kMonth = 11; kDay = month === 1 ? day - 20 : day + 11; kYear = year - 1 + KURDISH_YEAR_OFFSET; }
+  else { kMonth = 12; kDay = month === 2 ? day - 19 : day + 10; kYear = year - 1 + KURDISH_YEAR_OFFSET; }
   return `${kDay} ${kurdishMonthsFull[kMonth - 1]} ${kYear}`;
 }
 
-// ===================== CLOCK & DATES =====================
 function pad(n) { return n < 10 ? '0' + n : n; }
-
 function updateClock() {
   const now = new Date();
-  const h = pad(now.getHours()), mi = pad(now.getMinutes()), s = pad(now.getSeconds());
-  const timeStr = `${h}:${mi}:${s}`;
-  const greg = `${now.getDate()} ${gregorianMonthsKurdish[now.getMonth()]} ${now.getFullYear()}`;
-  const kurd = getKurdishDate(now);
-  
-  document.getElementById('tbGregorian').textContent = greg;
-  document.getElementById('tbKurdish').textContent = kurd;
-  document.getElementById('tbTime').textContent = timeStr;
+  document.getElementById('tbGregorian').textContent = `${now.getDate()} ${gregorianMonthsKurdish[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('tbKurdish').textContent = getKurdishDate(now);
+  document.getElementById('tbTime').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
-// ===================== YEAR COMBO =====================
 function populateYears() {
   const sel = document.getElementById('yearSel');
   const curY = new Date().getFullYear();
-  for (let y = 1970; y <= 2200; y++) {
-    const opt = document.createElement('option');
-    opt.value = y;
-    opt.textContent = y;
-    if (y === curY) opt.selected = true;
-    sel.appendChild(opt);
-  }
+  for (let y = 1970; y <= 2200; y++) { const opt = document.createElement('option'); opt.value = y; opt.textContent = y; if (y === curY) opt.selected = true; sel.appendChild(opt); }
 }
-
-function setCurrentMonth() {
-  const now = new Date();
-  const currentMonth = now.getMonth() + 1;
-  document.getElementById('monthSel').value = currentMonth;
-}
-
-// ===================== MONTH CHANGE =====================
+function setCurrentMonth() { document.getElementById('monthSel').value = new Date().getMonth() + 1; }
 function changeMonth(dir) {
-  const ms = document.getElementById('monthSel');
-  const ys = document.getElementById('yearSel');
-  let m = parseInt(ms.value);
-  let y = parseInt(ys.value);
-  m += dir;
-  if (m < 1) { m = 12; y--; }
-  if (m > 12) { m = 1; y++; }
-  ms.value = m;
-  ys.value = y;
-  updateTable();
+  const ms = document.getElementById('monthSel'), ys = document.getElementById('yearSel');
+  let m = parseInt(ms.value), y = parseInt(ys.value);
+  m += dir; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
+  ms.value = m; ys.value = y; updateTable();
 }
-
-// ===================== DAYS IN MONTH =====================
-function daysInMonth(m, y) {
-  return new Date(y, m, 0).getDate();
-}
-
-// Day of week
-function dayName(jsDay) {
-  const map = [1, 2, 3, 4, 5, 6, 0];
-  return kurdishDays[map[jsDay]];
-}
-
-// ===================== BUILD TABLE =====================
+function daysInMonth(m, y) { return new Date(y, m, 0).getDate(); }
+function dayName(jsDay) { const map = [1, 2, 3, 4, 5, 6, 0]; return kurdishDays[map[jsDay]]; }
 function updateTable() {
-  const m = parseInt(document.getElementById('monthSel').value);
-  const y = parseInt(document.getElementById('yearSel').value);
-  const days = daysInMonth(m, y);
-  const tbody = document.getElementById('att-body');
+  const m = parseInt(document.getElementById('monthSel').value), y = parseInt(document.getElementById('yearSel').value);
+  const days = daysInMonth(m, y), tbody = document.getElementById('att-body');
   tbody.innerHTML = '';
-  
   for (let d = 1; d <= days; d++) {
-    const date = new Date(y, m - 1, d);
-    const jsDay = date.getDay();
-    const dayN = dayName(jsDay);
-    const isFriday = (jsDay === 5);
-    
-    const tr = document.createElement('tr');
-    if (isFriday) tr.className = 'friday-row';
-    
-    const cols = [
-      d, dayN, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''
-    ];
-    
-    cols.forEach((c) => {
-      const td = document.createElement('td');
-      td.textContent = c;
-      tr.appendChild(td);
-    });
+    const date = new Date(y, m - 1, d), jsDay = date.getDay(), dayN = dayName(jsDay), isFriday = (jsDay === 5);
+    const tr = document.createElement('tr'); if (isFriday) tr.className = 'friday-row';
+    const cols = [d, dayN, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    cols.forEach((c) => { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); });
     tbody.appendChild(tr);
   }
 }
 
-// ===================== MODAL SEARCH FUNCTIONS (small) =====================
-function openSearchModal() {
-  const modal = document.getElementById('searchModal');
-  const input = document.getElementById('modalSearchInput');
-  modal.style.display = 'flex';
-  input.value = '';
-  input.focus();
-}
-
-function closeSearchModal() {
-  const modal = document.getElementById('searchModal');
-  modal.style.display = 'none';
-  document.getElementById('modalSearchInput').value = '';
-}
-
+function openSearchModal() { document.getElementById('searchModal').style.display = 'flex'; document.getElementById('modalSearchInput').focus(); }
+function closeSearchModal() { document.getElementById('searchModal').style.display = 'none'; document.getElementById('modalSearchInput').value = ''; }
 function performSearch() {
   const q = document.getElementById('modalSearchInput').value.trim().toLowerCase();
-  if (!q) {
-    alert('تکایە ناو یان کۆد یان ژمارەی مۆبایل بنووسە');
-    return;
-  }
-  
-  const found = employees.find(e =>
-    e.name.toLowerCase().includes(q) || 
-    e.code.includes(q) || 
-    e.mobile.includes(q)
-  );
-  
+  if (!q) { alert('تکایە ناو یان کۆد یان ژمارەی مۆبایل بنووسە'); return; }
+  const found = employees.find(e => e.name.toLowerCase().includes(q) || e.code.includes(q) || e.mobile.includes(q));
   if (found) {
-    currentSearchName = found.name;
-    currentEmployeeData = found;
+    currentSearchName = found.name; currentEmployeeData = found;
     document.getElementById('searchBox').value = found.name;
     document.getElementById('empGroup').textContent = found.group;
     document.getElementById('empType').textContent = found.type;
     document.getElementById('empLocation').textContent = found.location;
     closeSearchModal();
-  } else {
-    alert('کارمەند نەدۆزرایەوە');
-  }
+  } else { alert('کارمەند نەدۆزرایەوە'); }
 }
 
-// ===================== EMPLOYEE MODAL FUNCTIONS =====================
-let isModalFullscreen = false;
-let isModalMinimized = false;
-
+let isModalFullscreen = false, isModalMinimized = false;
 function openEmployeeModal() {
-  const modal = document.getElementById('employeeModal');
-  const content = document.getElementById('employeeModalContent');
-  modal.style.display = 'flex';
-  isModalFullscreen = false;
-  isModalMinimized = false;
-  content.classList.remove('fullscreen');
-  content.style.display = 'flex';
+  const modal = document.getElementById('employeeModal'), content = document.getElementById('employeeModalContent');
+  modal.style.display = 'flex'; isModalFullscreen = false; isModalMinimized = false;
+  content.classList.remove('fullscreen'); content.style.display = 'flex';
+  if (currentEmployeeData) { displayEmployeeInfo(currentEmployeeData); document.getElementById('modalEmployeeSearchInput').value = currentEmployeeData.name; }
+  else { document.getElementById('employeeInfoDisplay').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><p>تکایە لە سەرەوە ناوی کارمەند بگەڕێ</p></div>`; document.getElementById('modalEmployeeSearchInput').value = ''; }
+  if (isEditMode) toggleEditMode();
+}
+function closeEmployeeModal() { document.getElementById('employeeModal').style.display = 'none'; if (isEditMode) toggleEditMode(); }
+function minimizeEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.style.display = c.style.display === 'none' ? 'flex' : 'none'; }
+function toggleFullscreenEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.classList.toggle('fullscreen'); isModalFullscreen = !isModalFullscreen; }
+
+function toggleEditMode() {
+  isEditMode = !isEditMode;
+  const editBtn = document.getElementById('editBtn');
+  const allInputs = document.querySelectorAll('#employeeModal input:not(.search-input)');
+  const subInputs = document.querySelectorAll('#tab5 input');
+  const allInputsInModal = [...allInputs, ...subInputs];
   
-  if (currentEmployeeData) {
-    displayEmployeeInfo(currentEmployeeData);
-    document.getElementById('modalEmployeeSearchInput').value = currentEmployeeData.name;
+  allInputsInModal.forEach(input => { input.disabled = !isEditMode; });
+  if (isEditMode) {
+    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> سەیڤکردن';
+    editBtn.classList.add('edit-mode');
   } else {
-    document.getElementById('employeeInfoDisplay').innerHTML = `
-      <div class="empty-state">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <p>تکایە لە سەرەوە ناوی کارمەند بگەڕێ</p>
-      </div>
-    `;
-    document.getElementById('modalEmployeeSearchInput').value = '';
-  }
-}
-
-function closeEmployeeModal() {
-  const modal = document.getElementById('employeeModal');
-  modal.style.display = 'none';
-}
-
-function minimizeEmployeeModal() {
-  const content = document.getElementById('employeeModalContent');
-  if (content.style.display === 'none') {
-    content.style.display = 'flex';
-    isModalMinimized = false;
-  } else {
-    content.style.display = 'none';
-    isModalMinimized = true;
-  }
-}
-
-function toggleFullscreenEmployeeModal() {
-  const content = document.getElementById('employeeModalContent');
-  if (isModalFullscreen) {
-    content.classList.remove('fullscreen');
-    isModalFullscreen = false;
-  } else {
-    content.classList.add('fullscreen');
-    isModalFullscreen = true;
+    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> گۆڕانکاری';
+    editBtn.classList.remove('edit-mode');
+    alert('گۆڕانکارییەکان پاشەکەوت کران!');
   }
 }
 
 function uploadImage() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
+  const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
   input.onchange = function(e) {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
+    if (file) { const reader = new FileReader();
       reader.onload = function(event) {
-        const imgElement = document.getElementById('profileImg');
-        const uploadBtn = document.getElementById('uploadImageBtn');
-        const deleteBtn = document.getElementById('deleteImageBtn');
-        imgElement.src = event.target.result;
-        imgElement.style.display = 'block';
-        uploadBtn.textContent = 'گۆڕینی وێنە';
-        deleteBtn.disabled = false;
+        const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
+        img.src = event.target.result; img.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+        document.getElementById('uploadImageBtn').textContent = 'گۆڕینی وێنە';
+        document.getElementById('deleteImageBtn').disabled = false;
         hasImage = true;
-      };
-      reader.readAsDataURL(file);
+      }; reader.readAsDataURL(file);
     }
-  };
-  input.click();
+  }; input.click();
 }
-
 function deleteImage() {
   if (hasImage) {
-    const imgElement = document.getElementById('profileImg');
-    const uploadBtn = document.getElementById('uploadImageBtn');
-    const deleteBtn = document.getElementById('deleteImageBtn');
-    imgElement.src = '';
-    imgElement.style.display = 'none';
-    uploadBtn.textContent = 'دانانی وێنە';
-    deleteBtn.disabled = true;
+    const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
+    img.src = ''; img.style.display = 'none';
+    if (placeholder) placeholder.style.display = 'block';
+    document.getElementById('uploadImageBtn').textContent = 'دانانی وێنە';
+    document.getElementById('deleteImageBtn').disabled = true;
     hasImage = false;
   }
 }
 
 function displayEmployeeInfo(employee) {
-  const container = document.getElementById('employeeInfoDisplay');
-  container.innerHTML = `
+  document.getElementById('employeeInfoDisplay').innerHTML = `
     <div class="tab1-layout">
       <div class="tab1-right">
-        <div class="profile-image">
-          <img id="profileImg" src="" style="display: none; width: 100%; height: 100%; object-fit: cover;">
-          <span id="profilePlaceholder" style="font-size: 40px; color: #999;">👤</span>
-        </div>
-        <div class="image-buttons">
-          <button class="image-btn image-btn-upload" id="uploadImageBtn" onclick="uploadImage()">دانانی وێنە</button>
-          <button class="image-btn image-btn-delete" id="deleteImageBtn" onclick="deleteImage()" disabled>سڕینەوەی وێنە</button>
-        </div>
+        <div class="profile-image"><img id="profileImg" src="" style="display: none;"><span id="profilePlaceholder" style="font-size: 50px;">👤</span></div>
+        <div class="image-buttons"><button class="image-btn image-btn-upload" id="uploadImageBtn" onclick="uploadImage()">دانانی وێنە</button><button class="image-btn image-btn-delete" id="deleteImageBtn" onclick="deleteImage()" disabled>سڕینەوەی وێنە</button></div>
       </div>
       <div class="tab1-left">
-        <!-- First Row: Code and Card Number -->
-        <div class="info-row">
-          <div class="info-label">کۆدی کارمەند:</div>
-          <div class="info-value"><input type="text" value="${employee.code}" readonly disabled style="background:#f0f0f0"></div>
-          <div class="info-label" style="margin-right: 15px;">ژمارەی کارت:</div>
-          <div class="info-value"><input type="text" value="${employee.cardNumber || '—'}" readonly disabled style="background:#f0f0f0"></div>
-        </div>
-        <!-- Second Row: Name, Father, Grandfather -->
-        <div class="name-group">
-          <div class="info-row">
-            <div class="info-label">ناوی کارمەند:</div>
-            <div class="info-value"><input type="text" value="${employee.name}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ناوی باوک:</div>
-            <div class="info-value"><input type="text" value="${employee.fatherName || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ناوی باپیر:</div>
-            <div class="info-value"><input type="text" value="${employee.grandfatherName || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-        </div>
-        <!-- Silver Box -->
-        <div class="silver-box">
-          <div class="info-row">
-            <div class="info-label">ژمارەی کارتی نیشتمانی:</div>
-            <div class="info-value"><input type="text" value="${employee.nationalId || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ڕەگەز:</div>
-            <div class="info-value"><input type="text" value="${employee.gender || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ناوی دایک:</div>
-            <div class="info-value"><input type="text" value="${employee.motherName || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ناوی تەواو بە ئینگلیزی:</div>
-            <div class="info-value"><input type="text" value="${employee.englishName || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ژمارەی UPN:</div>
-            <div class="info-value"><input type="text" value="${employee.upn || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ناونیشان:</div>
-            <div class="info-value"><input type="text" value="${employee.address || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ژمارەی مۆبایل:</div>
-            <div class="info-value"><input type="text" value="${employee.mobile}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-        </div>
-        <!-- Second Silver Box -->
-        <div class="silver-box">
-          <div class="info-row">
-            <div class="info-label">ڕێکەوتی دامەزراندن:</div>
-            <div class="info-value"><input type="text" value="${employee.startDate || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">ڕێکەوتی دەست بەکاربوون:</div>
-            <div class="info-value"><input type="text" value="${employee.startDate || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-          <div class="info-row">
-            <div class="info-label">پلە:</div>
-            <div class="info-value"><input type="text" value="${employee.position || '—'}" readonly disabled style="background:#f0f0f0"></div>
-          </div>
-        </div>
+        <div class="info-row"><div class="info-label">کۆدی کارمەند:</div><div class="info-value"><input type="text" value="${employee.code}" disabled></div><div class="info-label" style="margin-right:15px;">ژمارەی کارت:</div><div class="info-value"><input type="text" value="${employee.cardNumber || '—'}" disabled></div></div>
+        <div class="name-group"><div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" value="${employee.name}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باوک:</div><div class="info-value"><input type="text" value="${employee.fatherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باپیر:</div><div class="info-value"><input type="text" value="${employee.grandfatherName || '—'}" disabled></div></div></div>
+        <div class="silver-box"><div class="info-row"><div class="info-label">ژمارەی کارتی نیشتمانی:</div><div class="info-value"><input type="text" value="${employee.nationalId || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕەگەز:</div><div class="info-value"><input type="text" value="${employee.gender || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی دایک:</div><div class="info-value"><input type="text" value="${employee.motherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی تەواو بە ئینگلیزی:</div><div class="info-value"><input type="text" value="${employee.englishName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی UPN:</div><div class="info-value"><input type="text" value="${employee.upn || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" value="${employee.address || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی مۆبایل:</div><div class="info-value"><input type="text" value="${employee.mobile}" disabled></div></div></div>
+        <div class="silver-box"><div class="info-row"><div class="info-label">ڕێکەوتی دامەزراندن:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕێکەوتی دەست بەکاربوون:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">پلە:</div><div class="info-value"><input type="text" value="${employee.position || '—'}" disabled></div></div></div>
       </div>
-    </div>
-  `;
-  
-  // Reset image state
-  hasImage = false;
-  const imgElement = document.getElementById('profileImg');
-  const placeholder = document.getElementById('profilePlaceholder');
-  const uploadBtn = document.getElementById('uploadImageBtn');
-  const deleteBtn = document.getElementById('deleteImageBtn');
-  if (imgElement) {
-    imgElement.style.display = 'none';
-    if (placeholder) placeholder.style.display = 'block';
-  }
-  if (uploadBtn) uploadBtn.textContent = 'دانانی وێنە';
-  if (deleteBtn) deleteBtn.disabled = true;
+    </div>`;
+  hasImage = false; const img = document.getElementById('profileImg'); const ph = document.getElementById('profilePlaceholder');
+  if (img) img.style.display = 'none'; if (ph) ph.style.display = 'block';
+  const upBtn = document.getElementById('uploadImageBtn'); const delBtn = document.getElementById('deleteImageBtn');
+  if (upBtn) upBtn.textContent = 'دانانی وێنە'; if (delBtn) delBtn.disabled = true;
 }
 
 function searchEmployeeInModal() {
   const q = document.getElementById('modalEmployeeSearchInput').value.trim().toLowerCase();
-  if (!q) {
-    alert('تکایە ناوی کارمەند بنووسە');
-    return;
-  }
-  
-  const found = employees.find(e =>
-    e.name.toLowerCase().includes(q) || 
-    e.code.includes(q) || 
-    e.mobile.includes(q)
-  );
-  
-  if (found) {
-    currentEmployeeData = found;
-    displayEmployeeInfo(found);
-  } else {
-    alert('کارمەند نەدۆزرایەوە');
-    document.getElementById('employeeInfoDisplay').innerHTML = `
-      <div class="empty-state">
-        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        <p>کارمەند نەدۆزرایەوە</p>
-      </div>
-    `;
-  }
+  if (!q) { alert('تکایە ناوی کارمەند بنووسە'); return; }
+  const found = employees.find(e => e.name.toLowerCase().includes(q) || e.code.includes(q) || e.mobile.includes(q));
+  if (found) { currentEmployeeData = found; displayEmployeeInfo(found); }
+  else { alert('کارمەند نەدۆزرایەوە'); document.getElementById('employeeInfoDisplay').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><p>کارمەند نەدۆزرایەوە</p></div>`; }
 }
 
-// Tab switching
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tabId = btn.getAttribute('data-tab');
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-  });
-});
+document.querySelectorAll('.tab-btn').forEach(btn => { btn.addEventListener('click', () => {
+  const tabId = btn.getAttribute('data-tab');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+}); });
 
-// Allow Enter key in modal inputs
-document.getElementById('modalSearchInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    performSearch();
-  }
-});
+document.querySelectorAll('.sub-tab-btn').forEach(btn => { btn.addEventListener('click', () => {
+  const subTabId = btn.getAttribute('data-subtab');
+  document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.sub-tab-content').forEach(tab => tab.classList.remove('active'));
+  document.getElementById(subTabId).classList.add('active');
+}); });
 
-document.getElementById('modalEmployeeSearchInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    searchEmployeeInModal();
-  }
-});
-
-// Close modals when clicking outside
+document.getElementById('modalSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
+document.getElementById('modalEmployeeSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') searchEmployeeInModal(); });
 window.onclick = function(event) {
-  const searchModal = document.getElementById('searchModal');
-  const employeeModal = document.getElementById('employeeModal');
-  if (event.target === searchModal) {
-    closeSearchModal();
-  }
-  if (event.target === employeeModal) {
-    closeEmployeeModal();
-  }
+  if (event.target === document.getElementById('searchModal')) closeSearchModal();
+  if (event.target === document.getElementById('employeeModal')) closeEmployeeModal();
 }
 
-// Draggable modal
-const modalContent = document.getElementById('employeeModalContent');
-const titleBar = document.getElementById('modalTitleBar');
-let isDragging = false;
-let offsetX, offsetY;
+const modalContent = document.getElementById('employeeModalContent'), titleBar = document.getElementById('modalTitleBar');
+let isDragging = false, offsetX, offsetY;
+if (titleBar) { titleBar.addEventListener('mousedown', (e) => { if (isModalFullscreen) return; isDragging = true; offsetX = e.clientX - modalContent.offsetLeft; offsetY = e.clientY - modalContent.offsetTop; modalContent.style.position = 'absolute'; modalContent.style.margin = '0'; }); }
+document.addEventListener('mousemove', (e) => { if (isDragging && !isModalFullscreen && modalContent) { modalContent.style.left = (e.clientX - offsetX) + 'px'; modalContent.style.top = (e.clientY - offsetY) + 'px'; } });
+document.addEventListener('mouseup', () => { isDragging = false; });
 
-if (titleBar) {
-  titleBar.addEventListener('mousedown', (e) => {
-    if (isModalFullscreen) return;
-    isDragging = true;
-    offsetX = e.clientX - modalContent.offsetLeft;
-    offsetY = e.clientY - modalContent.offsetTop;
-    modalContent.style.position = 'absolute';
-    modalContent.style.margin = '0';
-  });
-}
-
-document.addEventListener('mousemove', (e) => {
-  if (isDragging && !isModalFullscreen && modalContent) {
-    modalContent.style.left = (e.clientX - offsetX) + 'px';
-    modalContent.style.top = (e.clientY - offsetY) + 'px';
-  }
-});
-
-document.addEventListener('mouseup', () => {
-  isDragging = false;
-});
-
-// ===================== MENU TOGGLE =====================
 function toggleMenu(id) {
-  document.querySelectorAll('.dropdown').forEach(d => {
-    if (d.id !== id) { d.classList.remove('open'); }
-  });
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    if (b.getAttribute('onclick') !== `toggleMenu('${id}')`) b.classList.remove('open');
-  });
-  const menu = document.getElementById(id);
-  menu.classList.toggle('open');
-  const btn = document.querySelector(`[onclick="toggleMenu('${id}')"]`);
-  if (btn) btn.classList.toggle('open', menu.classList.contains('open'));
+  document.querySelectorAll('.dropdown').forEach(d => { if (d.id !== id) d.classList.remove('open'); });
+  document.querySelectorAll('.nav-btn').forEach(b => { if (b.getAttribute('onclick') !== `toggleMenu('${id}')`) b.classList.remove('open'); });
+  const menu = document.getElementById(id); menu.classList.toggle('open');
+  const btn = document.querySelector(`[onclick="toggleMenu('${id}')"]`); if (btn) btn.classList.toggle('open', menu.classList.contains('open'));
 }
+document.addEventListener('click', e => { if (!e.target.closest('.nav-menu')) { document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('open')); } });
 
-document.addEventListener('click', e => {
-  if (!e.target.closest('.nav-menu')) {
-    document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('open'));
-  }
-});
-
-// ===================== INIT =====================
-populateYears();
-setCurrentMonth();
-updateTable();
-updateClock();
-setInterval(updateClock, 1000);
+populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(updateClock, 1000);
 </script>
 </body>
 </html>
