@@ -987,7 +987,7 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   <!-- دەربارە -->
   <div class="nav-menu">
     <button class="nav-btn" onclick="toggleMenu('m7')">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-8h-2V7h2v2z"/></svg>
       دەربارە
       <svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:#888"><path d="M7 10l5 5 5-5z"/></svg>
     </button>
@@ -1133,7 +1133,117 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
         <div id="employeeInfoDisplay"></div>
       </div>
       <div id="tab2" class="tab-content">
-        <div class="empty-state"><p>ڕێکخستنی شەفت و گروپ - بەتاڵە</p></div>
+        <!-- NEW ENHANCED SHIFT & GROUP CONTENT -->
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+          
+          <!-- ========== LEFT SIDE: SHIFT DETAILS ========== -->
+          <div style="flex: 1; min-width: 280px; background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h4 style="color: var(--primary); border-right: 4px solid var(--primary); padding-right: 10px; margin-bottom: 15px;">⏰ وردەکاری شەفت</h4>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">ناوی شەفت:</div><div class="info-value"><input type="text" id="shiftName" value="شەفتی بەیانی" disabled></div></div>
+              <div class="info-row"><div class="info-label">کاتی دەستپێک:</div><div class="info-value"><input type="time" id="shiftStart" value="08:00" disabled></div></div>
+              <div class="info-row"><div class="info-label">کاتی کۆتایی:</div><div class="info-value"><input type="time" id="shiftEnd" value="16:00" disabled></div></div>
+              <div class="info-row"><div class="info-label">ماوەی کار (auto):</div><div class="info-value"><span id="shiftDuration">08:00</span></div></div>
+              <div class="info-row"><div class="info-label">ماوەی پشوو (Break):</div><div class="info-value"><input type="time" id="breakDuration" value="01:00" disabled></div></div>
+            </div>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">جۆری شەفت:</div><div class="info-value">
+                <select id="shiftType" disabled style="width:100%; padding:4px;">
+                  <option value="fixed" selected>جێگیر (Fixed)</option>
+                  <option value="rotating">گۆڕاو (Rotating)</option>
+                  <option value="flexible">Flexible - کاتی سەرەتای گۆڕاو</option>
+                </select>
+              </div></div>
+              <div class="info-row"><div class="info-label">ڕۆژەکانی کار:</div><div class="info-value"><input type="text" id="workDays" value="یەکشەممە - پێنجشەممە" disabled></div></div>
+              <div class="info-row"><div class="info-label">ڕۆژەکانی پشوو (Weekend):</div><div class="info-value"><input type="text" id="weekendDays" value="هەینی، شەممە" disabled></div></div>
+            </div>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">ڕێگەدان بە دواکەوتن:</div><div class="info-value"><input type="checkbox" id="lateAllowed" checked disabled> بەڵێ</div></div>
+              <div class="info-row"><div class="info-label">Grace period (خولەک):</div><div class="info-value"><input type="number" id="gracePeriod" value="10" disabled style="width:80px;"> خولەک</div></div>
+              <div class="info-row"><div class="info-label">ڕێگەدان بە زوو هاتن:</div><div class="info-value"><input type="checkbox" id="earlyInAllowed" checked disabled> بەڵێ</div></div>
+            </div>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">Overtime هەیە؟</div><div class="info-value"><input type="checkbox" id="hasOvertime" checked disabled> بەڵێ</div></div>
+              <div class="info-row"><div class="info-label">نرخی Overtime:</div><div class="info-value"><input type="text" id="otRate" value="1.5 x مووچەی ئاسایی" disabled></div></div>
+              <div class="info-row"><div class="info-label">دەستپێکی OT دوای:</div><div class="info-value"><input type="number" id="otAfterHours" value="8" disabled style="width:80px;"> کاتژمێر</div></div>
+            </div>
+            
+            <div class="silver-box">
+              <div class="info-row"><div class="info-label">شوێنی کارکردن:</div><div class="info-value"><input type="text" id="shiftLocation" value="شاخەی سەرەکی - تەلار ٣" disabled></div></div>
+              <div class="info-row"><div class="info-label">تایبەت بە شوێن:</div><div class="info-value"><input type="checkbox" id="locationSpecific" checked disabled> بەڵێ</div></div>
+            </div>
+          </div>
+          
+          <!-- ========== RIGHT SIDE: GROUP DETAILS ========== -->
+          <div style="flex: 1; min-width: 280px; background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+            <h4 style="color: var(--primary); border-right: 4px solid var(--primary); padding-right: 10px; margin-bottom: 15px;">👥 وردەکاری گروپ</h4>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">ناوی گروپ:</div><div class="info-value"><input type="text" id="groupName" value="گروپی تەکنیکاران" disabled></div></div>
+              <div class="info-row"><div class="info-label">بەش (Department):</div><div class="info-value"><input type="text" id="department" value="بەشی تەکنیکی" disabled></div></div>
+              <div class="info-row"><div class="info-label">کۆدی گروپ:</div><div class="info-value"><input type="text" id="groupCode" value="TECH-01" disabled></div></div>
+            </div>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">ڕۆڵی کارمەند:</div><div class="info-value">
+                <select id="userRole" disabled style="width:100%; padding:4px;">
+                  <option value="member">ئەندام</option>
+                  <option value="supervisor" selected>سەرپەرشتیار</option>
+                  <option value="manager">مانیجەر</option>
+                </select>
+              </div></div>
+              <div class="info-row"><div class="info-label">ئاستی دەسەڵات (Permissions):</div><div class="info-value"><input type="text" id="permissions" value="بینین، دەستکاری، ڕاپۆرت" disabled></div></div>
+            </div>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">کارە سەرەکییەکان:</div><div class="info-value"><textarea id="mainTasks" rows="2" disabled style="width:100%;">چاودێری سیستەم، پشتیوانی تەکنیکی، ڕاهێنان</textarea></div></div>
+              <div class="info-row"><div class="info-label">ئامانجەکانی گروپ (Targets):</div><div class="info-value"><textarea id="groupTargets" rows="2" disabled style="width:100%;">پڕۆژەی X تەواو بکرێت تا کۆتایی مانگ</textarea></div></div>
+              <div class="info-row"><div class="info-label">KPI:</div><div class="info-value"><input type="text" id="groupKpi" value="کەمتر لە ٥٪ هەڵە" disabled></div></div>
+            </div>
+            
+            <div class="silver-box" style="margin-bottom: 12px;">
+              <div class="info-row"><div class="info-label">شەفتی تایبەتی گروپ:</div><div class="info-value"><input type="text" id="groupSpecialShift" value="هەمان شەفتی گشتی" disabled></div></div>
+              <div class="info-row"><div class="info-label">ژمارەی ئەندامان:</div><div class="info-value"><input type="number" id="memberCount" value="8" disabled></div></div>
+            </div>
+            
+            <div class="silver-box">
+              <div class="info-row"><div class="info-label">پەیوەست بە شوێن:</div><div class="info-value"><input type="text" id="groupLocation" value="شاخەی سەرەکی" disabled></div></div>
+              <div class="info-row"><div class="info-label">پەیوەست بە شەفت:</div><div class="info-value"><input type="text" id="groupShiftRef" value="شەفتی بەیانی" disabled></div></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- ========== BOTTOM: HISTORY & ADVANCED ========== -->
+        <div style="margin-top: 20px; background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+          <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1;">
+              <h5 style="color: var(--primary);">📜 مێژووی شەفت (Shift History)</h5>
+              <div class="silver-box" style="max-height: 120px; overflow-y: auto;">
+                <div class="info-row"><div class="info-label">٢٠٢٤-١٢-٠١:</div><div class="info-value">شەفتی بەیانی</div></div>
+                <div class="info-row"><div class="info-label">٢٠٢٤-١١-٠١:</div><div class="info-value">شەفتی ئێوارە</div></div>
+                <div class="info-row"><div class="info-label">٢٠٢٤-١٠-٠١:</div><div class="info-value">شەفتی بەیانی</div></div>
+              </div>
+            </div>
+            <div style="flex: 1;">
+              <h5 style="color: var(--primary);">🔄 گۆڕانکاری گروپ (Group Transfer)</h5>
+              <div class="silver-box" style="max-height: 120px; overflow-y: auto;">
+                <div class="info-row"><div class="info-label">٢٠٢٤-٠٩-٠١:</div><div class="info-value">لە گروپی A بۆ گروپی B</div></div>
+                <div class="info-row"><div class="info-label">٢٠٢٣-٠١-٠١:</div><div class="info-value">دەستپێک لە گروپی A</div></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 15px;">
+            <h5 style="color: var(--primary);">📊 Performance بەپێی گروپ</h5>
+            <div class="silver-box">
+              <div class="info-row"><div class="info-label">ئامادەبوون (ئەم مانگە):</div><div class="info-value">٩٨٪</div></div>
+              <div class="info-row"><div class="info-label">دەرئەنجام (KPI):</div><div class="info-value">لە ئاستی مەرجەکاندا</div></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div id="tab3" class="tab-content">
         <div class="empty-state"><p>ڕیکخستنی جۆری دامەزراندن - بەتاڵە</p></div>
@@ -1478,7 +1588,23 @@ function toggleMenu(id) {
 }
 document.addEventListener('click', e => { if (!e.target.closest('.nav-menu')) { document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('open')); } });
 
+// Auto calculate shift duration
+function updateShiftDuration() {
+  const start = document.getElementById('shiftStart').value;
+  const end = document.getElementById('shiftEnd').value;
+  if (start && end) {
+    const [startH, startM] = start.split(':').map(Number);
+    let [endH, endM] = end.split(':').map(Number);
+    let durationH = endH - startH;
+    let durationM = endM - startM;
+    if (durationM < 0) { durationH--; durationM += 60; }
+    if (durationH < 0) durationH += 24;
+    document.getElementById('shiftDuration').innerText = `${String(durationH).padStart(2,'0')}:${String(durationM).padStart(2,'0')}`;
+  }
+}
+setInterval(() => { if (document.getElementById('shiftStart') && document.getElementById('shiftEnd')) updateShiftDuration(); }, 500);
+
 populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(updateClock, 1000);
 </script>
 </body>
-</html>
+                                                                                                                       </html>
