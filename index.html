@@ -1250,8 +1250,93 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
         <div class="empty-state"><p>ڕیکخستنی جۆری دامەزراندن - بەتاڵە</p></div>
       </div>
       <div id="tab4" class="tab-content">
-        <div class="empty-state"><p>ڕێکخستنی شوێنی دەوام - بەتاڵە</p></div>
-      </div>
+  <div style="display: flex; flex-direction: column; gap: 20px;">
+    
+    <!-- ========== 1. سەرەکی شوێن ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 1. زانیاری سەرەکی شوێن</h4>
+      <div class="info-row"><div class="info-label">ناوی شوێن:</div><div class="info-value"><input type="text" id="workLocationName" value="ئۆفیسی سەرەکی" disabled></div></div>
+      <div class="info-row"><div class="info-label">جۆری شوێن:</div><div class="info-value"><select id="workLocationType" disabled style="width:100%; padding:4px;"><option value="office" selected>Office</option><option value="remote">Remote (لە ماڵەوە)</option><option value="field">Field (کار لە دەرەوە)</option><option value="hybrid">Hybrid (تێکەڵ)</option></select></div></div>
+    </div>
+
+    <!-- ========== 2. جیاکردنەوەی شێوازی کار ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 2. جیاکردنەوەی شێوازی کار</h4>
+      <div class="info-row"><div class="info-label">شێواز:</div><div class="info-value"><select id="workLocationFlexibility" disabled style="width:100%; padding:4px;"><option value="fixed" selected>Fixed (هەموو کات لە یەک شوێن)</option><option value="flexible">Flexible (دەگۆڕێت)</option></select></div></div>
+      <div class="info-row" id="hybridDaysRow"><div class="info-label">چەند ڕۆژ ئۆفیس:</div><div class="info-value"><input type="number" id="hybridOfficeDays" value="3" disabled style="width:80px;"> ڕۆژ</div></div>
+      <div class="info-row"><div class="info-label">چەند ڕۆژ Remote:</div><div class="info-value"><input type="number" id="hybridRemoteDays" value="2" disabled style="width:80px;"> ڕۆژ</div></div>
+    </div>
+
+    <!-- ========== 3. ڕۆژەکان و کات ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 3. ڕۆژەکان و کات</h4>
+      <div class="info-row"><div class="info-label">ڕۆژەکانی کار لەم شوێنە:</div><div class="info-value"><input type="text" id="locationWorkDays" value="یەکشەممە - پێنجشەممە" disabled></div></div>
+      <div class="info-row"><div class="info-label">کاتی دەستپێک:</div><div class="info-value"><input type="time" id="locationStartTime" value="08:00" disabled></div></div>
+      <div class="info-row"><div class="info-label">کاتی کۆتایی:</div><div class="info-value"><input type="time" id="locationEndTime" value="16:00" disabled></div></div>
+      <div class="info-row"><div class="info-label">شەفتی پەیوەندیدار:</div><div class="info-value"><input type="text" id="locationShiftLink" value="شەفتی بەیانی" disabled></div></div>
+    </div>
+
+    <!-- ========== 4. ناونیشان و شوێنی ورد ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 4. ناونیشان و شوێنی ورد</h4>
+      <div class="info-row"><div class="info-label">وڵات:</div><div class="info-value"><input type="text" id="locationCountry" value="عێراق" disabled></div></div>
+      <div class="info-row"><div class="info-label">شار:</div><div class="info-value"><input type="text" id="locationCity" value="هەولێر" disabled></div></div>
+      <div class="info-row"><div class="info-label">ناوچە:</div><div class="info-value"><input type="text" id="locationDistrict" value="ئەنکاوە" disabled></div></div>
+      <div class="info-row"><div class="info-label">ناونیشانی تەواو:</div><div class="info-value"><input type="text" id="locationFullAddress" value="شەقامی ٤٠ مەتر، باڵەخانەی ڕەش" disabled></div></div>
+      <div class="info-row"><div class="info-label">GPS (Lat/Lng):</div><div class="info-value"><input type="text" id="locationGps" value="36.1912° N, 44.0092° E" disabled></div></div>
+      <div class="info-row"><div class="info-label">لینکی Google Map:</div><div class="info-value"><input type="text" id="locationGoogleMap" value="https://maps.google.com/?q=..." disabled></div></div>
+    </div>
+
+    <!-- ========== 5. تایبەتمەندی شوێن ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 5. تایبەتمەندی شوێن</h4>
+      <div class="info-row"><div class="info-label">پێویستە حاضری تۆمار بکرێت:</div><div class="info-value"><input type="checkbox" id="locationRequireAttendance" checked disabled> بەڵێ</div></div>
+      <div class="info-row"><div class="info-label">Geofencing (تەنها لەم شوێنە check-in):</div><div class="info-value"><input type="checkbox" id="locationGeofencing" checked disabled> چالاکە</div></div>
+      <div class="info-row"><div class="info-label">WiFi Restriction (MAC/SSID):</div><div class="info-value"><input type="text" id="locationWifiSsid" value="Office-WiFi-5G" disabled></div></div>
+    </div>
+
+    <!-- ========== 6. پەیوەندی بە کارمەند ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 6. پەیوەندی بە کارمەند</h4>
+      <div class="info-row"><div class="info-label">شوێنی سەرەکی (Primary):</div><div class="info-value"><input type="text" id="locationPrimary" value="ئۆفیسی سەرەکی" disabled></div></div>
+      <div class="info-row"><div class="info-label">شوێنی لاوەکی (Secondary):</div><div class="info-value"><input type="text" id="locationSecondary" value="Remote - ماڵ" disabled></div></div>
+      <div class="info-row"><div class="info-label">ڕێژەی کات (Office):</div><div class="info-value"><input type="text" id="locationPercentOffice" value="70%" disabled style="width:80px;"></div></div>
+      <div class="info-row"><div class="info-label">ڕێژەی کات (Remote):</div><div class="info-value"><input type="text" id="locationPercentRemote" value="30%" disabled style="width:80px;"></div></div>
+    </div>
+
+    <!-- ========== 7. مێژوو ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 7. مێژوو (History)</h4>
+      <div class="info-row"><div class="info-label">بەرواری دەستپێک:</div><div class="info-value"><input type="date" id="locationStartDate" value="2020-01-01" disabled></div></div>
+      <div class="info-row"><div class="info-label">بەرواری کۆتایی (ئەگەر گۆڕا):</div><div class="info-value"><input type="date" id="locationEndDate" value="-" disabled></div></div>
+      <div class="info-row"><div class="info-label">مێژووی گواستنەوە:</div><div class="info-value"><textarea id="locationTransferHistory" rows="2" disabled style="width:100%;">2020-01-01: دەستپێک لە ئۆفیسی سەرەکی</textarea></div></div>
+    </div>
+
+    <!-- ========== 8. یاسا و سنوورەکان ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 8. یاسا و سنوورەکان</h4>
+      <div class="info-row"><div class="info-label">دەتوانێت لە شوێنێکی تر کار بکات؟</div><div class="info-value"><input type="checkbox" id="locationAllowOther" disabled> ڕێگەپێدراوە</div></div>
+      <div class="info-row"><div class="info-label">سنووری گواستنەوە:</div><div class="info-value"><input type="text" id="locationTransferLimit" value="تەنها لە ناوەندی شار" disabled></div></div>
+      <div class="info-row"><div class="info-label">ڕێگەپێدان بۆ Remote days:</div><div class="info-value"><input type="checkbox" id="locationAllowRemote" checked disabled> بەڵێ</div></div>
+    </div>
+
+    <!-- ========== 9. خزمەتگوزاری و پارەدان ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 9. خزمەتگوزاری و پارەدان (Advanced)</h4>
+      <div class="info-row"><div class="info-label">Allowance (گواستنەوە):</div><div class="info-value"><input type="text" id="locationTransportAllowance" value="100,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">Allowance (سووتەمەنی):</div><div class="info-value"><input type="text" id="locationFuelAllowance" value="50,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">تێچووی گواستنەوە:</div><div class="info-value"><input type="text" id="locationTravelCost" value="بە پاس" disabled></div></div>
+      <div class="info-row"><div class="info-label">Daily allowance (ئەگەر Field بێت):</div><div class="info-value"><input type="text" id="locationDailyAllowance" value="25,000 IQD" disabled></div></div>
+    </div>
+
+    <!-- ========== 10. تێبینی ========== -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 10. تێبینی (Notes)</h4>
+      <div class="info-row"><div class="info-label">تێبینی تایبەت:</div><div class="info-value"><textarea id="locationNotes" rows="3" disabled style="width:100%;">هەموو هەینی کار لە ماڵەوە - بە زۆری لە دەرەوە کار دەکات</textarea></div></div>
+    </div>
+
+  </div>
+</div>
       <div id="tab5" class="tab-content">
         <!-- Sub Tabs inside Tab5 -->
         <div class="sub-tabs">
