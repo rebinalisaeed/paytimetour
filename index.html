@@ -1310,27 +1310,93 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
 
     <!-- 🔷 7. تایبەتمەندییەکانی کارمەند -->
     <div class="silver-box">
-      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 7. تایبەتمەندییەکانی کارمەند بەپێی جۆری دامەزراندن</h4>
-      <div class="info-row"><div class="info-label">مۆڵەتی ساڵانە (بە ڕۆژ):</div><div class="info-value"><input type="number" id="annualLeaveDays" value="21" disabled style="width:80px;"> ڕۆژ</div></div>
-      <div class="info-row"><div class="info-label">مۆڵەتی نەخۆشی (بە ڕۆژ):</div><div class="info-value"><input type="number" id="sickLeaveDays" value="10" disabled style="width:80px;"> ڕۆژ</div></div>
-      <div class="info-row"><div class="info-label">مۆڵەتی بێ مووچە:</div><div class="info-value"><input type="checkbox" id="unpaidLeaveAllowed" checked disabled> ڕێگەپێدراوە</div></div>
-      <div class="info-row"><div class="info-label">ئۆڤەرتایم:</div><div class="info-value"><input type="checkbox" id="overtimeAllowed" checked disabled> ڕێگەپێدراوە</div></div>
-      <div class="info-row"><div class="info-label">بیمە:</div><div class="info-value"><select id="insuranceStatus" disabled><option value="active" selected>چالاکە</option><option value="inactive">ناچالاکە</option><option value="notApplicable">نیە</option></select></div></div>
+<div id="tab3" class="tab-content">
+  <div style="display: flex; flex-direction: column; gap: 20px;">
+
+    <!-- 🔹 1. زانیاری سەرەکی (Core Info) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 1. زانیاری سەرەکی (Core Info)</h4>
+      <div class="info-row"><div class="info-label">ناوی جۆر:</div><div class="info-value"><select id="empTypeName" disabled style="width:100%; padding:4px;"><option value="fulltime" selected>Full-time</option><option value="parttime">Part-time</option><option value="contract">Contract</option><option value="temporary">Temporary</option><option value="intern">Intern</option><option value="freelance">Freelance</option></select></div></div>
+      <div class="info-row"><div class="info-label">کۆد / ID:</div><div class="info-value"><input type="text" id="empTypeCode" value="FT-001" disabled></div></div>
+      <div class="info-row"><div class="info-label">وەسف (Description):</div><div class="info-value"><textarea id="empTypeDesc" rows="2" disabled style="width:100%;">کارمەندی تەواوکات - 40 کاتژمێر لە هەفتەدا</textarea></div></div>
+      <div class="info-row"><div class="info-label">چالاک/ناچالاک:</div><div class="info-value"><select id="empTypeActive" disabled><option value="active" selected>چالاکە (Active)</option><option value="inactive">ناچالاکە (Inactive)</option></select></div></div>
     </div>
 
-    <!-- 🔷 8. بەڵگەنامەکان -->
+    <!-- 🔹 2. کاتی کار (Work Rules) -->
     <div class="silver-box">
-      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 8. بەڵگەنامەکان (Documents)</h4>
-      <div class="info-row"><div class="info-label">ڕەسەنەتی کارمەند:</div><div class="info-value"><input type="text" id="employmentContractDoc" value="employment_contract.pdf" disabled></div></div>
-      <div class="info-row"><div class="info-label">بەڵگەنامەی تاقیکردنەوە:</div><div class="info-value"><input type="text" id="probationDoc" value="probation_review.pdf" disabled></div></div>
-      <div class="info-row"><div class="info-label">نوێکردنەوەی گرێبەست:</div><div class="info-value"><input type="text" id="renewalDoc" value="renewal_2022.pdf" disabled></div></div>
-      <div class="info-row"><div class="info-label">تێبینی:</div><div class="info-value"><textarea id="employmentDocsNotes" rows="2" disabled style="width:100%;">هەموو بەڵگەنامەکان لە سیستەمی HR هەن</textarea></div></div>
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 2. کاتی کار (Work Rules)</h4>
+      <div class="info-row"><div class="info-label">کاتژمێری هەفتانە:</div><div class="info-value"><input type="number" id="weeklyHours" value="40" disabled style="width:100px;"> کاتژمێر</div></div>
+      <div class="info-row"><div class="info-label">کاتژمێری ڕۆژانە:</div><div class="info-value"><input type="number" id="dailyHours" value="8" disabled style="width:100px;"> کاتژمێر</div></div>
+      <div class="info-row"><div class="info-label">ڕۆژەکانی کار:</div><div class="info-value"><input type="text" id="workDaysList" value="یەکشەممە - پێنجشەممە" disabled></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی ڕۆژانی کار لە هەفتە:</div><div class="info-value"><input type="number" id="workDaysPerWeek" value="5" disabled style="width:80px;"> ڕۆژ</div></div>
     </div>
 
-    <!-- 🔷 9. تێبینی گشتی -->
+    <!-- 🔹 3. مووچە و پارەدان (Salary & Payment) -->
     <div class="silver-box">
-      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 9. تێبینی گشتی (General Notes)</h4>
-      <div class="info-row"><div class="info-label">تێبینی:</div><div class="info-value"><textarea id="employmentGeneralNotes" rows="3" disabled style="width:100%;">کارمەندێکی بەهرەدار - پلەی A لە ساڵی 2022 وەرگرتووە</textarea></div></div>
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 3. مووچە و پارەدان (Salary & Payment)</h4>
+      <div class="info-row"><div class="info-label">جۆری مووچە:</div><div class="info-value"><select id="salaryType" disabled><option value="monthly" selected>مانگانە (Monthly)</option><option value="hourly">کاتژمێری (Hourly)</option><option value="daily">ڕۆژانە (Daily)</option></select></div></div>
+      <div class="info-row"><div class="info-label">بڕی بنەڕەتی مووچە:</div><div class="info-value"><input type="text" id="baseSalary" value="850,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">نرخ بۆ کاتژمێر (ئەگەر hourly بێت):</div><div class="info-value"><input type="text" id="hourlyRate" value="5,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">شێوازی پارەدان:</div><div class="info-value"><select id="paymentFrequency" disabled><option value="monthly" selected>مانگانە</option><option value="biweekly">دوو هەفتەیەک جار</option><option value="weekly">هەفتانە</option></select></div></div>
+      <div class="info-row"><div class="info-label">Bonus (هەیە یان نا):</div><div class="info-value"><select id="hasBonus" disabled><option value="yes" selected>هەیە</option><option value="no">نا</option></select></div></div>
+      <div class="info-row"><div class="info-label">چۆنیەتی حسابکردنی Bonus:</div><div class="info-value"><input type="text" id="bonusCalculation" value="10% لە مووچەی ساڵانە" disabled></div></div>
+    </div>
+
+    <!-- 🔹 4. Overtime (زۆر گرنگ) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 4. Overtime (زۆر گرنگ)</h4>
+      <div class="info-row"><div class="info-label">ئایا overtime ڕێگەپێدراوە؟</div><div class="info-value"><select id="otAllowed" disabled><option value="yes" selected>بەڵێ</option><option value="no">نا</option></select></div></div>
+      <div class="info-row"><div class="info-label">نرخ بۆ هەر کاتژمێرێک:</div><div class="info-value"><input type="text" id="otRate" value="6,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">دەستپێکی overtime (دوای چەند کاتژمێر):</div><div class="info-value"><input type="number" id="otStartAfter" value="8" disabled style="width:100px;"> کاتژمێر</div></div>
+      <div class="info-row"><div class="info-label">سنووری overtime (max hours لە ڕۆژێکدا):</div><div class="info-value"><input type="number" id="otMaxHours" value="4" disabled style="width:100px;"> کاتژمێر</div></div>
+    </div>
+
+    <!-- 🔹 5. مافەکان (Benefits) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 5. مافەکان (Benefits)</h4>
+      <div class="info-row"><div class="info-label">مۆڵەت (Annual leave) - چەند ڕۆژ لە ساڵدا:</div><div class="info-value"><input type="number" id="annualLeave" value="21" disabled style="width:80px;"> ڕۆژ</div></div>
+      <div class="info-row"><div class="info-label">مۆڵەتی نەخۆشی (Sick leave):</div><div class="info-value"><input type="number" id="sickLeave" value="10" disabled style="width:80px;"> ڕۆژ</div></div>
+      <div class="info-row"><div class="info-label">مۆڵەتی فەرمی (Public holidays):</div><div class="info-value"><input type="number" id="publicHolidays" value="15" disabled style="width:80px;"> ڕۆژ</div></div>
+      <div class="info-row"><div class="info-label">بیمە (Health insurance):</div><div class="info-value"><select id="healthInsurance" disabled><option value="yes" selected>هەیە</option><option value="no">نیە</option></select></div></div>
+      <div class="info-row"><div class="info-label">پەنسن (Retirement):</div><div class="info-value"><select id="retirement" disabled><option value="yes" selected>هەیە</option><option value="no">نیە</option></select></div></div>
+    </div>
+
+    <!-- 🔹 6. گرێبەست (Contract Details) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 6. گرێبەست (Contract Details)</h4>
+      <div class="info-row"><div class="info-label">جۆری گرێبەست:</div><div class="info-value"><select id="contractType" disabled><option value="permanent" selected>دائمی (Permanent)</option><option value="temporary">کاتی (Temporary)</option><option value="project">پرۆژەیی (Project based)</option></select></div></div>
+      <div class="info-row"><div class="info-label">بەرواری دەستپێک:</div><div class="info-value"><input type="date" id="contractStartDate" value="2020-01-01" disabled></div></div>
+      <div class="info-row"><div class="info-label">بەرواری کۆتایی (ئەگەر کاتی بێت):</div><div class="info-value"><input type="date" id="contractEndDate" value="2025-01-01" disabled></div></div>
+      <div class="info-row"><div class="info-label">ماوەی تاقیکردنەوە (Probation period - بە مانگ):</div><div class="info-value"><input type="number" id="probationPeriod" value="3" disabled style="width:80px;"> مانگ</div></div>
+      <div class="info-row"><div class="info-label">مەرجەکانی وەستاندن (Termination rules):</div><div class="info-value"><textarea id="terminationRules" rows="2" disabled style="width:100%;">ئاگادارکردنەوەی 1 مانگ پێش وەستاندن</textarea></div></div>
+    </div>
+
+    <!-- 🔹 7. یاسا و سنوورەکان (Policies) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 7. یاسا و سنوورەکان (Policies)</h4>
+      <div class="info-row"><div class="info-label">ژمارەی دواکەوتن ڕێگەپێدراو لە مانگدا:</div><div class="info-value"><input type="number" id="allowedLateDays" value="3" disabled style="width:80px;"> جار</div></div>
+      <div class="info-row"><div class="info-label">سزا (Penalty rules):</div><div class="info-value"><input type="text" id="penaltyRules" value="بڕینی 10,000 دینار بۆ هەر دواکەوتنێک" disabled></div></div>
+      <div class="info-row"><div class="info-label">Attendance policy:</div><div class="info-value"><textarea id="attendancePolicy" rows="2" disabled style="width:100%;">پێویستە هاتن و چوون لە کاتی دیاریکراودا تۆمار بکرێت</textarea></div></div>
+      <div class="info-row"><div class="info-label">Absence policy:</div><div class="info-value"><textarea id="absencePolicy" rows="2" disabled style="width:100%;">ڕۆژی نەبوون پێویستە بە بەڵگە ڕوون بکرێتەوە</textarea></div></div>
+    </div>
+
+    <!-- 🔹 8. پەیوەندی بە شتانی تر -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 8. پەیوەندی بە شتانی تر</h4>
+      <div class="info-row"><div class="info-label">شەفتی بنەڕەتی:</div><div class="info-value"><input type="text" id="defaultShift" value="شەفتی بەیانی" disabled></div></div>
+      <div class="info-row"><div class="info-label">گروپی پەیوەندیدار:</div><div class="info-value"><input type="text" id="relatedGroup" value="گروپی تەکنیکاران" disabled></div></div>
+      <div class="info-row"><div class="info-label">شوێنی کار (ئەگەر تایبەتی هەبێت):</div><div class="info-value"><input type="text" id="workLocation" value="ئۆفیسی سەرەکی" disabled></div></div>
+    </div>
+
+    <!-- 🔹 9. شتی زۆر پیشەیی (Advanced) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔹 9. شتی زۆر پیشەیی (Advanced)</h4>
+      <div class="info-row"><div class="info-label">Leave accrual (کۆکردنەوەی مۆڵەت مانگانە):</div><div class="info-value"><input type="text" id="leaveAccrual" value="1.75 ڕۆژ لە هەر مانگدا" disabled></div></div>
+      <div class="info-row"><div class="info-label">Auto salary calculation:</div><div class="info-value"><select id="autoSalaryCalc" disabled><option value="yes" selected>بەڵێ</option><option value="no">نا</option></select></div></div>
+      <div class="info-row"><div class="info-label">Tax / deduction:</div><div class="info-value"><input type="text" id="taxRate" value="5% لە مووچە" disabled></div></div>
+      <div class="info-row"><div class="info-label" style="color: var(--green);">Allowance - گواستنەوە (Transport):</div><div class="info-value"><input type="text" id="transportAllowance" value="100,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label" style="color: var(--green);">Allowance - خواردن (Meal):</div><div class="info-value"><input type="text" id="mealAllowance" value="50,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label" style="color: var(--green);">Allowance - نیشتەجێبوون (Housing):</div><div class="info-value"><input type="text" id="housingAllowance" value="200,000 IQD" disabled></div></div>
     </div>
 
   </div>
