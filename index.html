@@ -1247,8 +1247,94 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
         </div>
       </div>
       <div id="tab3" class="tab-content">
-        <div class="empty-state"><p>ڕیکخستنی جۆری دامەزراندن - بەتاڵە</p></div>
-      </div>
+  <div style="display: flex; flex-direction: column; gap: 20px;">
+
+    <!-- 🔷 1. زانیاری سەرەکی جۆری دامەزراندن -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 1. زانیاری سەرەکی جۆری دامەزراندن</h4>
+      <div class="info-row"><div class="info-label">جۆری دامەزراندن:</div><div class="info-value"><select id="employmentType" disabled style="width:100%; padding:4px;"><option value="permanent" selected>بەردەوام (Permanent)</option><option value="contract">گرێبەست (Contract)</option><option value="temporary">کاتی (Temporary)</option><option value="probation">ماوەی تاقیکردنەوە (Probation)</option><option value="freelance">سەربەخۆ (Freelance)</option><option value="internship">راهێنان (Internship)</option></select></div></div>
+      <div class="info-row"><div class="info-label">پلە/پۆست:</div><div class="info-value"><input type="text" id="employmentPosition" value="ئەندازیار" disabled></div></div>
+      <div class="info-row"><div class="info-label">بەش/دیپارتمێنت:</div><div class="info-value"><input type="text" id="employmentDepartment" value="بەشی تەکنیکی" disabled></div></div>
+      <div class="info-row"><div class="info-label">ڕێکەوتی دەستپێک:</div><div class="info-value"><input type="date" id="employmentStartDate" value="2020-01-01" disabled></div></div>
+      <div class="info-row"><div class="info-label">ڕێکەوتی کۆتایی (ئەگەر هەیە):</div><div class="info-value"><input type="date" id="employmentEndDate" value="-" disabled></div></div>
+      <div class="info-row"><div class="info-label">دۆخی ئێستا:</div><div class="info-value"><select id="employmentStatus" disabled style="width:100%; padding:4px;"><option value="active" selected>چالاکە (Active)</option><option value="inactive">ناچالاکە (Inactive)</option><option value="suspended">ڕاگیراوە (Suspended)</option><option value="terminated">کۆتایی هاتووە (Terminated)</option></select></div></div>
+    </div>
+
+    <!-- 🔷 2. وردەکاری گرێبەست (ئەگەر Contract یان Temporary بێت) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 2. وردەکاری گرێبەست</h4>
+      <div class="info-row"><div class="info-label">ژمارەی گرێبەست:</div><div class="info-value"><input type="text" id="contractNumber" value="CON-2020-001" disabled></div></div>
+      <div class="info-row"><div class="info-label">ماوەی گرێبەست (بە مانگ):</div><div class="info-value"><input type="number" id="contractDuration" value="24" disabled style="width:80px;"> مانگ</div></div>
+      <div class="info-row"><div class="info-label">ڕێکەوتی نوێکردنەوە:</div><div class="info-value"><input type="date" id="contractRenewalDate" value="2022-01-01" disabled></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی نوێکردنەوە:</div><div class="info-value"><input type="number" id="contractRenewalCount" value="1" disabled style="width:80px;"></div></div>
+      <div class="info-row"><div class="info-label">بەڵگەنامەی گرێبەست:</div><div class="info-value"><input type="text" id="contractDocument" value="contract_2020.pdf" disabled></div></div>
+    </div>
+
+    <!-- 🔷 3. ماوەی تاقیکردنەوە (Probation Period) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 3. ماوەی تاقیکردنەوە (Probation Period)</h4>
+      <div class="info-row"><div class="info-label">ماوەی تاقیکردنەوە (بە مانگ):</div><div class="info-value"><input type="number" id="probationDuration" value="3" disabled style="width:80px;"> مانگ</div></div>
+      <div class="info-row"><div class="info-label">ڕێکەوتی دەستپێکی تاقیکردنەوە:</div><div class="info-value"><input type="date" id="probationStartDate" value="2020-01-01" disabled></div></div>
+      <div class="info-row"><div class="info-label">ڕێکەوتی کۆتایی تاقیکردنەوە:</div><div class="info-value"><input type="date" id="probationEndDate" value="2020-04-01" disabled></div></div>
+      <div class="info-row"><div class="info-label">ئەنجامی تاقیکردنەوە:</div><div class="info-value"><select id="probationResult" disabled><option value="pending" selected>چاوەڕوان</option><option value="passed">سەرکەوتوو بوو</option><option value="failed">سەرکەوتوو نەبوو</option><option value="extended">درێژکرایەوە</option></select></div></div>
+    </div>
+
+    <!-- 🔷 4. پلە و پایە (Grade & Level) -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 4. پلە و پایە (Grade & Level)</h4>
+      <div class="info-row"><div class="info-label">پلە (Grade):</div><div class="info-value"><input type="text" id="employmentGrade" value="A" disabled></div></div>
+      <div class="info-row"><div class="info-label">ئاست (Level):</div><div class="info-value"><input type="text" id="employmentLevel" value="3" disabled></div></div>
+      <div class="info-row"><div class="info-label">بەندی مووچە (Salary Band):</div><div class="info-value"><input type="text" id="salaryBand" value="B2" disabled></div></div>
+      <div class="info-row"><div class="info-label">پلەی کۆن (پێش گۆڕانکاری):</div><div class="info-value"><input type="text" id="previousGrade" value="B" disabled></div></div>
+      <div class="info-row"><div class="info-label">ڕێکەوتی گۆڕینی پلە:</div><div class="info-value"><input type="date" id="gradeChangeDate" value="2022-01-01" disabled></div></div>
+    </div>
+
+    <!-- 🔷 5. ڕێژەی مووچە و کرێ -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 5. ڕێژەی مووچە و کرێ</h4>
+      <div class="info-row"><div class="info-label">مووچەی بنەڕەت:</div><div class="info-value"><input type="text" id="basicSalary" value="850,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">کرێی کاتژمێری (ئەگەر کاتی بێت):</div><div class="info-value"><input type="text" id="hourlyRate" value="5,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">کرێی ڕۆژانە:</div><div class="info-value"><input type="text" id="dailyRate" value="40,000 IQD" disabled></div></div>
+      <div class="info-row"><div class="info-label">شێوازی مووچەدان:</div><div class="info-value"><select id="paymentMethod" disabled><option value="monthly" selected>مانگانە</option><option value="biweekly">دوو هەفتەیەک جار</option><option value="weekly">هەفتانە</option><option value="daily">ڕۆژانە</option><option value="hourly">کاتژمێری</option></select></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی بانک:</div><div class="info-value"><input type="text" id="bankAccountNumber" value="IQD123456789" disabled></div></div>
+    </div>
+
+    <!-- 🔷 6. مێژووی دامەزراندن -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 6. مێژووی دامەزراندن (Employment History)</h4>
+      <div class="info-row"><div class="info-label">مێژووی گۆڕینی جۆری دامەزراندن:</div><div class="info-value"><textarea id="employmentHistory" rows="3" disabled style="width:100%;">2020-01-01: دەستپێک وەک Probation
+2020-04-01: گواستنەوە بۆ Permanent</textarea></div></div>
+      <div class="info-row"><div class="info-label">مێژووی گۆڕینی پلە:</div><div class="info-value"><textarea id="gradeHistory" rows="2" disabled style="width:100%;">2020-01-01: پلە B
+2022-01-01: پلە A</textarea></div></div>
+    </div>
+
+    <!-- 🔷 7. تایبەتمەندییەکانی کارمەند -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 7. تایبەتمەندییەکانی کارمەند بەپێی جۆری دامەزراندن</h4>
+      <div class="info-row"><div class="info-label">مۆڵەتی ساڵانە (بە ڕۆژ):</div><div class="info-value"><input type="number" id="annualLeaveDays" value="21" disabled style="width:80px;"> ڕۆژ</div></div>
+      <div class="info-row"><div class="info-label">مۆڵەتی نەخۆشی (بە ڕۆژ):</div><div class="info-value"><input type="number" id="sickLeaveDays" value="10" disabled style="width:80px;"> ڕۆژ</div></div>
+      <div class="info-row"><div class="info-label">مۆڵەتی بێ مووچە:</div><div class="info-value"><input type="checkbox" id="unpaidLeaveAllowed" checked disabled> ڕێگەپێدراوە</div></div>
+      <div class="info-row"><div class="info-label">ئۆڤەرتایم:</div><div class="info-value"><input type="checkbox" id="overtimeAllowed" checked disabled> ڕێگەپێدراوە</div></div>
+      <div class="info-row"><div class="info-label">بیمە:</div><div class="info-value"><select id="insuranceStatus" disabled><option value="active" selected>چالاکە</option><option value="inactive">ناچالاکە</option><option value="notApplicable">نیە</option></select></div></div>
+    </div>
+
+    <!-- 🔷 8. بەڵگەنامەکان -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 8. بەڵگەنامەکان (Documents)</h4>
+      <div class="info-row"><div class="info-label">ڕەسەنەتی کارمەند:</div><div class="info-value"><input type="text" id="employmentContractDoc" value="employment_contract.pdf" disabled></div></div>
+      <div class="info-row"><div class="info-label">بەڵگەنامەی تاقیکردنەوە:</div><div class="info-value"><input type="text" id="probationDoc" value="probation_review.pdf" disabled></div></div>
+      <div class="info-row"><div class="info-label">نوێکردنەوەی گرێبەست:</div><div class="info-value"><input type="text" id="renewalDoc" value="renewal_2022.pdf" disabled></div></div>
+      <div class="info-row"><div class="info-label">تێبینی:</div><div class="info-value"><textarea id="employmentDocsNotes" rows="2" disabled style="width:100%;">هەموو بەڵگەنامەکان لە سیستەمی HR هەن</textarea></div></div>
+    </div>
+
+    <!-- 🔷 9. تێبینی گشتی -->
+    <div class="silver-box">
+      <h4 style="color: var(--primary); margin-bottom: 15px;">🔷 9. تێبینی گشتی (General Notes)</h4>
+      <div class="info-row"><div class="info-label">تێبینی:</div><div class="info-value"><textarea id="employmentGeneralNotes" rows="3" disabled style="width:100%;">کارمەندێکی بەهرەدار - پلەی A لە ساڵی 2022 وەرگرتووە</textarea></div></div>
+    </div>
+
+  </div>
+</div>
       <div id="tab4" class="tab-content">
   <div style="display: flex; flex-direction: column; gap: 20px;">
     
