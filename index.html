@@ -1781,6 +1781,223 @@ function updateShiftDuration() {
 setInterval(() => { if (document.getElementById('shiftStart') && document.getElementById('shiftEnd')) updateShiftDuration(); }, 500);
 
 populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(updateClock, 1000);
+
+
+// ===================== کۆدی دوگمەی نوێ =====================
+let isNewEmployeeWindowOpen = false;
+
+function openNewEmployeeWindow() {
+  // ئەگەر پەنجەرەی نوێ پێشتر کرابێتەوە
+  if (isNewEmployeeWindowOpen) {
+    alert('پەنجەرەیەکی نوێ پێشتر کراوە! تکایە یەکەم داخە.');
+    return;
+  }
+  
+  // کۆدی نوێی کارمەند دیاری بکە (دواین کۆد + ١)
+  let lastCode = 1000;
+  if (employees.length > 0) {
+    const lastEmployee = employees[employees.length - 1];
+    lastCode = parseInt(lastEmployee.code) + 1;
+  }
+  const newEmployeeCode = lastCode.toString();
+  
+  // پەنجەرەی نوێ بکەرەوە
+  const newWindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
+  
+  if (!newWindow) {
+    alert('تکایە ڕێگەپێدان بە popup بۆ ئەم سایتە بدە!');
+    return;
+  }
+  
+  // HTMLـی پەنجەرەی نوێ
+  newWindow.document.write(`
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>زیادکردنی کارمەندی نوێ - Pay Time Tour</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .header { background: #2d4a7a; color: white; padding: 15px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+    .header h2 { margin: 0; font-size: 18px; }
+    .close-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .close-btn:hover { background: #b71c1c; }
+    .tabs { display: flex; background: #2d4a7a; padding: 5px 10px 0 10px; gap: 2px; flex-wrap: wrap; }
+    .tab-btn { padding: 8px 16px; background: #2d4a7a; border: none; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 600; color: white; border-radius: 6px 6px 0 0; }
+    .tab-btn:hover { background: #4a6fa5; }
+    .tab-btn.active { background: #f9f9f9; color: #2d4a7a; }
+    .tab-content { display: none; background: #f9f9f9; padding: 20px; border-radius: 0 0 10px 10px; max-height: 55vh; overflow-y: auto; }
+    .tab-content.active { display: block; }
+    .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
+    .info-row { display: flex; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
+    .info-label { width: 140px; font-weight: 700; color: #2d4a7a; font-size: 12px; }
+    .info-value { flex: 1; }
+    .info-value input, .info-value select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 12px; }
+    .info-value input:focus, .info-value select:focus { outline: none; border-color: #2d4a7a; }
+    .action-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+    .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
+    .cancel-btn { background: #999; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
+    .save-btn:hover { background: #1b5e20; }
+    .cancel-btn:hover { background: #666; }
+    h4 { color: #2d4a7a; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h2>➕ زیادکردنی کارمەندی نوێ</h2>
+    <button class="close-btn" onclick="window.close()">✖ داخستن</button>
+  </div>
+  
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="tab1">📋 زانیاری کارمەندان</button>
+    <button class="tab-btn" data-tab="tab2">⏰ شەفت و گروپ</button>
+    <button class="tab-btn" data-tab="tab3">🔧 جۆری دامەزراندن</button>
+    <button class="tab-btn" data-tab="tab4">📍 شوێنی دەوام</button>
+    <button class="tab-btn" data-tab="tab5">📚 زانیاری تر</button>
+  </div>
+  
+  <!-- Tab 1: زانیاری کارمەندان -->
+  <div id="tab1" class="tab-content active">
+    <div class="silver-box">
+      <h4>📋 زانیاری کەسی</h4>
+      <div class="info-row"><div class="info-label">کۆدی کارمەند:</div><div class="info-value"><input type="text" id="newCode" value="${newEmployeeCode}" readonly style="background:#e0e0e0;"></div></div>
+      <div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" id="newName" placeholder="ناوی تەواو"></div></div>
+      <div class="info-row"><div class="info-label">ناوی باوک:</div><div class="info-value"><input type="text" id="newFatherName" placeholder="ناوی باوک"></div></div>
+      <div class="info-row"><div class="info-label">ناوی باپیر:</div><div class="info-value"><input type="text" id="newGrandfatherName" placeholder="ناوی باپیر"></div></div>
+      <div class="info-row"><div class="info-label">ناوی دایک:</div><div class="info-value"><input type="text" id="newMotherName" placeholder="ناوی دایک"></div></div>
+      <div class="info-row"><div class="info-label">ڕەگەز:</div><div class="info-value"><select id="newGender"><option value="نێر">نێر</option><option value="مێ">مێ</option></select></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی مۆبایل:</div><div class="info-value"><input type="text" id="newMobile" placeholder="0750xxxxxxx"></div></div>
+      <div class="info-row"><div class="info-label">ژ. کارتی نیشتمانی:</div><div class="info-value"><input type="text" id="newNationalId" placeholder="١٢ ژمارە"></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی کارت:</div><div class="info-value"><input type="text" id="newCardNumber" placeholder="ژمارەی کارت"></div></div>
+      <div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" id="newAddress" placeholder="ناونیشان"></div></div>
+      <div class="info-row"><div class="info-label">پلە:</div><div class="info-value"><input type="text" id="newPosition" placeholder="پلە"></div></div>
+      <div class="info-row"><div class="info-label">ڕێکەوتی دامەزراندن:</div><div class="info-value"><input type="date" id="newStartDate"></div></div>
+    </div>
+  </div>
+  
+  <!-- Tab 2: شەفت و گروپ -->
+  <div id="tab2" class="tab-content">
+    <div class="silver-box">
+      <h4>⏰ وردەکاری شەفت و گروپ</h4>
+      <div class="info-row"><div class="info-label">ناوی شەفت:</div><div class="info-value"><input type="text" id="newShiftName" placeholder="شەفتی بەیانی"></div></div>
+      <div class="info-row"><div class="info-label">کاتی دەستپێک:</div><div class="info-value"><input type="time" id="newShiftStart"></div></div>
+      <div class="info-row"><div class="info-label">کاتی کۆتایی:</div><div class="info-value"><input type="time" id="newShiftEnd"></div></div>
+      <div class="info-row"><div class="info-label">ناوی گروپ:</div><div class="info-value"><input type="text" id="newGroupName" placeholder="ناوی گروپ"></div></div>
+      <div class="info-row"><div class="info-label">بەش:</div><div class="info-value"><input type="text" id="newDepartment" placeholder="بەش"></div></div>
+      <div class="info-row"><div class="info-label">گروپ:</div><div class="info-value"><input type="text" id="newGroup" placeholder="گروپ"></div></div>
+    </div>
+  </div>
+  
+  <!-- Tab 3: جۆری دامەزراندن -->
+  <div id="tab3" class="tab-content">
+    <div class="silver-box">
+      <h4>🔧 جۆری دامەزراندن</h4>
+      <div class="info-row"><div class="info-label">ناوی جۆر:</div><div class="info-value"><select id="newEmpTypeName"><option value="fulltime">Full-time</option><option value="parttime">Part-time</option><option value="contract">Contract</option><option value="temporary">Temporary</option></select></div></div>
+      <div class="info-row"><div class="info-label">جۆری دامەزراندن:</div><div class="info-value"><input type="text" id="newType" placeholder="جۆری دامەزراندن"></div></div>
+      <div class="info-row"><div class="info-label">مووچەی بنەڕەت:</div><div class="info-value"><input type="text" id="newBaseSalary" placeholder="مووچە"></div></div>
+      <div class="info-row"><div class="info-label">کاتژمێری ڕۆژانە:</div><div class="info-value"><input type="number" id="newDailyHours" placeholder="٨"></div></div>
+    </div>
+  </div>
+  
+  <!-- Tab 4: شوێنی دەوام -->
+  <div id="tab4" class="tab-content">
+    <div class="silver-box">
+      <h4>📍 شوێنی دەوام</h4>
+      <div class="info-row"><div class="info-label">شوێنی کارکردن:</div><div class="info-value"><input type="text" id="newLocation" placeholder="شوێنی کار"></div></div>
+      <div class="info-row"><div class="info-label">ناوی شوێن:</div><div class="info-value"><input type="text" id="newWorkLocation" placeholder="ناوی شوێن"></div></div>
+      <div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" id="newLocationAddress" placeholder="ناونیشان"></div></div>
+    </div>
+  </div>
+  
+  <!-- Tab 5: زانیاری تر -->
+  <div id="tab5" class="tab-content">
+    <div class="silver-box">
+      <h4>📚 زانیاریەکانی تر</h4>
+      <div class="info-row"><div class="info-label">ئاستی خوێندن:</div><div class="info-value"><input type="text" id="newEduLevel" placeholder="بەکالۆریۆس"></div></div>
+      <div class="info-row"><div class="info-label">بەشی خوێندن:</div><div class="info-value"><input type="text" id="newEduField" placeholder="کۆمپیوتەر"></div></div>
+      <div class="info-row"><div class="info-label">زمانەکان:</div><div class="info-value"><input type="text" id="newLanguages" placeholder="کوردی، عەرەبی، ئینگلیزی"></div></div>
+      <div class="info-row"><div class="info-label">ئیمەیڵ:</div><div class="info-value"><input type="email" id="newEmail" placeholder="example@email.com"></div></div>
+    </div>
+  </div>
+  
+  <div class="action-buttons">
+    <button class="save-btn" onclick="saveNewEmployee()">💾 پاشەکەوتکردن</button>
+    <button class="cancel-btn" onclick="window.close()">❌ ڕەتکردنەوە</button>
+  </div>
+</div>
+
+<script>
+  function saveNewEmployee() {
+    const newEmployee = {
+      name: document.getElementById('newName').value || '--',
+      code: document.getElementById('newCode').value,
+      mobile: document.getElementById('newMobile').value || '--',
+      group: document.getElementById('newGroup').value || '--',
+      type: document.getElementById('newType').value || '--',
+      location: document.getElementById('newLocation').value || '--',
+      fatherName: document.getElementById('newFatherName').value || '--',
+      grandfatherName: document.getElementById('newGrandfatherName').value || '--',
+      motherName: document.getElementById('newMotherName').value || '--',
+      nationalId: document.getElementById('newNationalId').value || '--',
+      gender: document.getElementById('newGender').value,
+      cardNumber: document.getElementById('newCardNumber').value || '--',
+      address: document.getElementById('newAddress').value || '--',
+      position: document.getElementById('newPosition').value || '--',
+      startDate: document.getElementById('newStartDate').value || '--'
+    };
+    
+    if (window.opener && !window.opener.closed) {
+      if (typeof window.opener.addNewEmployeeFromWindow === 'function') {
+        window.opener.addNewEmployeeFromWindow(newEmployee);
+        alert('✓ کارمەند بە سەرکەوتوویی زیاد کرا!');
+        window.close();
+      } else {
+        alert('هەڵە: فەنکشن لە پەنجەرەی سەرەکیدا نەدۆزرایەوە');
+      }
+    } else {
+      alert('پەنجەرەی سەرەکی داخراوە!');
+    }
+  }
+  
+  // گۆڕینی تابەکان
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+<\/script>
+</body>
+</html>
+  `);
+  
+  newWindow.document.close();
+  isNewEmployeeWindowOpen = true;
+  
+  newWindow.onbeforeunload = function() {
+    isNewEmployeeWindowOpen = false;
+  };
+}
+
+// فەنکشن بۆ زیادکردنی کارمەند لە پەنجەرەی نوێوە بۆ لیستی سەرەکی
+function addNewEmployeeFromWindow(newEmployee) {
+  employees.push(newEmployee);
+  console.log('کارمەندی نوێ زیاد کرا:', newEmployee);
+  alert('کارمەند بە سەرکەوتوویی زیاد کرا!\\nژمارەی کۆی کارمەندان: ' + employees.length);
+  
+  // ئەگەر کارمەند هەڵبژێردرابێت، ناوەکەی نمایش بکە
+  if (currentEmployeeData) {
+    // ئەمە بۆ نوێکردنەوەی نمایشی کارمەندی هەڵبژێردراو
+  }
+}
+
 </script>
 </body>
 </html>
