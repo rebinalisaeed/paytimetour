@@ -1543,6 +1543,8 @@ body { font-family: var(--font); background:#dce8f8; font-size:13px; color:#222;
   </div>
 </div>
 
+
+
 <script>
 // ===================== DATA =====================
 const kurdishDays = ['شەممە','یەک شەممە','دوو شەممە','سێ شەممە','چوار شەممە','پێنج شەممە','هەینی'];
@@ -1570,221 +1572,12 @@ let currentSearchName = '';
 let currentEmployeeData = null;
 let hasImage = false;
 let isEditMode = false;
-
-// ===================== KURDISH DATE FUNCTION =====================
-function getKurdishDate(gregorianDate) {
-  const day = gregorianDate.getDate(), month = gregorianDate.getMonth() + 1, year = gregorianDate.getFullYear();
-  let kDay, kMonth, kYear;
-  if ((month === 3 && day >= 21) || (month === 4 && day <= 20)) { kMonth = 1; kDay = month === 3 ? day - 20 : day + 11; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 4 && day >= 21) || (month === 5 && day <= 21)) { kMonth = 2; kDay = month === 4 ? day - 20 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 5 && day >= 22) || (month === 6 && day <= 21)) { kMonth = 3; kDay = month === 5 ? day - 21 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 6 && day >= 22) || (month === 7 && day <= 22)) { kMonth = 4; kDay = month === 6 ? day - 21 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) { kMonth = 5; kDay = month === 7 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) { kMonth = 6; kDay = month === 8 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) { kMonth = 7; kDay = month === 9 ? day - 22 : day + 8; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) { kMonth = 8; kDay = month === 10 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) { kMonth = 9; kDay = month === 11 ? day - 21 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
-  else if ((month === 12 && day >= 22) || (month === 1 && day <= 20)) { kMonth = 10; kDay = month === 12 ? day - 21 : day + 10; kYear = (month === 12 ? year : year - 1) + KURDISH_YEAR_OFFSET; }
-  else if ((month === 1 && day >= 21) || (month === 2 && day <= 19)) { kMonth = 11; kDay = month === 1 ? day - 20 : day + 11; kYear = year - 1 + KURDISH_YEAR_OFFSET; }
-  else { kMonth = 12; kDay = month === 2 ? day - 19 : day + 10; kYear = year - 1 + KURDISH_YEAR_OFFSET; }
-  return `${kDay} ${kurdishMonthsFull[kMonth - 1]} ${kYear}`;
-}
-
-function pad(n) { return n < 10 ? '0' + n : n; }
-function updateClock() {
-  const now = new Date();
-  document.getElementById('tbGregorian').textContent = `${now.getDate()} ${gregorianMonthsKurdish[now.getMonth()]} ${now.getFullYear()}`;
-  document.getElementById('tbKurdish').textContent = getKurdishDate(now);
-  document.getElementById('tbTime').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-}
-
-function populateYears() {
-  const sel = document.getElementById('yearSel');
-  const curY = new Date().getFullYear();
-  for (let y = 1970; y <= 2200; y++) { const opt = document.createElement('option'); opt.value = y; opt.textContent = y; if (y === curY) opt.selected = true; sel.appendChild(opt); }
-}
-function setCurrentMonth() { document.getElementById('monthSel').value = new Date().getMonth() + 1; }
-function changeMonth(dir) {
-  const ms = document.getElementById('monthSel'), ys = document.getElementById('yearSel');
-  let m = parseInt(ms.value), y = parseInt(ys.value);
-  m += dir; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
-  ms.value = m; ys.value = y; updateTable();
-}
-function daysInMonth(m, y) { return new Date(y, m, 0).getDate(); }
-function dayName(jsDay) { const map = [1, 2, 3, 4, 5, 6, 0]; return kurdishDays[map[jsDay]]; }
-function updateTable() {
-  const m = parseInt(document.getElementById('monthSel').value), y = parseInt(document.getElementById('yearSel').value);
-  const days = daysInMonth(m, y), tbody = document.getElementById('att-body');
-  tbody.innerHTML = '';
-  for (let d = 1; d <= days; d++) {
-    const date = new Date(y, m - 1, d), jsDay = date.getDay(), dayN = dayName(jsDay), isFriday = (jsDay === 5);
-    const tr = document.createElement('tr'); if (isFriday) tr.className = 'friday-row';
-    const cols = [d, dayN, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-    cols.forEach((c) => { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); });
-    tbody.appendChild(tr);
-  }
-}
-
-function openSearchModal() { document.getElementById('searchModal').style.display = 'flex'; document.getElementById('modalSearchInput').focus(); }
-function closeSearchModal() { document.getElementById('searchModal').style.display = 'none'; document.getElementById('modalSearchInput').value = ''; }
-function performSearch() {
-  const q = document.getElementById('modalSearchInput').value.trim().toLowerCase();
-  if (!q) { alert('تکایە ناو یان کۆد یان ژمارەی مۆبایل بنووسە'); return; }
-  const found = employees.find(e => e.name.toLowerCase().includes(q) || e.code.includes(q) || e.mobile.includes(q));
-  if (found) {
-    currentSearchName = found.name; currentEmployeeData = found;
-    document.getElementById('searchBox').value = found.name;
-    document.getElementById('empGroup').textContent = found.group;
-    document.getElementById('empType').textContent = found.type;
-    document.getElementById('empLocation').textContent = found.location;
-    closeSearchModal();
-  } else { alert('کارمەند نەدۆزرایەوە'); }
-}
-
 let isModalFullscreen = false, isModalMinimized = false;
-function openEmployeeModal() {
-  const modal = document.getElementById('employeeModal'), content = document.getElementById('employeeModalContent');
-  modal.style.display = 'flex'; isModalFullscreen = false; isModalMinimized = false;
-  content.classList.remove('fullscreen'); content.style.display = 'flex';
-  if (currentEmployeeData) { displayEmployeeInfo(currentEmployeeData); document.getElementById('modalEmployeeSearchInput').value = currentEmployeeData.name; }
-  else { document.getElementById('employeeInfoDisplay').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><p>تکایە لە سەرەوە ناوی کارمەند بگەڕێ</p></div>`; document.getElementById('modalEmployeeSearchInput').value = ''; }
-  if (isEditMode) toggleEditMode();
-}
-function closeEmployeeModal() { document.getElementById('employeeModal').style.display = 'none'; if (isEditMode) toggleEditMode(); }
-function minimizeEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.style.display = c.style.display === 'none' ? 'flex' : 'none'; }
-function toggleFullscreenEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.classList.toggle('fullscreen'); isModalFullscreen = !isModalFullscreen; }
 
-function toggleEditMode() {
-  isEditMode = !isEditMode;
-  const editBtn = document.getElementById('editBtn');
-  const allInputs = document.querySelectorAll('#employeeModal input:not(.search-input)');
-  const subInputs = document.querySelectorAll('#tab5 input');
-  const allInputsInModal = [...allInputs, ...subInputs];
-  
-  allInputsInModal.forEach(input => { input.disabled = !isEditMode; });
-  if (isEditMode) {
-    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> سەیڤکردن';
-    editBtn.classList.add('edit-mode');
-  } else {
-    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> گۆڕانکاری';
-    editBtn.classList.remove('edit-mode');
-    alert('گۆڕانکارییەکان پاشەکەوت کران!');
-  }
-}
+// ===================== کۆدی دوگمەی نوێ =====================
+let isNewEmployeeWindowOpen = false;
 
-function uploadImage() {
-  const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
-  input.onchange = function(e) {
-    const file = e.target.files[0];
-    if (file) { const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
-        img.src = event.target.result; img.style.display = 'block';
-        if (placeholder) placeholder.style.display = 'none';
-        document.getElementById('uploadImageBtn').textContent = 'گۆڕینی وێنە';
-        document.getElementById('deleteImageBtn').disabled = false;
-        hasImage = true;
-      }; reader.readAsDataURL(file);
-    }
-  }; input.click();
-}
-function deleteImage() {
-  if (hasImage) {
-    const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
-    img.src = ''; img.style.display = 'none';
-    if (placeholder) placeholder.style.display = 'block';
-    document.getElementById('uploadImageBtn').textContent = 'دانانی وێنە';
-    document.getElementById('deleteImageBtn').disabled = true;
-    hasImage = false;
-  }
-}
-
-function displayEmployeeInfo(employee) {
-  document.getElementById('employeeInfoDisplay').innerHTML = `
-    <div class="tab1-layout">
-      <div class="tab1-right">
-        <div class="profile-image"><img id="profileImg" src="" style="display: none;"><span id="profilePlaceholder" style="font-size: 50px;">👤</span></div>
-        <div class="image-buttons"><button class="image-btn image-btn-upload" id="uploadImageBtn" onclick="uploadImage()">دانانی وێنە</button><button class="image-btn image-btn-delete" id="deleteImageBtn" onclick="deleteImage()" disabled>سڕینەوەی وێنە</button></div>
-      </div>
-      <div class="tab1-left">
-        <div class="info-row"><div class="info-label">کۆدی کارمەند:</div><div class="info-value"><input type="text" value="${employee.code}" disabled></div><div class="info-label" style="margin-right:15px;">ژمارەی کارت:</div><div class="info-value"><input type="text" value="${employee.cardNumber || '—'}" disabled></div></div>
-        <div class="name-group"><div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" value="${employee.name}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باوک:</div><div class="info-value"><input type="text" value="${employee.fatherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باپیر:</div><div class="info-value"><input type="text" value="${employee.grandfatherName || '—'}" disabled></div></div></div>
-        <div class="silver-box"><div class="info-row"><div class="info-label">ژمارەی کارتی نیشتمانی:</div><div class="info-value"><input type="text" value="${employee.nationalId || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕەگەز:</div><div class="info-value"><input type="text" value="${employee.gender || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی دایک:</div><div class="info-value"><input type="text" value="${employee.motherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی تەواو بە ئینگلیزی:</div><div class="info-value"><input type="text" value="${employee.englishName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی UPN:</div><div class="info-value"><input type="text" value="${employee.upn || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" value="${employee.address || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی مۆبایل:</div><div class="info-value"><input type="text" value="${employee.mobile}" disabled></div></div></div>
-        <div class="silver-box"><div class="info-row"><div class="info-label">ڕێکەوتی دامەزراندن:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕێکەوتی دەست بەکاربوون:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">پلە:</div><div class="info-value"><input type="text" value="${employee.position || '—'}" disabled></div></div></div>
-      </div>
-    </div>`;
-  hasImage = false; const img = document.getElementById('profileImg'); const ph = document.getElementById('profilePlaceholder');
-  if (img) img.style.display = 'none'; if (ph) ph.style.display = 'block';
-  const upBtn = document.getElementById('uploadImageBtn'); const delBtn = document.getElementById('deleteImageBtn');
-  if (upBtn) upBtn.textContent = 'دانانی وێنە'; if (delBtn) delBtn.disabled = true;
-}
-
-function searchEmployeeInModal() {
-  const q = document.getElementById('modalEmployeeSearchInput').value.trim().toLowerCase();
-  if (!q) { alert('تکایە ناوی کارمەند بنووسە'); return; }
-  const found = employees.find(e => e.name.toLowerCase().includes(q) || e.code.includes(q) || e.mobile.includes(q));
-  if (found) { currentEmployeeData = found; displayEmployeeInfo(found); }
-  else { alert('کارمەند نەدۆزرایەوە'); document.getElementById('employeeInfoDisplay').innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><p>کارمەند نەدۆزرایەوە</p></div>`; }
-}
-
-document.querySelectorAll('.tab-btn').forEach(btn => { btn.addEventListener('click', () => {
-  const tabId = btn.getAttribute('data-tab');
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-}); });
-
-document.querySelectorAll('.sub-tab-btn').forEach(btn => { btn.addEventListener('click', () => {
-  const subTabId = btn.getAttribute('data-subtab');
-  document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.sub-tab-content').forEach(tab => tab.classList.remove('active'));
-  document.getElementById(subTabId).classList.add('active');
-}); });
-
-document.getElementById('modalSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
-document.getElementById('modalEmployeeSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') searchEmployeeInModal(); });
-window.onclick = function(event) {
-  if (event.target === document.getElementById('searchModal')) closeSearchModal();
-  if (event.target === document.getElementById('employeeModal')) closeEmployeeModal();
-}
-
-const modalContent = document.getElementById('employeeModalContent'), titleBar = document.getElementById('modalTitleBar');
-let isDragging = false, offsetX, offsetY;
-if (titleBar) { titleBar.addEventListener('mousedown', (e) => { if (isModalFullscreen) return; isDragging = true; offsetX = e.clientX - modalContent.offsetLeft; offsetY = e.clientY - modalContent.offsetTop; modalContent.style.position = 'absolute'; modalContent.style.margin = '0'; }); }
-document.addEventListener('mousemove', (e) => { if (isDragging && !isModalFullscreen && modalContent) { modalContent.style.left = (e.clientX - offsetX) + 'px'; modalContent.style.top = (e.clientY - offsetY) + 'px'; } });
-document.addEventListener('mouseup', () => { isDragging = false; });
-
-function toggleMenu(id) {
-  document.querySelectorAll('.dropdown').forEach(d => { if (d.id !== id) d.classList.remove('open'); });
-  document.querySelectorAll('.nav-btn').forEach(b => { if (b.getAttribute('onclick') !== `toggleMenu('${id}')`) b.classList.remove('open'); });
-  const menu = document.getElementById(id); menu.classList.toggle('open');
-  const btn = document.querySelector(`[onclick="toggleMenu('${id}')"]`); if (btn) btn.classList.toggle('open', menu.classList.contains('open'));
-}
-document.addEventListener('click', e => { if (!e.target.closest('.nav-menu')) { document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('open')); } });
-
-// Auto calculate shift duration
-function updateShiftDuration() {
-  const start = document.getElementById('shiftStart').value;
-  const end = document.getElementById('shiftEnd').value;
-  if (start && end) {
-    const [startH, startM] = start.split(':').map(Number);
-    let [endH, endM] = end.split(':').map(Number);
-    let durationH = endH - startH;
-    let durationM = endM - startM;
-    if (durationM < 0) { durationH--; durationM += 60; }
-    if (durationH < 0) durationH += 24;
-    document.getElementById('shiftDuration').innerText = `${String(durationH).padStart(2,'0')}:${String(durationM).padStart(2,'0')}`;
-  }
-}
-setInterval(() => { if (document.getElementById('shiftStart') && document.getElementById('shiftEnd')) updateShiftDuration(); }, 500);
-
-populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(updateClock, 1000);
-
-
-
-  function openNewEmployeeWindow() {
+function openNewEmployeeWindow() {
   if (isNewEmployeeWindowOpen) {
     alert('پەنجەرەیەکی نوێ پێشتر کراوە! تکایە یەکەم داخە.');
     return;
@@ -1820,24 +1613,18 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
     .header h2 { margin: 0; font-size: 18px; }
     .close-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; }
     .close-btn:hover { background: #b71c1c; }
-    
-    /* Step indicator */
     .step-indicator { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
     .step { width: 30px; height: 30px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
     .step.active { background: #2d4a7a; }
     .step.completed { background: #2e7d32; }
-    
-    /* Form sections */
     .form-section { display: none; background: #f9f9f9; padding: 20px; border-radius: 10px; }
     .form-section.active { display: block; }
-    
     .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
     .info-row { display: flex; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
     .info-label { width: 160px; font-weight: 700; color: #2d4a7a; font-size: 12px; }
     .info-value { flex: 1; }
     .info-value input, .info-value select, .info-value textarea { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 12px; }
     .info-value input:focus, .info-value select:focus { outline: none; border-color: #2d4a7a; }
-    
     .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
     .nav-btn { background: #2d4a7a; color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
     .nav-btn:hover { background: #4a6fa5; }
@@ -1845,7 +1632,6 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
     .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
     .save-btn:hover { background: #1b5e20; }
     .action-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
-    
     h4 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
     .required { color: red; }
   </style>
@@ -1857,7 +1643,6 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
     <button class="close-btn" onclick="window.close()">✖ داخستن</button>
   </div>
   
-  <!-- Step Indicator -->
   <div class="step-indicator">
     <div class="step active" id="step1">1</div>
     <div class="step" id="step2">2</div>
@@ -1949,7 +1734,6 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
     </div>
   </div>
   
-  <!-- Navigation Buttons -->
   <div class="nav-buttons">
     <button class="nav-btn" id="prevBtn" onclick="changeSection(-1)">◀ پێشوو</button>
     <button class="nav-btn" id="nextBtn" onclick="changeSection(1)">دواتر ▶</button>
@@ -1990,31 +1774,19 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
     const saveBtn = document.getElementById('saveFinalBtn');
     
     if (prevBtn) {
-      if (currentSection === 1) {
-        prevBtn.classList.add('disabled');
-        prevBtn.disabled = true;
-      } else {
-        prevBtn.classList.remove('disabled');
-        prevBtn.disabled = false;
-      }
+      prevBtn.disabled = (currentSection === 1);
+      if (currentSection === 1) prevBtn.classList.add('disabled');
+      else prevBtn.classList.remove('disabled');
     }
     
     if (nextBtn) {
-      if (currentSection === totalSections) {
-        nextBtn.classList.add('disabled');
-        nextBtn.disabled = true;
-      } else {
-        nextBtn.classList.remove('disabled');
-        nextBtn.disabled = false;
-      }
+      nextBtn.disabled = (currentSection === totalSections);
+      if (currentSection === totalSections) nextBtn.classList.add('disabled');
+      else nextBtn.classList.remove('disabled');
     }
     
     if (saveBtn) {
-      if (currentSection === totalSections) {
-        saveBtn.style.display = 'flex';
-      } else {
-        saveBtn.style.display = 'none';
-      }
+      saveBtn.style.display = (currentSection === totalSections) ? 'flex' : 'none';
     }
   }
   
@@ -2044,12 +1816,7 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
       position: document.getElementById('newPosition').value || '--',
       startDate: document.getElementById('newStartDate').value || '--',
       englishName: document.getElementById('newEnglishName').value || '--',
-      upn: document.getElementById('newUpn').value || '--',
-      shiftName: document.getElementById('newShiftName').value || '--',
-      shiftStart: document.getElementById('newShiftStart').value || '08:00',
-      shiftEnd: document.getElementById('newShiftEnd').value || '16:00',
-      groupName: document.getElementById('newGroupName').value || '--',
-      department: document.getElementById('newDepartment').value || '--'
+      upn: document.getElementById('newUpn').value || '--'
     };
     
     if (window.opener && !window.opener.closed) {
@@ -2065,15 +1832,7 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
     }
   }
   
-  // Initialize
   updateSections();
-  
-  // Enter key to go next
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && currentSection < totalSections) {
-      changeSection(1);
-    }
-  });
 <\/script>
 </body>
 </html>
@@ -2087,8 +1846,243 @@ populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(up
   };
 }
 
+function addNewEmployeeFromWindow(newEmployee) {
+  employees.push(newEmployee);
+  console.log('کارمەندی نوێ زیاد کرا:', newEmployee);
+  alert('✓ کارمەند بە سەرکەوتوویی زیاد کرا!\\nژمارەی کۆی کارمەندان: ' + employees.length);
+}
 
+// ===================== کوردی دیت (Kurdish Date) =====================
+function getKurdishDate(gregorianDate) {
+  const day = gregorianDate.getDate(), month = gregorianDate.getMonth() + 1, year = gregorianDate.getFullYear();
+  let kDay, kMonth, kYear;
+  if ((month === 3 && day >= 21) || (month === 4 && day <= 20)) { kMonth = 1; kDay = month === 3 ? day - 20 : day + 11; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 4 && day >= 21) || (month === 5 && day <= 21)) { kMonth = 2; kDay = month === 4 ? day - 20 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 5 && day >= 22) || (month === 6 && day <= 21)) { kMonth = 3; kDay = month === 5 ? day - 21 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 6 && day >= 22) || (month === 7 && day <= 22)) { kMonth = 4; kDay = month === 6 ? day - 21 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) { kMonth = 5; kDay = month === 7 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) { kMonth = 6; kDay = month === 8 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) { kMonth = 7; kDay = month === 9 ? day - 22 : day + 8; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) { kMonth = 8; kDay = month === 10 ? day - 22 : day + 9; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) { kMonth = 9; kDay = month === 11 ? day - 21 : day + 10; kYear = year + KURDISH_YEAR_OFFSET; }
+  else if ((month === 12 && day >= 22) || (month === 1 && day <= 20)) { kMonth = 10; kDay = month === 12 ? day - 21 : day + 10; kYear = (month === 12 ? year : year - 1) + KURDISH_YEAR_OFFSET; }
+  else if ((month === 1 && day >= 21) || (month === 2 && day <= 19)) { kMonth = 11; kDay = month === 1 ? day - 20 : day + 11; kYear = year - 1 + KURDISH_YEAR_OFFSET; }
+  else { kMonth = 12; kDay = month === 2 ? day - 19 : day + 10; kYear = year - 1 + KURDISH_YEAR_OFFSET; }
+  return `${kDay} ${kurdishMonthsFull[kMonth - 1]} ${kYear}`;
+}
+
+function pad(n) { return n < 10 ? '0' + n : n; }
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('tbGregorian').textContent = `${now.getDate()} ${gregorianMonthsKurdish[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('tbKurdish').textContent = getKurdishDate(now);
+  document.getElementById('tbTime').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+}
+
+function populateYears() {
+  const sel = document.getElementById('yearSel');
+  const curY = new Date().getFullYear();
+  for (let y = 1970; y <= 2200; y++) { const opt = document.createElement('option'); opt.value = y; opt.textContent = y; if (y === curY) opt.selected = true; sel.appendChild(opt); }
+}
+
+function setCurrentMonth() { document.getElementById('monthSel').value = new Date().getMonth() + 1; }
+
+function changeMonth(dir) {
+  const ms = document.getElementById('monthSel'), ys = document.getElementById('yearSel');
+  let m = parseInt(ms.value), y = parseInt(ys.value);
+  m += dir; if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
+  ms.value = m; ys.value = y; updateTable();
+}
+
+function daysInMonth(m, y) { return new Date(y, m, 0).getDate(); }
+
+function dayName(jsDay) { const map = [1, 2, 3, 4, 5, 6, 0]; return kurdishDays[map[jsDay]]; }
+
+function updateTable() {
+  const m = parseInt(document.getElementById('monthSel').value), y = parseInt(document.getElementById('yearSel').value);
+  const days = daysInMonth(m, y), tbody = document.getElementById('att-body');
+  tbody.innerHTML = '';
+  for (let d = 1; d <= days; d++) {
+    const date = new Date(y, m - 1, d), jsDay = date.getDay(), dayN = dayName(jsDay), isFriday = (jsDay === 5);
+    const tr = document.createElement('tr'); if (isFriday) tr.className = 'friday-row';
+    const cols = [d, dayN, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    cols.forEach((c) => { const td = document.createElement('td'); td.textContent = c; tr.appendChild(td); });
+    tbody.appendChild(tr);
+  }
+}
+
+function openSearchModal() { document.getElementById('searchModal').style.display = 'flex'; document.getElementById('modalSearchInput').focus(); }
+
+function closeSearchModal() { document.getElementById('searchModal').style.display = 'none'; document.getElementById('modalSearchInput').value = ''; }
+
+function performSearch() {
+  const q = document.getElementById('modalSearchInput').value.trim().toLowerCase();
+  if (!q) { alert('تکایە ناو یان کۆد یان ژمارەی مۆبایل بنووسە'); return; }
+  const found = employees.find(e => e.name.toLowerCase().includes(q) || e.code.includes(q) || e.mobile.includes(q));
+  if (found) {
+    currentSearchName = found.name; currentEmployeeData = found;
+    document.getElementById('searchBox').value = found.name;
+    document.getElementById('empGroup').textContent = found.group;
+    document.getElementById('empType').textContent = found.type;
+    document.getElementById('empLocation').textContent = found.location;
+    closeSearchModal();
+  } else { alert('کارمەند نەدۆزرایەوە'); }
+}
+
+function openEmployeeModal() {
+  const modal = document.getElementById('employeeModal'), content = document.getElementById('employeeModalContent');
+  modal.style.display = 'flex'; isModalFullscreen = false; isModalMinimized = false;
+  content.classList.remove('fullscreen'); content.style.display = 'flex';
+  if (currentEmployeeData) { 
+    displayEmployeeInfo(currentEmployeeData); 
+    document.getElementById('modalEmployeeSearchInput').value = currentEmployeeData.name; 
+  } else { 
+    document.getElementById('employeeInfoDisplay').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><p>تکایە لە سەرەوە ناوی کارمەند بگەڕێ</p></div>'; 
+    document.getElementById('modalEmployeeSearchInput').value = ''; 
+  }
+  if (isEditMode) toggleEditMode();
+}
+
+function closeEmployeeModal() { document.getElementById('employeeModal').style.display = 'none'; if (isEditMode) toggleEditMode(); }
+
+function minimizeEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.style.display = c.style.display === 'none' ? 'flex' : 'none'; }
+
+function toggleFullscreenEmployeeModal() { const c = document.getElementById('employeeModalContent'); c.classList.toggle('fullscreen'); isModalFullscreen = !isModalFullscreen; }
+
+function toggleEditMode() {
+  isEditMode = !isEditMode;
+  const editBtn = document.getElementById('editBtn');
+  const allInputs = document.querySelectorAll('#employeeModal input:not(.search-input)');
+  const subInputs = document.querySelectorAll('#tab5 input');
+  const allInputsInModal = [...allInputs, ...subInputs];
   
+  allInputsInModal.forEach(input => { input.disabled = !isEditMode; });
+  if (isEditMode) {
+    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg> سەیڤکردن';
+    editBtn.classList.add('edit-mode');
+  } else {
+    editBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> گۆڕانکاری';
+    editBtn.classList.remove('edit-mode');
+    alert('گۆڕانکارییەکان پاشەکەوت کران!');
+  }
+}
+
+function uploadImage() {
+  const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/*';
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (file) { const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
+        img.src = event.target.result; img.style.display = 'block';
+        if (placeholder) placeholder.style.display = 'none';
+        document.getElementById('uploadImageBtn').textContent = 'گۆڕینی وێنە';
+        document.getElementById('deleteImageBtn').disabled = false;
+        hasImage = true;
+      }; reader.readAsDataURL(file);
+    }
+  }; input.click();
+}
+
+function deleteImage() {
+  if (hasImage) {
+    const img = document.getElementById('profileImg'); const placeholder = document.getElementById('profilePlaceholder');
+    img.src = ''; img.style.display = 'none';
+    if (placeholder) placeholder.style.display = 'block';
+    document.getElementById('uploadImageBtn').textContent = 'دانانی وێنە';
+    document.getElementById('deleteImageBtn').disabled = true;
+    hasImage = false;
+  }
+}
+
+function displayEmployeeInfo(employee) {
+  document.getElementById('employeeInfoDisplay').innerHTML = `
+    <div class="tab1-layout">
+      <div class="tab1-right">
+        <div class="profile-image"><img id="profileImg" src="" style="display: none;"><span id="profilePlaceholder" style="font-size: 50px;">👤</span></div>
+        <div class="image-buttons"><button class="image-btn image-btn-upload" id="uploadImageBtn" onclick="uploadImage()">دانانی وێنە</button><button class="image-btn image-btn-delete" id="deleteImageBtn" onclick="deleteImage()" disabled>سڕینەوەی وێنە</button></div>
+      </div>
+      <div class="tab1-left">
+        <div class="info-row"><div class="info-label">کۆدی کارمەند:</div><div class="info-value"><input type="text" value="${employee.code}" disabled></div><div class="info-label" style="margin-right:15px;">ژمارەی کارت:</div><div class="info-value"><input type="text" value="${employee.cardNumber || '—'}" disabled></div></div>
+        <div class="name-group"><div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" value="${employee.name}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باوک:</div><div class="info-value"><input type="text" value="${employee.fatherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی باپیر:</div><div class="info-value"><input type="text" value="${employee.grandfatherName || '—'}" disabled></div></div></div>
+        <div class="silver-box"><div class="info-row"><div class="info-label">ژمارەی کارتی نیشتمانی:</div><div class="info-value"><input type="text" value="${employee.nationalId || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕەگەز:</div><div class="info-value"><input type="text" value="${employee.gender || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی دایک:</div><div class="info-value"><input type="text" value="${employee.motherName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناوی تەواو بە ئینگلیزی:</div><div class="info-value"><input type="text" value="${employee.englishName || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی UPN:</div><div class="info-value"><input type="text" value="${employee.upn || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" value="${employee.address || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ژمارەی مۆبایل:</div><div class="info-value"><input type="text" value="${employee.mobile}" disabled></div></div></div>
+        <div class="silver-box"><div class="info-row"><div class="info-label">ڕێکەوتی دامەزراندن:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">ڕێکەوتی دەست بەکاربوون:</div><div class="info-value"><input type="text" value="${employee.startDate || '—'}" disabled></div></div><div class="info-row"><div class="info-label">پلە:</div><div class="info-value"><input type="text" value="${employee.position || '—'}" disabled></div></div></div>
+      </div>
+    </div>`;
+  hasImage = false; const img = document.getElementById('profileImg'); const ph = document.getElementById('profilePlaceholder');
+  if (img) img.style.display = 'none'; if (ph) ph.style.display = 'block';
+  const upBtn = document.getElementById('uploadImageBtn'); const delBtn = document.getElementById('deleteImageBtn');
+  if (upBtn) upBtn.textContent = 'دانانی وێنە'; if (delBtn) delBtn.disabled = true;
+}
+
+function searchEmployeeInModal() {
+  const q = document.getElementById('modalEmployeeSearchInput').value.trim().toLowerCase();
+  if (!q) { alert('تکایە ناوی کارمەند بنووسە'); return; }
+  const found = employees.find(e => e.name.toLowerCase().includes(q) || e.code.includes(q) || e.mobile.includes(q));
+  if (found) { currentEmployeeData = found; displayEmployeeInfo(found); }
+  else { alert('کارمەند نەدۆزرایەوە'); document.getElementById('employeeInfoDisplay').innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><p>کارمەند نەدۆزرایەوە</p></div>'; }
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => { btn.addEventListener('click', () => {
+  const tabId = btn.getAttribute('data-tab');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+}); });
+
+document.querySelectorAll('.sub-tab-btn').forEach(btn => { btn.addEventListener('click', () => {
+  const subTabId = btn.getAttribute('data-subtab');
+  document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.sub-tab-content').forEach(tab => tab.classList.remove('active'));
+  document.getElementById(subTabId).classList.add('active');
+}); });
+
+document.getElementById('modalSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') performSearch(); });
+document.getElementById('modalEmployeeSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') searchEmployeeInModal(); });
+
+window.onclick = function(event) {
+  if (event.target === document.getElementById('searchModal')) closeSearchModal();
+  if (event.target === document.getElementById('employeeModal')) closeEmployeeModal();
+}
+
+const modalContent = document.getElementById('employeeModalContent'), titleBar = document.getElementById('modalTitleBar');
+let isDragging = false, offsetX, offsetY;
+if (titleBar) { titleBar.addEventListener('mousedown', (e) => { if (isModalFullscreen) return; isDragging = true; offsetX = e.clientX - modalContent.offsetLeft; offsetY = e.clientY - modalContent.offsetTop; modalContent.style.position = 'absolute'; modalContent.style.margin = '0'; }); }
+document.addEventListener('mousemove', (e) => { if (isDragging && !isModalFullscreen && modalContent) { modalContent.style.left = (e.clientX - offsetX) + 'px'; modalContent.style.top = (e.clientY - offsetY) + 'px'; } });
+document.addEventListener('mouseup', () => { isDragging = false; });
+
+function toggleMenu(id) {
+  document.querySelectorAll('.dropdown').forEach(d => { if (d.id !== id) d.classList.remove('open'); });
+  document.querySelectorAll('.nav-btn').forEach(b => { if (b.getAttribute('onclick') !== `toggleMenu('${id}')`) b.classList.remove('open'); });
+  const menu = document.getElementById(id); menu.classList.toggle('open');
+  const btn = document.querySelector(`[onclick="toggleMenu('${id}')"]`); if (btn) btn.classList.toggle('open', menu.classList.contains('open'));
+}
+
+document.addEventListener('click', e => { if (!e.target.closest('.nav-menu')) { document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('open')); } });
+
+function updateShiftDuration() {
+  const start = document.getElementById('shiftStart').value;
+  const end = document.getElementById('shiftEnd').value;
+  if (start && end) {
+    const [startH, startM] = start.split(':').map(Number);
+    let [endH, endM] = end.split(':').map(Number);
+    let durationH = endH - startH;
+    let durationM = endM - startM;
+    if (durationM < 0) { durationH--; durationM += 60; }
+    if (durationH < 0) durationH += 24;
+    document.getElementById('shiftDuration').innerText = `${String(durationH).padStart(2,'0')}:${String(durationM).padStart(2,'0')}`;
+  }
+}
+
+setInterval(() => { if (document.getElementById('shiftStart') && document.getElementById('shiftEnd')) updateShiftDuration(); }, 500);
+
+populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(updateClock, 1000);
 </script>
+  
+
+
 </body>
 </html>
