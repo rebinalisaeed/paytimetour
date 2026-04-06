@@ -1783,17 +1783,13 @@ setInterval(() => { if (document.getElementById('shiftStart') && document.getEle
 populateYears(); setCurrentMonth(); updateTable(); updateClock(); setInterval(updateClock, 1000);
 
 
-// ===================== کۆدی دوگمەی نوێ =====================
-let isNewEmployeeWindowOpen = false;
 
-function openNewEmployeeWindow() {
-  // ئەگەر پەنجەرەی نوێ پێشتر کرابێتەوە
+  function openNewEmployeeWindow() {
   if (isNewEmployeeWindowOpen) {
     alert('پەنجەرەیەکی نوێ پێشتر کراوە! تکایە یەکەم داخە.');
     return;
   }
   
-  // کۆدی نوێی کارمەند دیاری بکە (دواین کۆد + ١)
   let lastCode = 1000;
   if (employees.length > 0) {
     const lastEmployee = employees[employees.length - 1];
@@ -1801,15 +1797,13 @@ function openNewEmployeeWindow() {
   }
   const newEmployeeCode = lastCode.toString();
   
-  // پەنجەرەی نوێ بکەرەوە
-  const newWindow = window.open('', '_blank', 'width=1000,height=700,scrollbars=yes,resizable=yes');
+  const newWindow = window.open('', '_blank', 'width=1100,height=750,scrollbars=yes,resizable=yes');
   
   if (!newWindow) {
-    alert('تکایە ڕێگەپێدان بە popup بۆ ئەم سایتە بدە!');
+    alert('تکایە ڕێگەپێدان بە popup بدە!');
     return;
   }
   
-  // HTMLـی پەنجەرەی نوێ
   newWindow.document.write(`
 <!DOCTYPE html>
 <html lang="ckb" dir="rtl">
@@ -1821,29 +1815,39 @@ function openNewEmployeeWindow() {
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
-    .container { max-width: 900px; margin: 0 auto; }
+    .container { max-width: 1000px; margin: 0 auto; }
     .header { background: #2d4a7a; color: white; padding: 15px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
     .header h2 { margin: 0; font-size: 18px; }
     .close-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; }
     .close-btn:hover { background: #b71c1c; }
-    .tabs { display: flex; background: #2d4a7a; padding: 5px 10px 0 10px; gap: 2px; flex-wrap: wrap; }
-    .tab-btn { padding: 8px 16px; background: #2d4a7a; border: none; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 600; color: white; border-radius: 6px 6px 0 0; }
-    .tab-btn:hover { background: #4a6fa5; }
-    .tab-btn.active { background: #f9f9f9; color: #2d4a7a; }
-    .tab-content { display: none; background: #f9f9f9; padding: 20px; border-radius: 0 0 10px 10px; max-height: 55vh; overflow-y: auto; }
-    .tab-content.active { display: block; }
+    
+    /* Step indicator */
+    .step-indicator { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+    .step { width: 30px; height: 30px; border-radius: 50%; background: #ccc; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+    .step.active { background: #2d4a7a; }
+    .step.completed { background: #2e7d32; }
+    
+    /* Form sections */
+    .form-section { display: none; background: #f9f9f9; padding: 20px; border-radius: 10px; }
+    .form-section.active { display: block; }
+    
     .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 15px; }
     .info-row { display: flex; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
-    .info-label { width: 140px; font-weight: 700; color: #2d4a7a; font-size: 12px; }
+    .info-label { width: 160px; font-weight: 700; color: #2d4a7a; font-size: 12px; }
     .info-value { flex: 1; }
-    .info-value input, .info-value select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 12px; }
+    .info-value input, .info-value select, .info-value textarea { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 12px; }
     .info-value input:focus, .info-value select:focus { outline: none; border-color: #2d4a7a; }
-    .action-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+    
+    .nav-buttons { display: flex; justify-content: space-between; margin-top: 20px; }
+    .nav-btn { background: #2d4a7a; color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .nav-btn:hover { background: #4a6fa5; }
+    .nav-btn.disabled { background: #ccc; cursor: not-allowed; }
     .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
-    .cancel-btn { background: #999; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
     .save-btn:hover { background: #1b5e20; }
-    .cancel-btn:hover { background: #666; }
-    h4 { color: #2d4a7a; margin-bottom: 15px; }
+    .action-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+    
+    h4 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    .required { color: red; }
   </style>
 </head>
 <body>
@@ -1853,85 +1857,175 @@ function openNewEmployeeWindow() {
     <button class="close-btn" onclick="window.close()">✖ داخستن</button>
   </div>
   
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="tab1">📋 زانیاری کارمەندان</button>
-    <button class="tab-btn" data-tab="tab2">⏰ شەفت و گروپ</button>
-    <button class="tab-btn" data-tab="tab3">🔧 جۆری دامەزراندن</button>
-    <button class="tab-btn" data-tab="tab4">📍 شوێنی دەوام</button>
-    <button class="tab-btn" data-tab="tab5">📚 زانیاری تر</button>
+  <!-- Step Indicator -->
+  <div class="step-indicator">
+    <div class="step active" id="step1">1</div>
+    <div class="step" id="step2">2</div>
+    <div class="step" id="step3">3</div>
+    <div class="step" id="step4">4</div>
+    <div class="step" id="step5">5</div>
   </div>
   
-  <!-- Tab 1: زانیاری کارمەندان -->
-  <div id="tab1" class="tab-content active">
+  <!-- Section 1: زانیاری کارمەندان -->
+  <div id="section1" class="form-section active">
     <div class="silver-box">
       <h4>📋 زانیاری کەسی</h4>
       <div class="info-row"><div class="info-label">کۆدی کارمەند:</div><div class="info-value"><input type="text" id="newCode" value="${newEmployeeCode}" readonly style="background:#e0e0e0;"></div></div>
-      <div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" id="newName" placeholder="ناوی تەواو"></div></div>
+      <div class="info-row"><div class="info-label">ناوی کارمەند:<span class="required">*</span></div><div class="info-value"><input type="text" id="newName" placeholder="ناوی تەواو"></div></div>
       <div class="info-row"><div class="info-label">ناوی باوک:</div><div class="info-value"><input type="text" id="newFatherName" placeholder="ناوی باوک"></div></div>
       <div class="info-row"><div class="info-label">ناوی باپیر:</div><div class="info-value"><input type="text" id="newGrandfatherName" placeholder="ناوی باپیر"></div></div>
       <div class="info-row"><div class="info-label">ناوی دایک:</div><div class="info-value"><input type="text" id="newMotherName" placeholder="ناوی دایک"></div></div>
       <div class="info-row"><div class="info-label">ڕەگەز:</div><div class="info-value"><select id="newGender"><option value="نێر">نێر</option><option value="مێ">مێ</option></select></div></div>
-      <div class="info-row"><div class="info-label">ژمارەی مۆبایل:</div><div class="info-value"><input type="text" id="newMobile" placeholder="0750xxxxxxx"></div></div>
-      <div class="info-row"><div class="info-label">ژ. کارتی نیشتمانی:</div><div class="info-value"><input type="text" id="newNationalId" placeholder="١٢ ژمارە"></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی مۆبایل:<span class="required">*</span></div><div class="info-value"><input type="text" id="newMobile" placeholder="0750xxxxxxx"></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی کارتی نیشتمانی:</div><div class="info-value"><input type="text" id="newNationalId" placeholder="١٢ ژمارە"></div></div>
       <div class="info-row"><div class="info-label">ژمارەی کارت:</div><div class="info-value"><input type="text" id="newCardNumber" placeholder="ژمارەی کارت"></div></div>
       <div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" id="newAddress" placeholder="ناونیشان"></div></div>
+      <div class="info-row"><div class="info-label">ناوی بە ئینگلیزی:</div><div class="info-value"><input type="text" id="newEnglishName" placeholder="English Name"></div></div>
+      <div class="info-row"><div class="info-label">ژمارەی UPN:</div><div class="info-value"><input type="text" id="newUpn" placeholder="UPN"></div></div>
       <div class="info-row"><div class="info-label">پلە:</div><div class="info-value"><input type="text" id="newPosition" placeholder="پلە"></div></div>
       <div class="info-row"><div class="info-label">ڕێکەوتی دامەزراندن:</div><div class="info-value"><input type="date" id="newStartDate"></div></div>
     </div>
   </div>
   
-  <!-- Tab 2: شەفت و گروپ -->
-  <div id="tab2" class="tab-content">
+  <!-- Section 2: ڕێکخستنی شەفت و گروپ -->
+  <div id="section2" class="form-section">
     <div class="silver-box">
-      <h4>⏰ وردەکاری شەفت و گروپ</h4>
+      <h4>⏰ وردەکاری شەفت</h4>
       <div class="info-row"><div class="info-label">ناوی شەفت:</div><div class="info-value"><input type="text" id="newShiftName" placeholder="شەفتی بەیانی"></div></div>
-      <div class="info-row"><div class="info-label">کاتی دەستپێک:</div><div class="info-value"><input type="time" id="newShiftStart"></div></div>
-      <div class="info-row"><div class="info-label">کاتی کۆتایی:</div><div class="info-value"><input type="time" id="newShiftEnd"></div></div>
+      <div class="info-row"><div class="info-label">کاتی دەستپێک:</div><div class="info-value"><input type="time" id="newShiftStart" value="08:00"></div></div>
+      <div class="info-row"><div class="info-label">کاتی کۆتایی:</div><div class="info-value"><input type="time" id="newShiftEnd" value="16:00"></div></div>
+      <div class="info-row"><div class="info-label">ماوەی پشوو:</div><div class="info-value"><input type="time" id="newBreakDuration" value="01:00"></div></div>
+      <div class="info-row"><div class="info-label">جۆری شەفت:</div><div class="info-value"><select id="newShiftType"><option value="fixed">جێگیر (Fixed)</option><option value="rotating">گۆڕاو (Rotating)</option></select></div></div>
+      <div class="info-row"><div class="info-label">ڕۆژەکانی کار:</div><div class="info-value"><input type="text" id="newWorkDays" placeholder="یەکشەممە - پێنجشەممە"></div></div>
+    </div>
+    <div class="silver-box">
+      <h4>👥 وردەکاری گروپ</h4>
       <div class="info-row"><div class="info-label">ناوی گروپ:</div><div class="info-value"><input type="text" id="newGroupName" placeholder="ناوی گروپ"></div></div>
       <div class="info-row"><div class="info-label">بەش:</div><div class="info-value"><input type="text" id="newDepartment" placeholder="بەش"></div></div>
-      <div class="info-row"><div class="info-label">گروپ:</div><div class="info-value"><input type="text" id="newGroup" placeholder="گروپ"></div></div>
+      <div class="info-row"><div class="info-label">کۆدی گروپ:</div><div class="info-value"><input type="text" id="newGroupCode" placeholder="کۆدی گروپ"></div></div>
+      <div class="info-row"><div class="info-label">ڕۆڵی کارمەند:</div><div class="info-value"><select id="newUserRole"><option value="member">ئەندام</option><option value="supervisor">سەرپەرشتیار</option><option value="manager">مانیجەر</option></select></div></div>
+      <div class="info-row"><div class="info-label">گروپ (بە کوردی):</div><div class="info-value"><input type="text" id="newGroup" placeholder="گروپ"></div></div>
     </div>
   </div>
   
-  <!-- Tab 3: جۆری دامەزراندن -->
-  <div id="tab3" class="tab-content">
+  <!-- Section 3: ڕێکخستنی جۆری دامەزراندن -->
+  <div id="section3" class="form-section">
     <div class="silver-box">
       <h4>🔧 جۆری دامەزراندن</h4>
+      <div class="info-row"><div class="info-label">جۆری دامەزراندن:</div><div class="info-value"><input type="text" id="newType" placeholder="بەردەوام / کاتی"></div></div>
       <div class="info-row"><div class="info-label">ناوی جۆر:</div><div class="info-value"><select id="newEmpTypeName"><option value="fulltime">Full-time</option><option value="parttime">Part-time</option><option value="contract">Contract</option><option value="temporary">Temporary</option></select></div></div>
-      <div class="info-row"><div class="info-label">جۆری دامەزراندن:</div><div class="info-value"><input type="text" id="newType" placeholder="جۆری دامەزراندن"></div></div>
       <div class="info-row"><div class="info-label">مووچەی بنەڕەت:</div><div class="info-value"><input type="text" id="newBaseSalary" placeholder="مووچە"></div></div>
       <div class="info-row"><div class="info-label">کاتژمێری ڕۆژانە:</div><div class="info-value"><input type="number" id="newDailyHours" placeholder="٨"></div></div>
+      <div class="info-row"><div class="info-label">کاتژمێری هەفتانە:</div><div class="info-value"><input type="number" id="newWeeklyHours" placeholder="٤٠"></div></div>
+      <div class="info-row"><div class="info-label">بەرواری دەستپێکی گرێبەست:</div><div class="info-value"><input type="date" id="newContractStartDate"></div></div>
+      <div class="info-row"><div class="info-label">بەرواری کۆتایی گرێبەست:</div><div class="info-value"><input type="date" id="newContractEndDate"></div></div>
     </div>
   </div>
   
-  <!-- Tab 4: شوێنی دەوام -->
-  <div id="tab4" class="tab-content">
+  <!-- Section 4: ڕێکخستنی شوێنی دەوام -->
+  <div id="section4" class="form-section">
     <div class="silver-box">
       <h4>📍 شوێنی دەوام</h4>
       <div class="info-row"><div class="info-label">شوێنی کارکردن:</div><div class="info-value"><input type="text" id="newLocation" placeholder="شوێنی کار"></div></div>
-      <div class="info-row"><div class="info-label">ناوی شوێن:</div><div class="info-value"><input type="text" id="newWorkLocation" placeholder="ناوی شوێن"></div></div>
-      <div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" id="newLocationAddress" placeholder="ناونیشان"></div></div>
+      <div class="info-row"><div class="info-label">ناوی شوێن:</div><div class="info-value"><input type="text" id="newWorkLocation" placeholder="ئۆفیسی سەرەکی"></div></div>
+      <div class="info-row"><div class="info-label">جۆری شوێن:</div><div class="info-value"><select id="newLocationType"><option value="office">Office</option><option value="remote">Remote</option><option value="field">Field</option></select></div></div>
+      <div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" id="newLocationAddress" placeholder="ناونیشانی تەواو"></div></div>
+      <div class="info-row"><div class="info-label">وڵات:</div><div class="info-value"><input type="text" id="newLocationCountry" placeholder="عێراق"></div></div>
+      <div class="info-row"><div class="info-label">شار:</div><div class="info-value"><input type="text" id="newLocationCity" placeholder="هەولێر"></div></div>
     </div>
   </div>
   
-  <!-- Tab 5: زانیاری تر -->
-  <div id="tab5" class="tab-content">
+  <!-- Section 5: زانیاریەکانی تر -->
+  <div id="section5" class="form-section">
     <div class="silver-box">
       <h4>📚 زانیاریەکانی تر</h4>
       <div class="info-row"><div class="info-label">ئاستی خوێندن:</div><div class="info-value"><input type="text" id="newEduLevel" placeholder="بەکالۆریۆس"></div></div>
       <div class="info-row"><div class="info-label">بەشی خوێندن:</div><div class="info-value"><input type="text" id="newEduField" placeholder="کۆمپیوتەر"></div></div>
       <div class="info-row"><div class="info-label">زمانەکان:</div><div class="info-value"><input type="text" id="newLanguages" placeholder="کوردی، عەرەبی، ئینگلیزی"></div></div>
+      <div class="info-row"><div class="info-label">ئاستی زمان:</div><div class="info-value"><input type="text" id="newLangLevel" placeholder="باش"></div></div>
       <div class="info-row"><div class="info-label">ئیمەیڵ:</div><div class="info-value"><input type="email" id="newEmail" placeholder="example@email.com"></div></div>
+      <div class="info-row"><div class="info-label">ئیمەیڵی سیستەم:</div><div class="info-value"><input type="email" id="newSystemEmail" placeholder="system@email.com"></div></div>
+      <div class="info-row"><div class="info-label">ناوی بەکارهێنەر:</div><div class="info-value"><input type="text" id="newUsername" placeholder="username"></div></div>
     </div>
   </div>
   
+  <!-- Navigation Buttons -->
+  <div class="nav-buttons">
+    <button class="nav-btn" id="prevBtn" onclick="changeSection(-1)">◀ پێشوو</button>
+    <button class="nav-btn" id="nextBtn" onclick="changeSection(1)">دواتر ▶</button>
+  </div>
+  
   <div class="action-buttons">
-    <button class="save-btn" onclick="saveNewEmployee()">💾 پاشەکەوتکردن</button>
-    <button class="cancel-btn" onclick="window.close()">❌ ڕەتکردنەوە</button>
+    <button class="save-btn" id="saveFinalBtn" onclick="saveNewEmployee()">💾 پاشەکەوتکردنی کۆتایی</button>
   </div>
 </div>
 
 <script>
+  let currentSection = 1;
+  const totalSections = 5;
+  
+  function updateSections() {
+    for (let i = 1; i <= totalSections; i++) {
+      const section = document.getElementById('section' + i);
+      const step = document.getElementById('step' + i);
+      if (section) {
+        if (i === currentSection) {
+          section.classList.add('active');
+          step.classList.add('active');
+          step.classList.remove('completed');
+        } else {
+          section.classList.remove('active');
+          step.classList.remove('active');
+          if (i < currentSection) {
+            step.classList.add('completed');
+          } else {
+            step.classList.remove('completed');
+          }
+        }
+      }
+    }
+    
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const saveBtn = document.getElementById('saveFinalBtn');
+    
+    if (prevBtn) {
+      if (currentSection === 1) {
+        prevBtn.classList.add('disabled');
+        prevBtn.disabled = true;
+      } else {
+        prevBtn.classList.remove('disabled');
+        prevBtn.disabled = false;
+      }
+    }
+    
+    if (nextBtn) {
+      if (currentSection === totalSections) {
+        nextBtn.classList.add('disabled');
+        nextBtn.disabled = true;
+      } else {
+        nextBtn.classList.remove('disabled');
+        nextBtn.disabled = false;
+      }
+    }
+    
+    if (saveBtn) {
+      if (currentSection === totalSections) {
+        saveBtn.style.display = 'flex';
+      } else {
+        saveBtn.style.display = 'none';
+      }
+    }
+  }
+  
+  function changeSection(direction) {
+    const newSection = currentSection + direction;
+    if (newSection >= 1 && newSection <= totalSections) {
+      currentSection = newSection;
+      updateSections();
+    }
+  }
+  
   function saveNewEmployee() {
     const newEmployee = {
       name: document.getElementById('newName').value || '--',
@@ -1948,7 +2042,14 @@ function openNewEmployeeWindow() {
       cardNumber: document.getElementById('newCardNumber').value || '--',
       address: document.getElementById('newAddress').value || '--',
       position: document.getElementById('newPosition').value || '--',
-      startDate: document.getElementById('newStartDate').value || '--'
+      startDate: document.getElementById('newStartDate').value || '--',
+      englishName: document.getElementById('newEnglishName').value || '--',
+      upn: document.getElementById('newUpn').value || '--',
+      shiftName: document.getElementById('newShiftName').value || '--',
+      shiftStart: document.getElementById('newShiftStart').value || '08:00',
+      shiftEnd: document.getElementById('newShiftEnd').value || '16:00',
+      groupName: document.getElementById('newGroupName').value || '--',
+      department: document.getElementById('newDepartment').value || '--'
     };
     
     if (window.opener && !window.opener.closed) {
@@ -1964,14 +2065,14 @@ function openNewEmployeeWindow() {
     }
   }
   
-  // گۆڕینی تابەکان
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-      document.getElementById(this.getAttribute('data-tab')).classList.add('active');
-    });
+  // Initialize
+  updateSections();
+  
+  // Enter key to go next
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && currentSection < totalSections) {
+      changeSection(1);
+    }
   });
 <\/script>
 </body>
@@ -1986,18 +2087,8 @@ function openNewEmployeeWindow() {
   };
 }
 
-// فەنکشن بۆ زیادکردنی کارمەند لە پەنجەرەی نوێوە بۆ لیستی سەرەکی
-function addNewEmployeeFromWindow(newEmployee) {
-  employees.push(newEmployee);
-  console.log('کارمەندی نوێ زیاد کرا:', newEmployee);
-  alert('کارمەند بە سەرکەوتوویی زیاد کرا!\\nژمارەی کۆی کارمەندان: ' + employees.length);
-  
-  // ئەگەر کارمەند هەڵبژێردرابێت، ناوەکەی نمایش بکە
-  if (currentEmployeeData) {
-    // ئەمە بۆ نوێکردنەوەی نمایشی کارمەندی هەڵبژێردراو
-  }
-}
 
+  
 </script>
 </body>
 </html>
