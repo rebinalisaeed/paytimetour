@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پەیوەندی لەگەڵ ئامێر - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .device-card { background: #f5f5f5; border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .device-info h4 { color: #2d4a7a; margin-bottom: 5px; }
+        .device-info p { color: #666; font-size: 12px; }
+        .connect-btn { background: #2d4a7a; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; }
+        .connect-btn.connected { background: #2e7d32; }
+        .connect-btn:hover { opacity: 0.9; }
+        .scan-btn { background: #ff9800; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📱 پەیوەندی لەگەڵ ئامێر</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە</a>
+    </div>
+    <div class="content">
+        <button class="scan-btn" onclick="alert('گەڕان بۆ ئامێرەکان دەستی پێکرد...')">🔍 گەڕان بۆ ئامێرەکان</button>
+        
+        <div class="device-card">
+            <div class="device-info">
+                <h4>ئامێری تۆمارکردنی هاتن و چوون (Fingerprint)</h4>
+                <p>IP: 192.168.1.100 | ناوەند: ئۆفیسی سەرەکی</p>
+            </div>
+            <button class="connect-btn" onclick="alert('پەیوەندی بە ئامێرەوە کرا!')">🔌 پەیوەندی</button>
+        </div>
+        
+        <div class="device-card">
+            <div class="device-info">
+                <h4>ئامێری RFID / کارت</h4>
+                <p>IP: 192.168.1.101 | ناوەند: لقی باکور</p>
+            </div>
+            <button class="connect-btn" onclick="alert('پەیوەندی بە ئامێرەوە کرا!')">🔌 پەیوەندی</button>
+        </div>
+        
+        <div class="device-card">
+            <div class="device-info">
+                <h4>ئامێری ناسینەوەی دەموچاو (Face Recognition)</h4>
+                <p>IP: 192.168.1.102 | ناوەند: ئۆفیسی سەرەکی</p>
+            </div>
+            <button class="connect-btn" onclick="alert('پەیوەندی بە ئامێرەوە کرا!')">🔌 پەیوەندی</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
