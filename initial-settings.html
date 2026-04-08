@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پێناسە سەرەتاییەکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .section { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .section h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 200px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 15px; }
+        .save-btn:hover { background: #1b5e20; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔧 پێناسە سەرەتاییەکان</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە</a>
+    </div>
+    <div class="content">
+        <div class="section">
+            <h3>پێناسەکانی کۆمپانیا</h3>
+            <div class="info-row"><div class="info-label">ژمارەی مۆڵەتی کۆمپانیا:</div><div class="info-value"><input type="text" placeholder="ژمارەی مۆڵەت"></div></div>
+            <div class="info-row"><div class="info-label">ژمارەی باج (Tax ID):</div><div class="info-value"><input type="text" placeholder="Tax ID"></div></div>
+            <div class="info-row"><div class="info-label">ناونیشانی کۆمپانیا:</div><div class="info-value"><input type="text" placeholder="ناونیشان"></div></div>
+        </div>
+        <div class="section">
+            <h3>پێناسەکانی کارمەند</h3>
+            <div class="info-row"><div class="info-label">شێوازی کۆدی کارمەند:</div><div class="info-value"><select><option selected>ژمارەی ڕیزبەندی</option><option>ساڵ + ژمارە</option><option>پێشگر + ژمارە</option></select></div></div>
+            <div class="info-row"><div class="info-label">دەستپێکی کۆدی کارمەند:</div><div class="info-value"><input type="number" value="1000"></div></div>
+        </div>
+        <button class="save-btn" onclick="alert('پێناسە سەرەتاییەکان پاشەکەوت کران!')">💾 پاشەکەوتکردن</button>
+    </div>
+</div>
+</body>
+</html>
