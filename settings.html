@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕێکخستنەکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .section { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .section h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 180px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 15px; }
+        .save-btn:hover { background: #1b5e20; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>⚙️ ڕێکخستنەکان</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە</a>
+    </div>
+    <div class="content">
+        <div class="section">
+            <h3>ڕێکخستنی گشتی</h3>
+            <div class="info-row"><div class="info-label">ناوی کۆمپانیا:</div><div class="info-value"><input type="text" placeholder="ناوی کۆمپانیا" value="Pay Time Tour"></div></div>
+            <div class="info-row"><div class="info-label">زمان:</div><div class="info-value"><select><option selected>کوردی</option><option>عەرەبی</option><option>ئینگلیزی</option></select></div></div>
+            <div class="info-row"><div class="info-label">فۆرماتی بەروار:</div><div class="info-value"><select><option selected>YYYY-MM-DD</option><option>DD/MM/YYYY</option><option>MM/DD/YYYY</option></select></div></div>
+        </div>
+        <div class="section">
+            <h3>ڕێکخستنی کات</h3>
+            <div class="info-row"><div class="info-label">ناوچەی کاتی (Timezone):</div><div class="info-value"><input type="text" placeholder="Asia/Baghdad" value="Asia/Baghdad"></div></div>
+            <div class="info-row"><div class="info-label">فۆرماتی کات:</div><div class="info-value"><select><option selected>24 کاتژمێری</option><option>12 کاتژمێری (AM/PM)</option></select></div></div>
+        </div>
+        <button class="save-btn" onclick="alert('ڕێکخستنەکان پاشەکەوت کران!')">💾 پاشەکەوتکردن</button>
+    </div>
+</div>
+</body>
+</html>
