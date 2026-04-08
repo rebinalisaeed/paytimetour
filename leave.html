@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لادان لەکار - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 160px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select, .info-value textarea { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .submit-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🚫 لادان لەکار (Leave Request)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە</a>
+    </div>
+    <div class="content">
+        <div class="info-row"><div class="info-label">ناوی کارمەند:</div><div class="info-value"><input type="text" placeholder="ناوی کارمەند"></div></div>
+        <div class="info-row"><div class="info-label">جۆری مۆڵەت:</div><div class="info-value"><select><option>مۆڵەتی ساڵانە</option><option>مۆڵەتی نەخۆشی</option><option>مۆڵەتی بێ مووچە</option><option>مۆڵەتی فەرمی</option></select></div></div>
+        <div class="info-row"><div class="info-label">ڕێکەوتی دەستپێک:</div><div class="info-value"><input type="date"></div></div>
+        <div class="info-row"><div class="info-label">ڕێکەوتی کۆتایی:</div><div class="info-value"><input type="date"></div></div>
+        <div class="info-row"><div class="info-label">ژمارەی ڕۆژەکان:</div><div class="info-value"><input type="number" placeholder="٠"></div></div>
+        <div class="info-row"><div class="info-label">هۆکار:</div><div class="info-value"><textarea rows="3" placeholder="هۆکاری مۆڵەت..."></textarea></div></div>
+        <button class="submit-btn" onclick="alert('داواکاری مۆڵەت نێردرا! چاوەڕوانی پەسەندکردن بکە')">📨 ناردنی داواکاری</button>
+    </div>
+</div>
+</body>
+</html>
