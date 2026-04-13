@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕێکخستنی شەفت بۆ مەودایەکی دیاریکراو - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 200px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .info-value input[type="date"] { max-width: 180px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .save-btn:hover { background: #1b5e20; }
+        .calendar-preview { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
+        .calendar-day { background: #f0f0f0; padding: 8px; border-radius: 5px; text-align: center; font-size: 12px; }
+        .calendar-day.shift { background: #B8CFF0; }
+        .calendar-day.weekend { background: #ffeb3b; }
+        .calendar-day.friday { background: #ff9800; color: white; }
+        h3 { color: #2d4a7a; margin-bottom: 20px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📅 ڕێکخستنی شەفت بۆ مەودایەکی دیاریکراو (Shift Range Setup)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <form id="shiftRangeForm">
+            <!-- 1. هەڵبژاردنی کارمەند یان گروپ -->
+            <div class="silver-box">
+                <h3>🔹 1. هەڵبژاردنی کارمەند / گروپ</h3>
+                <div class="info-row">
+                    <div class="info-label">جۆر:</div>
+                    <div class="info-value">
+                        <select id="targetType">
+                            <option value="employee">کارمەند</option>
+                            <option value="group">گروپ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row" id="employeeSelectRow">
+                    <div class="info-label">کارمەند:</div>
+                    <div class="info-value">
+                        <select id="employeeSelect">
+                            <option value="">-- هەڵبژاردنی کارمەند --</option>
+                            <option value="ئەحمەد علی">ئەحمەد علی (1001)</option>
+                            <option value="سارا محمد">سارا محمد (1002)</option>
+                            <option value="کارزان حسێن">کارزان حسێن (1003)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row" id="groupSelectRow" style="display:none;">
+                    <div class="info-label">گروپ:</div>
+                    <div class="info-value">
+                        <select id="groupSelect">
+                            <option value="">-- هەڵبژاردنی گروپ --</option>
+                            <option value="گروپی تەکنیکاران">گروپی تەکنیکاران</option>
+                            <option value="گروپی فرۆشتن">گروپی فرۆشتن</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. مەودا و شەفت -->
+            <div class="silver-box">
+                <h3>🔹 2. مەودا و شەفت</h3>
+                <div class="info-row">
+                    <div class="info-label">شەفت:</div>
+                    <div class="info-value">
+                        <select id="shiftSelect">
+                            <option value="">-- هەڵبژاردنی شەفت --</option>
+                            <option value="شەفتی بەیانی (08-16)">شەفتی بەیانی (08-16)</option>
+                            <option value="شەفتی ئێوارە (16-00)">شەفتی ئێوارە (16-00)</option>
+                            <option value="شەفتی شەو (00-08)">شەفتی شەو (00-08)</option>
+                            <option value="پشوو">پشوو</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی دەستپێک:</div>
+                    <div class="info-value"><input type="date" id="rangeStart"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی کۆتایی:</div>
+                    <div class="info-value"><input type="date" id="rangeEnd"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">دوبارەبوونەوە (Repeat):</div>
+                    <div class="info-value">
+                        <select id="repeatType">
+                            <option value="none">جێبەجێیەکی سادە</option>
+                            <option value="weekly">هەفتانە</option>
+                            <option value="monthly">مانگانە</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. پێشبینینی مەودا -->
+            <div class="silver-box">
+                <h3>🔹 3. پێشبینینی مەودا (Preview)</h3>
+                <div id="calendarPreview" class="calendar-preview"></div>
+                <button type="button" class="add-btn" style="background:#2d4a7a; padding:5px 12px; margin-top:10px;" onclick="generateCalendarPreview()">پێشبینی کردن</button>
+            </div>
+
+            <button type="button" class="save-btn" onclick="saveShiftRange()">✅ جێبەجێکردن</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById('targetType').addEventListener('change', function() {
+        const isGroup = this.value === 'group';
+        document.getElementById('employeeSelectRow').style.display = isGroup ? 'none' : 'flex';
+        document.getElementById('groupSelectRow').style.display = isGroup ? 'flex' : 'none';
+    });
+
+    function generateCalendarPreview() {
+        const start = new Date(document.getElementById('rangeStart').value);
+        const end = new Date(document.getElementById('rangeEnd').value);
+        const shift = document.getElementById('shiftSelect').value;
+        
+        if (!start || !end || !shift) {
+            document.getElementById('calendarPreview').innerHTML = '<p style="color:red;">تکایە مەودا و شەفتێک هەڵبژێرە!</p>';
+            return;
+        }
+        
+        let html = '';
+        let current = new Date(start);
+        while (current <= end) {
+            const dayName = current.toLocaleDateString('ckb', { weekday: 'long' });
+            const dateStr = current.toLocaleDateString('ckb');
+            const isFriday = dayName === 'هەینی';
+            html += `<div class="calendar-day ${isFriday ? 'friday' : 'shift'}">${dateStr}<br><small>${shift}</small></div>`;
+            current.setDate(current.getDate() + 1);
+        }
+        document.getElementById('calendarPreview').innerHTML = html;
+    }
+
+    function saveShiftRange() {
+        const targetType = document.getElementById('targetType').value;
+        const target = targetType === 'employee' ? document.getElementById('employeeSelect').value : document.getElementById('groupSelect').value;
+        const shift = document.getElementById('shiftSelect').value;
+        const startDate = document.getElementById('rangeStart').value;
+        const endDate = document.getElementById('rangeEnd').value;
+        const repeatType = document.getElementById('repeatType').value;
+
+        if (!target) { alert('تکایە کارمەند یان گروپ هەڵبژێرە!'); return; }
+        if (!shift) { alert('تکایە شەفتێک هەڵبژێرە!'); return; }
+        if (!startDate) { alert('تکایە ڕێکەوتی دەستپێک دیاری بکە!'); return; }
+
+        const result = {
+            targetType: targetType,
+            target: target,
+            shift: shift,
+            startDate: startDate,
+            endDate: endDate || 'بەردەوام',
+            repeatType: repeatType,
+            appliedDate: new Date().toLocaleString()
+        };
+
+        console.log('Shift Range Setup:', result);
+        alert(`✅ شەفت بۆ مەودا جێبەجێ کرا!\n${targetType === 'employee' ? 'کارمەند' : 'گروپ'}: ${target}\nشەفت: ${shift}\nمەودا: ${startDate} - ${endDate || 'بەردەوام'}`);
+    }
+</script>
+</body>
+</html>
