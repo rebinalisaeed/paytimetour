@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پێناسەکردنی خشتەی سوڕانەوەی شەفت - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 200px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select, .info-value textarea { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .info-value input[type="number"] { max-width: 120px; }
+        .pattern-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; background: #f5f5f5; padding: 10px; border-radius: 5px; }
+        .pattern-row select { width: 150px; }
+        .pattern-row input { width: 100px; }
+        .add-btn { background: #2d4a7a; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .remove-btn { background: #d32f2f; color: white; border: none; padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 15px; }
+        .save-btn:hover { background: #1b5e20; }
+        h3 { color: #2d4a7a; margin-bottom: 20px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+        hr { margin: 15px 0; }
+        .preview-box { background: #f9f9f9; border: 1px dashed #2d4a7a; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .preview-box h4 { color: #2d4a7a; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔄 پێناسەکردنی خشتەی سوڕانەوەی شەفت (Rotating Shift Schedule)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <form id="rotatingShiftForm">
+            <!-- 1. زانیاری سەرەکی خشتە -->
+            <div class="silver-box">
+                <h3>🔹 1. زانیاری سەرەکی خشتە</h3>
+                <div class="info-row">
+                    <div class="info-label">ناوی خشتە:</div>
+                    <div class="info-value"><input type="text" id="scheduleName" placeholder="مثال: خشتەی سوڕانەوەی سێ شەفت" required></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">کۆدی خشتە:</div>
+                    <div class="info-value"><input type="text" id="scheduleCode" placeholder="مثال: ROT-3S-001"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">وەسف:</div>
+                    <div class="info-value"><textarea id="scheduleDesc" rows="2" placeholder="وەسفی خشتە..."></textarea></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕەنگ (بۆ نیشاندان):</div>
+                    <div class="info-value"><input type="color" id="scheduleColor" value="#4a6fa5" style="width:80px;"></div>
+                </div>
+            </div>
+
+            <!-- 2. پێکهاتەکانی سوڕانەوە -->
+            <div class="silver-box">
+                <h3>🔹 2. پێکهاتەکانی سوڕانەوە</h3>
+                <div class="info-row">
+                    <div class="info-label">ماوەی سوڕ (Cycle Length - بە ڕۆژ):</div>
+                    <div class="info-value"><input type="number" id="cycleLength" value="21" min="1" max="365"> ڕۆژ</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">شەفتەکان لە سوڕدا:</div>
+                    <div class="info-value">
+                        <div id="shiftsList">
+                            <div class="pattern-row" id="patternRow0">
+                                <select id="shiftSelect0">
+                                    <option value="شەفتی بەیانی (08-16)">شەفتی بەیانی (08-16)</option>
+                                    <option value="شەفتی ئێوارە (16-00)">شەفتی ئێوارە (16-00)</option>
+                                    <option value="شەفتی شەو (00-08)">شەفتی شەو (00-08)</option>
+                                    <option value="پشوو">پشوو</option>
+                                </select>
+                                <input type="number" id="daysCount0" value="7" min="1" max="30" style="width:80px;" placeholder="ژمارەی ڕۆژ">
+                                <span>ڕۆژ</span>
+                                <button type="button" class="remove-btn" onclick="removePatternRow(0)" style="display:none;">✖</button>
+                            </div>
+                        </div>
+                        <button type="button" class="add-btn" onclick="addPatternRow()">➕ زیادکردنی شەفت/بەش</button>
+                        <p style="font-size:12px; color:#666; margin-top:8px;">تێبینی: هەر ڕیزێک شەفتێک و ژمارەی ڕۆژەکانی لە سوڕدا دیاری دەکات. سوڕ دوای تەواوبوونی هەموو ڕیزەکان دووبارە دەبێتەوە.</p>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">جۆری سوڕانەوە:</div>
+                    <div class="info-value">
+                        <select id="rotationType">
+                            <option value="continuous">بەردەوام (دوای کۆتایی سوڕ، دەستپێکەوە)</option>
+                            <option value="reverse">پێچەوانە (Reverse Rotation)</option>
+                            <option value="custom">تایبەت (Custom)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. کاتی دەستپێک و جێبەجێکردن -->
+            <div class="silver-box">
+                <h3>🔹 3. کاتی دەستپێک و جێبەجێکردن</h3>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی دەستپێکی سوڕ:</div>
+                    <div class="info-value"><input type="date" id="startDate" value="2026-01-01"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">شەفتی دەستپێک بۆ یەکەم کارمەند:</div>
+                    <div class="info-value">
+                        <select id="initialShift">
+                            <option value="شەفتی بەیانی (08-16)">شەفتی بەیانی (08-16)</option>
+                            <option value="شەفتی ئێوارە (16-00)">شەفتی ئێوارە (16-00)</option>
+                            <option value="شەفتی شەو (00-08)">شەفتی شەو (00-08)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">جێبەجێکردن بۆ هەموو کارمەندان:</div>
+                    <div class="info-value">
+                        <label><input type="checkbox" id="applyToAll" checked> بەڵێ</label>
+                    </div>
+                </div>
+                <div class="info-row" id="groupSelectRow" style="display:none;">
+                    <div class="info-label">گروپی دیاریکراو:</div>
+                    <div class="info-value"><select id="targetGroup"><option>گروپی تەکنیکاران</option><option>گروپی فرۆشتن</option><option>گروپی کارگێڕی</option></select></div>
+                </div>
+            </div>
+
+            <!-- 4. پێشبینینی خشتە (Preview) -->
+            <div class="silver-box">
+                <h3>🔹 4. پێشبینینی خشتە (Preview)</h3>
+                <div class="info-row">
+                    <div class="info-label">ژمارەی ڕۆژانی پیشاندان:</div>
+                    <div class="info-value"><input type="number" id="previewDays" value="21" min="1" max="90" style="width:100px;"> <button type="button" class="add-btn" onclick="generatePreview()">پێشبینی کردن</button></div>
+                </div>
+                <div class="preview-box" id="previewBox">
+                    <h4>پێشبینی خشتە:</h4>
+                    <div id="previewContent" style="font-size:12px; max-height:200px; overflow-y:auto;">تکایە کلیکی "پێشبینی کردن" بکە.</div>
+                </div>
+            </div>
+
+            <!-- 5. تێبینی -->
+            <div class="silver-box">
+                <h3>🔹 5. تێبینی</h3>
+                <div class="info-row">
+                    <div class="info-label">تێبینی زیادە:</div>
+                    <div class="info-value"><textarea id="scheduleNotes" rows="3" placeholder="تێبینی تایبەتی بۆ ئەم خشتەی سوڕانەوە..."></textarea></div>
+                </div>
+            </div>
+
+            <button type="button" class="save-btn" onclick="saveRotatingSchedule()">💾 پاشەکەوتکردنی خشتە</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let patternRowCount = 1; // چونکە ڕیزێکی بنەڕەتی هەیە
+
+    function addPatternRow() {
+        const container = document.getElementById('shiftsList');
+        const newId = patternRowCount;
+        const div = document.createElement('div');
+        div.className = 'pattern-row';
+        div.id = `patternRow${newId}`;
+        div.innerHTML = `
+            <select id="shiftSelect${newId}">
+                <option value="شەفتی بەیانی (08-16)">شەفتی بەیانی (08-16)</option>
+                <option value="شەفتی ئێوارە (16-00)">شەفتی ئێوارە (16-00)</option>
+                <option value="شەفتی شەو (00-08)">شەفتی شەو (00-08)</option>
+                <option value="پشوو">پشوو</option>
+            </select>
+            <input type="number" id="daysCount${newId}" value="7" min="1" max="30" style="width:80px;" placeholder="ژمارەی ڕۆژ">
+            <span>ڕۆژ</span>
+            <button type="button" class="remove-btn" onclick="removePatternRow(${newId})">✖</button>
+        `;
+        container.appendChild(div);
+        patternRowCount++;
+    }
+
+    function removePatternRow(id) {
+        const row = document.getElementById(`patternRow${id}`);
+        if (row && document.querySelectorAll('.pattern-row').length > 1) {
+            row.remove();
+        } else {
+            alert('پێویستە لانی کەم یەک ڕیز هەبێت!');
+        }
+    }
+
+    function getPatternArray() {
+        const rows = document.querySelectorAll('.pattern-row');
+        const pattern = [];
+        rows.forEach(row => {
+            const id = row.id.replace('patternRow', '');
+            const shiftSelect = document.getElementById(`shiftSelect${id}`);
+            const daysInput = document.getElementById(`daysCount${id}`);
+            if (shiftSelect && daysInput) {
+                pattern.push({
+                    shift: shiftSelect.value,
+                    days: parseInt(daysInput.value) || 1
+                });
+            }
+        });
+        return pattern;
+    }
+
+    function generatePreview() {
+        const pattern = getPatternArray();
+        if (pattern.length === 0) {
+            document.getElementById('previewContent').innerHTML = '<span style="color:red;">تکایە لانی کەم یەک شەفت دیاری بکە!</span>';
+            return;
+        }
+        const totalCycleDays = pattern.reduce((sum, p) => sum + p.days, 0);
+        const previewDays = parseInt(document.getElementById('previewDays').value) || 21;
+        const startDate = new Date(document.getElementById('startDate').value);
+        
+        let previewHtml = `<p><strong>ماوەی سوڕ:</strong> ${totalCycleDays} ڕۆژ</p><ul style="list-style:none;">`;
+        let currentDate = new Date(startDate);
+        let dayCounter = 0;
+        for (let i = 0; i < previewDays; i++) {
+            // دیاریکردنی شەفت بەپێی سوڕ
+            let cyclePosition = dayCounter % totalCycleDays;
+            let accumulated = 0;
+            let currentShift = '';
+            for (let p of pattern) {
+                if (cyclePosition < accumulated + p.days) {
+                    currentShift = p.shift;
+                    break;
+                }
+                accumulated += p.days;
+            }
+            const dateStr = currentDate.toLocaleDateString('ckb');
+            previewHtml += `<li>${dateStr} : <strong>${currentShift}</strong></li>`;
+            currentDate.setDate(currentDate.getDate() + 1);
+            dayCounter++;
+        }
+        previewHtml += `</ul><p>تێبینی: خشتە دوای ${totalCycleDays} ڕۆژ دووبارە دەبێتەوە.</p>`;
+        document.getElementById('previewContent').innerHTML = previewHtml;
+    }
+
+    function saveRotatingSchedule() {
+        const scheduleData = {
+            name: document.getElementById('scheduleName').value,
+            code: document.getElementById('scheduleCode').value,
+            description: document.getElementById('scheduleDesc').value,
+            color: document.getElementById('scheduleColor').value,
+            cycleLength: document.getElementById('cycleLength').value,
+            pattern: getPatternArray(),
+            rotationType: document.getElementById('rotationType').value,
+            startDate: document.getElementById('startDate').value,
+            initialShift: document.getElementById('initialShift').value,
+            applyToAll: document.getElementById('applyToAll').checked,
+            targetGroup: document.getElementById('targetGroup').value,
+            notes: document.getElementById('scheduleNotes').value
+        };
+        
+        console.log('Rotating Schedule Saved:', scheduleData);
+        alert(`خشتەی سوڕانەوە "${scheduleData.name}" بە سەرکەوتوویی پاشەکەوت کرا!`);
+        // دەتوانیت بۆ localStorage یان سرڤەر بنێریت
+        // localStorage.setItem('rotatingSchedule_' + scheduleData.code, JSON.stringify(scheduleData));
+    }
+
+    // نمایش یان شاردنەوەی هەڵبژاردنی گروپ
+    document.getElementById('applyToAll').addEventListener('change', function(e) {
+        document.getElementById('groupSelectRow').style.display = e.target.checked ? 'none' : 'flex';
+    });
+</script>
+</body>
+</html>
