@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕێکخستنی شەفت بە شێوەی گروپ - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 200px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select, .info-value textarea { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .member-list { background: white; border: 1px solid #ccc; border-radius: 5px; padding: 10px; max-height: 200px; overflow-y: auto; }
+        .member-item { padding: 5px; border-bottom: 1px solid #eee; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .save-btn:hover { background: #1b5e20; }
+        h3 { color: #2d4a7a; margin-bottom: 20px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>👥 ڕێکخستنی شەفت بە شێوەی گروپ (Group Shift Setup)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <form id="groupShiftSetupForm">
+            <div class="silver-box">
+                <h3>🔹 1. هەڵبژاردنی گروپ</h3>
+                <div class="info-row">
+                    <div class="info-label">گروپ:</div>
+                    <div class="info-value">
+                        <select id="groupSelect">
+                            <option value="">-- هەڵبژاردنی گروپ --</option>
+                            <option value="گروپی تەکنیکاران">گروپی تەکنیکاران</option>
+                            <option value="گروپی فرۆشتن">گروپی فرۆشتن</option>
+                            <option value="گروپی کارگێڕی">گروپی کارگێڕی</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ئەندامانی گروپ:</div>
+                    <div class="info-value">
+                        <div class="member-list" id="memberList">
+                            <div style="color:#999;">تکایە گروپێک هەڵبژێرە</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="silver-box">
+                <h3>🔹 2. وردەکاری شەفت</h3>
+                <div class="info-row">
+                    <div class="info-label">شەفت:</div>
+                    <div class="info-value">
+                        <select id="shiftSelect">
+                            <option value="">-- هەڵبژاردنی شەفت --</option>
+                            <option value="شەفتی بەیانی (08-16)">شەفتی بەیانی (08-16)</option>
+                            <option value="شەفتی ئێوارە (16-00)">شەفتی ئێوارە (16-00)</option>
+                            <option value="شەفتی شەو (00-08)">شەفتی شەو (00-08)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">کاتی دەستپێک (ئەگەر جیاواز بێت):</div>
+                    <div class="info-value"><input type="time" id="customStart"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">کاتی کۆتایی (ئەگەر جیاواز بێت):</div>
+                    <div class="info-value"><input type="time" id="customEnd"></div>
+                </div>
+            </div>
+
+            <div class="silver-box">
+                <h3>🔹 3. کاتی جێبەجێکردن</h3>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی دەستپێک:</div>
+                    <div class="info-value"><input type="date" id="startDate"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی کۆتایی:</div>
+                    <div class="info-value"><input type="date" id="endDate"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">هۆکار:</div>
+                    <div class="info-value"><textarea id="reason" rows="2" placeholder="هۆکاری ڕێکخستن..."></textarea></div>
+                </div>
+            </div>
+
+            <button type="button" class="save-btn" onclick="saveGroupShiftSetup()">✅ جێبەجێکردن بۆ هەموو گروپ</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const groupMembers = {
+        'گروپی تەکنیکاران': ['ئەحمەد علی', 'کارزان حسێن', 'محەمەد رەحیم', 'ڕێباز محەمەد', 'سۆران عەلی', 'دڵشاد کەریم'],
+        'گروپی فرۆشتن': ['سارا محمد', 'شێرزاد حەسەن', 'لەتیف عەزیز', 'نەوزاد حسێن', 'پەریشان قادر'],
+        'گروپی کارگێڕی': ['ئازاد مستەفا', 'نەجمەدین کەریم', 'سەباح محەمەد', 'هێمن عەزیز']
+    };
+
+    document.getElementById('groupSelect').addEventListener('change', function() {
+        const group = this.value;
+        const members = groupMembers[group] || [];
+        const container = document.getElementById('memberList');
+        
+        if (members.length > 0) {
+            let html = '';
+            members.forEach(member => {
+                html += `<div class="member-item">👤 ${member}</div>`;
+            });
+            container.innerHTML = html;
+        } else {
+            container.innerHTML = '<div style="color:#999;">تکایە گروپێک هەڵبژێرە</div>';
+        }
+    });
+
+    function saveGroupShiftSetup() {
+        const group = document.getElementById('groupSelect').value;
+        const shift = document.getElementById('shiftSelect').value;
+        const customStart = document.getElementById('customStart').value;
+        const customEnd = document.getElementById('customEnd').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const reason = document.getElementById('reason').value;
+        const members = groupMembers[group] || [];
+
+        if (!group) { alert('تکایە گروپێک هەڵبژێرە!'); return; }
+        if (!shift) { alert('تکایە شەفتێک هەڵبژێرە!'); return; }
+        if (!startDate) { alert('تکایە ڕێکەوتی دەستپێک دیاری بکە!'); return; }
+
+        const result = {
+            group: group,
+            shift: shift,
+            customStart: customStart || 'بەکارهێنانی کاتی شەفت',
+            customEnd: customEnd || 'بەکارهێنانی کاتی شەفت',
+            startDate: startDate,
+            endDate: endDate || 'بەردەوام',
+            reason: reason,
+            affectedMembers: members,
+            appliedDate: new Date().toLocaleString()
+        };
+
+        console.log('Group Shift Setup:', result);
+        alert(`✅ شەفت بۆ گروپی ${group} جێبەجێ کرا!\nشەفت: ${shift}\nژمارەی ئەندامان: ${members.length}`);
+    }
+</script>
+</body>
+</html>
