@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕێکخستنی شەفتی کەسی - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 180px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select, .info-value textarea { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .info-value input[type="date"] { max-width: 180px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .save-btn:hover { background: #1b5e20; }
+        h3 { color: #2d4a7a; margin-bottom: 20px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>👤 ڕێکخستنی شەفتی کەسی (Personal Shift Setup)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <form id="personalShiftForm">
+            <div class="silver-box">
+                <h3>🔹 هەڵبژاردنی کارمەند</h3>
+                <div class="info-row">
+                    <div class="info-label">کارمەند:</div>
+                    <div class="info-value">
+                        <select id="employeeSelect">
+                            <option value="">-- هەڵبژاردنی کارمەند --</option>
+                            <option value="ئەحمەد علی">ئەحمەد علی (1001)</option>
+                            <option value="سارا محمد">سارا محمد (1002)</option>
+                            <option value="کارزان حسێن">کارزان حسێن (1003)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="silver-box">
+                <h3>🔹 وردەکاری شەفتی کەسی</h3>
+                <div class="info-row">
+                    <div class="info-label">ناوی شەفت:</div>
+                    <div class="info-value"><input type="text" id="shiftName" placeholder="مثال: شەفتی کەسی - بەیانی"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">کاتی دەستپێک:</div>
+                    <div class="info-value"><input type="time" id="shiftStart" value="09:00"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">کاتی کۆتایی:</div>
+                    <div class="info-value"><input type="time" id="shiftEnd" value="17:00"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ماوەی پشوو:</div>
+                    <div class="info-value"><input type="time" id="breakDuration" value="01:00"></div>
+                </div>
+            </div>
+
+            <div class="silver-box">
+                <h3>🔹 کاتی جێبەجێکردن</h3>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی دەستپێک:</div>
+                    <div class="info-value"><input type="date" id="startDate"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی کۆتایی:</div>
+                    <div class="info-value"><input type="date" id="endDate"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">جۆری ڕێکخستن:</div>
+                    <div class="info-value">
+                        <select id="setupType">
+                            <option value="permanent">هەمیشەیی</option>
+                            <option value="temporary">کاتی</option>
+                            <option value="one-time">تەنها یەک جار</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">هۆکار:</div>
+                    <div class="info-value"><textarea id="reason" rows="2" placeholder="هۆکاری ڕێکخستنی شەفتی کەسی..."></textarea></div>
+                </div>
+            </div>
+
+            <button type="button" class="save-btn" onclick="savePersonalShift()">✅ جێبەجێکردن</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function savePersonalShift() {
+        const employee = document.getElementById('employeeSelect').value;
+        const shiftName = document.getElementById('shiftName').value;
+        const shiftStart = document.getElementById('shiftStart').value;
+        const shiftEnd = document.getElementById('shiftEnd').value;
+        const breakDuration = document.getElementById('breakDuration').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const setupType = document.getElementById('setupType').value;
+        const reason = document.getElementById('reason').value;
+
+        if (!employee) { alert('تکایە کارمەندێک هەڵبژێرە!'); return; }
+        if (!shiftName) { alert('تکایە ناوی شەفت پڕ بکەوە!'); return; }
+        if (!startDate) { alert('تکایە ڕێکەوتی دەستپێک دیاری بکە!'); return; }
+
+        const result = {
+            employee: employee,
+            shiftName: shiftName,
+            shiftStart: shiftStart,
+            shiftEnd: shiftEnd,
+            breakDuration: breakDuration,
+            startDate: startDate,
+            endDate: endDate || 'بەردەوام',
+            setupType: setupType,
+            reason: reason,
+            appliedDate: new Date().toLocaleString()
+        };
+
+        console.log('Personal Shift Setup:', result);
+        alert(`✅ شەفتی کەسی بۆ ${employee} جێبەجێ کرا!\nناوی شەفت: ${shiftName}\nکات: ${shiftStart} - ${shiftEnd}`);
+    }
+</script>
+</body>
+</html>
