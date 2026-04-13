@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پێناسەکردنی شەفت - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 180px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select, .info-value textarea { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 13px; }
+        .info-value input[type="checkbox"] { width: auto; margin-left: 10px; }
+        .info-value .checkbox-label { display: inline-flex; align-items: center; gap: 8px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .save-btn:hover { background: #1b5e20; }
+        h3 { color: #2d4a7a; margin-bottom: 20px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+        hr { margin: 15px 0; border-color: #ccc; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>⏰ پێناسەکردنی شەفت (Shift Definition)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <form id="shiftForm">
+            <!-- 1. زانیاری سەرەکی شەفت -->
+            <div class="silver-box">
+                <h3>🔹 1. زانیاری سەرەکی شەفت</h3>
+                <div class="info-row">
+                    <div class="info-label">ناوی شەفت:</div>
+                    <div class="info-value"><input type="text" id="shiftName" placeholder="مثال: شەفتی بەیانی" required></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">کۆدی شەفت:</div>
+                    <div class="info-value"><input type="text" id="shiftCode" placeholder="مثال: MORN-01"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕەنگ (بۆ نیشاندان):</div>
+                    <div class="info-value"><input type="color" id="shiftColor" value="#2d4a7a" style="width:80px; padding:2px;"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">وەسف:</div>
+                    <div class="info-value"><textarea id="shiftDesc" rows="2" placeholder="وەسفی شەفت..."></textarea></div>
+                </div>
+            </div>
+
+            <!-- 2. کاتی کار -->
+            <div class="silver-box">
+                <h3>🔹 2. کاتی کار</h3>
+                <div class="info-row">
+                    <div class="info-label">کاتی دەستپێک:</div>
+                    <div class="info-value"><input type="time" id="shiftStart" value="08:00"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">کاتی کۆتایی:</div>
+                    <div class="info-value"><input type="time" id="shiftEnd" value="16:00"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ماوەی کار (خۆکار):</div>
+                    <div class="info-value"><span id="shiftDurationDisplay">08:00</span> کاتژمێر</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ماوەی پشوو (Break):</div>
+                    <div class="info-value"><input type="time" id="breakDuration" value="01:00"> <span style="font-size:12px;">(کاتژمێر)</span></div>
+                </div>
+            </div>
+
+            <!-- 3. جۆری شەفت و ڕۆژەکان -->
+            <div class="silver-box">
+                <h3>🔹 3. جۆری شەفت و ڕۆژەکان</h3>
+                <div class="info-row">
+                    <div class="info-label">جۆری شەفت:</div>
+                    <div class="info-value">
+                        <select id="shiftType">
+                            <option value="fixed">جێگیر (Fixed)</option>
+                            <option value="rotating">گۆڕاو (Rotating)</option>
+                            <option value="flexible">Flexible (کاتی گۆڕاو)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕۆژەکانی کار:</div>
+                    <div class="info-value"><input type="text" id="workDays" placeholder="یەکشەممە - پێنجشەممە" value="یەکشەممە - پێنجشەممە"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕۆژەکانی پشوو (Weekend):</div>
+                    <div class="info-value"><input type="text" id="weekendDays" placeholder="هەینی، شەممە" value="هەینی، شەممە"></div>
+                </div>
+            </div>
+
+            <!-- 4. ڕێگەپێدان و Grace Period -->
+            <div class="silver-box">
+                <h3>🔹 4. ڕێگەپێدان و گرەیس پێریۆد</h3>
+                <div class="info-row">
+                    <div class="info-label">ڕێگەدان بە دواکەوتن:</div>
+                    <div class="info-value">
+                        <label class="checkbox-label"><input type="checkbox" id="lateAllowed" checked> بەڵێ</label>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Grace period (خولەک):</div>
+                    <div class="info-value"><input type="number" id="gracePeriod" value="10" style="width:100px;"> خولەک</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕێگەدان بە زوو هاتن:</div>
+                    <div class="info-value">
+                        <label class="checkbox-label"><input type="checkbox" id="earlyInAllowed" checked> بەڵێ</label>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕێگەدان بە زوو دەرچوون:</div>
+                    <div class="info-value">
+                        <label class="checkbox-label"><input type="checkbox" id="earlyOutAllowed"> بەڵێ (پێویستە پەسەند بکرێت)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Overtime (ئۆڤەرتایم) -->
+            <div class="silver-box">
+                <h3>🔹 5. Overtime (ئۆڤەرتایم)</h3>
+                <div class="info-row">
+                    <div class="info-label">ئایا OT ڕێگەپێدراوە؟</div>
+                    <div class="info-value">
+                        <label class="checkbox-label"><input type="checkbox" id="otAllowed" checked> بەڵێ</label>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">نرخی OT (بۆ هەر کاتژمێر):</div>
+                    <div class="info-value"><input type="text" id="otRate" value="1.5 × مووچەی ئاسایی" placeholder="مثال: 1.5 × نرخی ئاسایی"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">دەستپێکی OT دوای:</div>
+                    <div class="info-value"><input type="number" id="otAfterHours" value="8" style="width:100px;"> کاتژمێر</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">زیاترین OT ڕۆژانە (max):</div>
+                    <div class="info-value"><input type="number" id="otMaxDaily" value="4" style="width:100px;"> کاتژمێر</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">OT پێش دەوام ڕێگەپێدراوە؟</div>
+                    <div class="info-value">
+                        <label class="checkbox-label"><input type="checkbox" id="otBeforeAllowed"> بەڵێ</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. پەیوەندی بە شوێن و ئامێر -->
+            <div class="silver-box">
+                <h3>🔹 6. پەیوەندی بە شوێن و ئامێر</h3>
+                <div class="info-row">
+                    <div class="info-label">شوێنی کار (لە شەفتدا):</div>
+                    <div class="info-value"><input type="text" id="shiftLocation" placeholder="ئۆفیسی سەرەکی - تەلار ٣"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">پێویستی بە ئامێری تایبەت:</div>
+                    <div class="info-value"><input type="text" id="requiredDevice" placeholder="مثال: کارتی RFID، مۆبایل"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Geofencing پێویستە؟</div>
+                    <div class="info-value">
+                        <label class="checkbox-label"><input type="checkbox" id="geofencingRequired"> بەڵێ (تەنها لە شوێنی دیاریکراو چێک ئین بکەن)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. تێبینی زیادە -->
+            <div class="silver-box">
+                <h3>🔹 7. تێبینی زیادە</h3>
+                <div class="info-row">
+                    <div class="info-label">تێبینی:</div>
+                    <div class="info-value"><textarea id="shiftNotes" rows="3" placeholder="تێبینی تایبەتی بۆ ئەم شەفتە..."></textarea></div>
+                </div>
+            </div>
+
+            <button type="button" class="save-btn" onclick="saveShift()">💾 پاشەکەوتکردنی شەفت</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // ژماردنی ماوەی کار (duration) بە شێوەی خۆکار
+    function updateShiftDuration() {
+        const start = document.getElementById('shiftStart').value;
+        const end = document.getElementById('shiftEnd').value;
+        if (start && end) {
+            const [startH, startM] = start.split(':').map(Number);
+            let [endH, endM] = end.split(':').map(Number);
+            let durationH = endH - startH;
+            let durationM = endM - startM;
+            if (durationM < 0) { durationH--; durationM += 60; }
+            if (durationH < 0) durationH += 24;
+            document.getElementById('shiftDurationDisplay').innerText = 
+                `${String(durationH).padStart(2,'0')}:${String(durationM).padStart(2,'0')}`;
+        }
+    }
+
+    document.getElementById('shiftStart').addEventListener('change', updateShiftDuration);
+    document.getElementById('shiftEnd').addEventListener('change', updateShiftDuration);
+    updateShiftDuration();
+
+    function saveShift() {
+        const shiftData = {
+            name: document.getElementById('shiftName').value,
+            code: document.getElementById('shiftCode').value,
+            color: document.getElementById('shiftColor').value,
+            description: document.getElementById('shiftDesc').value,
+            startTime: document.getElementById('shiftStart').value,
+            endTime: document.getElementById('shiftEnd').value,
+            breakDuration: document.getElementById('breakDuration').value,
+            shiftType: document.getElementById('shiftType').value,
+            workDays: document.getElementById('workDays').value,
+            weekendDays: document.getElementById('weekendDays').value,
+            lateAllowed: document.getElementById('lateAllowed').checked,
+            gracePeriod: document.getElementById('gracePeriod').value,
+            earlyInAllowed: document.getElementById('earlyInAllowed').checked,
+            earlyOutAllowed: document.getElementById('earlyOutAllowed').checked,
+            otAllowed: document.getElementById('otAllowed').checked,
+            otRate: document.getElementById('otRate').value,
+            otAfterHours: document.getElementById('otAfterHours').value,
+            otMaxDaily: document.getElementById('otMaxDaily').value,
+            otBeforeAllowed: document.getElementById('otBeforeAllowed').checked,
+            location: document.getElementById('shiftLocation').value,
+            requiredDevice: document.getElementById('requiredDevice').value,
+            geofencingRequired: document.getElementById('geofencingRequired').checked,
+            notes: document.getElementById('shiftNotes').value
+        };
+
+        // ئەمە بۆ پاشەکەوتکردنی داتاکانە (دەتوانیت بۆ console یان بۆ localStorage یان ناردن بۆ سرڤەر)
+        console.log('Shift Data Saved:', shiftData);
+        
+        // بۆ کاتی ئێستا، تەنها ئاگاداریکردنەوە
+        alert('شەفت بە سەرکەوتوویی پاشەکەوت کرا!\nناوی شەفت: ' + shiftData.name);
+        
+        // ئەگەر دەتەوێت داتاکان له local storage هەڵبگریت:
+        // localStorage.setItem('shift_' + shiftData.code, JSON.stringify(shiftData));
+        
+        // دەتوانیت ڕەوانەی پەڕەی پێشوو بکەیت یان لەسەر هەمان پەڕە بمێنیتەوە
+        // window.location.href = 'index.html';
+    }
+</script>
+</body>
+</html>
