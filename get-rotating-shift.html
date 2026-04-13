@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هێنانەوەی خشتەی شەفتی سوڕانەوە-گروپ - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 200px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 350px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .shift-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .shift-table th, .shift-table td { border: 1px solid #ccc; padding: 8px; text-align: center; font-size: 12px; }
+        .shift-table th { background: #2d4a7a; color: white; }
+        .shift-table tr:nth-child(even) { background: #f9f9f9; }
+        .export-btn { background: #ff9800; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-left: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 20px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 هێنانەوەی خشتەی شەفتی سوڕانەوە-گروپ (Get Rotating Schedule)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <form id="getRotatingShiftForm">
+            <div class="silver-box">
+                <h3>🔹 هەڵبژاردنەکان</h3>
+                <div class="info-row">
+                    <div class="info-label">گروپ:</div>
+                    <div class="info-value">
+                        <select id="groupSelect">
+                            <option value="">-- هەڵبژاردنی گروپ --</option>
+                            <option value="گروپی تەکنیکاران">گروپی تەکنیکاران</option>
+                            <option value="گروپی فرۆشتن">گروپی فرۆشتن</option>
+                            <option value="گروپی کارگێڕی">گروپی کارگێڕی</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">خشتەی سوڕانەوە:</div>
+                    <div class="info-value">
+                        <select id="scheduleSelect">
+                            <option value="">-- هەڵبژاردنی خشتە --</option>
+                            <option value="خشتەی سێ شەفت">خشتەی سێ شەفت (7+7+7)</option>
+                            <option value="خشتەی دوو شەفت">خشتەی دوو شەفت (5+5+5+5)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ڕێکەوتی دەستپێک:</div>
+                    <div class="info-value"><input type="date" id="startDate"></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">ماوە (ڕۆژ):</div>
+                    <div class="info-value"><input type="number" id="durationDays" value="30" min="1" max="365" style="width:120px;"></div>
+                </div>
+            </div>
+
+            <button type="button" class="save-btn" onclick="generateSchedule()">🔍 نمایش خشتە</button>
+            <button type="button" class="export-btn" onclick="exportToCSV()">📎 Export to CSV</button>
+
+            <div class="silver-box" id="resultBox" style="display:none;">
+                <h3>🔹 خشتەی شەفتی سوڕانەوە</h3>
+                <div id="scheduleResult"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const schedules = {
+        'خشتەی سێ شەفت': {
+            pattern: ['شەفتی بەیانی (08-16)', 'شەفتی ئێوارە (16-00)', 'شەفتی شەو (00-08)'],
+            daysPerShift: 7
+        },
+        'خشتەی دوو شەفت': {
+            pattern: ['شەفتی بەیانی (08-16)', 'شەفتی ئێوارە (16-00)'],
+            daysPerShift: 5
+        }
+    };
+
+    function generateSchedule() {
+        const group = document.getElementById('groupSelect').value;
+        const scheduleName = document.getElementById('scheduleSelect').value;
+        const startDate = document.getElementById('startDate').value;
+        const duration = parseInt(document.getElementById('durationDays').value);
+
+        if (!group) { alert('تکایە گروپ هەڵبژێرە!'); return; }
+        if (!scheduleName) { alert('تکایە خشتە هەڵبژێرە!'); return; }
+        if (!startDate) { alert('تکایە ڕێکەوتی دەستپێک دیاری بکە!'); return; }
+
+        const schedule = schedules[scheduleName];
+        if (!schedule) { alert('خشتە نەدۆزرایەوە!'); return; }
+
+        const members = {
+            'گروپی تەکنیکاران': ['ئەحمەد علی', 'کارزان حسێن', 'محەمەد رەحیم', 'ڕێباز محەمەد'],
+            'گروپی فرۆشتن': ['سارا محمد', 'شێرزاد حەسەن', 'لەتیف عەزیز', 'نەوزاد حسێن'],
+            'گروپی کارگێڕی': ['ئازاد مستەفا', 'نەجمەدین کەریم', 'سەباح محەمەد']
+        }[group] || [];
+
+        let html = `<p><strong>گروپ:</strong> ${group}</p>
+                    <p><strong>خشتە:</strong> ${scheduleName}</p>
+                    <p><strong>ماوە:</strong> ${duration} ڕۆژ</p>
+                    <table class="shift-table">
+                        <thead><tr><th>ڕێکەوت</th><th>ڕۆژ</th>${members.map(m => `<th>${m}</th>`).join('')}</tr></thead>
+                        <tbody>`;
+
+        const start = new Date(startDate);
+        for (let day = 0; day < duration; day++) {
+            const currentDate = new Date(start);
+            currentDate.setDate(start.getDate() + day);
+            const dateStr = currentDate.toLocaleDateString('ckb');
+            const dayName = currentDate.toLocaleDateString('ckb', { weekday: 'long' });
+            
+            const cyclePosition = Math.floor(day / schedule.daysPerShift) % schedule.pattern.length;
+            const shiftForDay = schedule.pattern[cyclePosition];
+            
+            html += `<tr><td>${dateStr}</td><td>${dayName}</td>`;
+            members.forEach(() => {
+                html += `<td>${shiftForDay}</td>`;
+            });
+            html += `</tr>`;
+        }
+        html += `</tbody></table>`;
+        
+        document.getElementById('scheduleResult').innerHTML = html;
+        document.getElementById('resultBox').style.display = 'block';
+    }
+
+    function exportToCSV() {
+        const table = document.querySelector('.shift-table');
+        if (!table) { alert('
