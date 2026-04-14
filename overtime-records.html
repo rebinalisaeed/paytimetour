@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overtime Records - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 140px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .ot-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .ot-table th, .ot-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .ot-table th { background: #2d4a7a; color: white; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>⏱️ Overtime Records</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>➕ زیادکردنی OT</h3>
+            <div class="info-row">
+                <div class="info-label">ناوی کارمەند:</div>
+                <div class="info-value"><select id="employeeSelect"><option value="">-- هەڵبژێرە --</option><option value="ئەحمەد علی">ئەحمەد علی</option><option value="سارا محمد">سارا محمد</option><option value="کارزان حسێن">کارزان حسێن</option></select></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ڕێکەوت:</div>
+                <div class="info-value"><input type="date" id="otDate"></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ژمارەی کاتژمێرەکان:</div>
+                <div class="info-value"><input type="number" id="otHours" step="0.5" placeholder="کاتژمێر"></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">نرخی OT (بۆ هەر کاتژمێر):</div>
+                <div class="info-value"><input type="text" id="otRate" placeholder="مثال: 6000 IQD"></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">هۆکار:</div>
+                <div class="info-value"><textarea id="otReason" rows="2" placeholder="هۆکاری OT..."></textarea></div>
+            </div>
+            <button class="save-btn" onclick="saveOTRecord()">💾 تۆمارکردنی OT</button>
+        </div>
+        
+        <h3>📋 لیستی Overtime</h3>
+        <div style="overflow-x: auto;">
+            <table class="ot-table" id="otTable">
+                <thead><tr><th>#</th><th>ناوی کارمەند</th><th>ڕێکەوت</th><th>کاتژمێر</th><th>نرخ</th><th>کۆی گشتی</th><th>هۆکار</th><th>کردار</th></tr></thead>
+                <tbody id="otTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function saveOTRecord() {
+        const employee = document.getElementById('employeeSelect').value;
+        const otDate = document.getElementById('otDate').value;
+        const hours = parseFloat(document.getElementById('otHours').value);
+        const rate = document.getElementById('otRate').value;
+        const reason = document.getElementById('otReason').value;
+        
+        if (!employee || !otDate || !hours) { alert('تکایە هەموو خانە پێویستەکان پڕ بکەوە!'); return; }
+        
+        const total = rate ? hours * parseFloat(rate) : 0;
+        
+        const otRecord = {
+            id: Date.now(),
+            employee: employee,
+            date: otDate,
+            hours: hours,
+            rate: rate,
+            total: total,
+            reason: reason
+        };
+        
+        let records = JSON.parse(localStorage.getItem('otRecords') || '[]');
+        records.push(otRecord);
+        localStorage.setItem('otRecords', JSON.stringify(records));
+        
+        alert('OT تۆمار کرا!');
+        document.getElementById('employeeSelect').value = '';
+        document.getElementById('otDate').value = '';
+        document.getElementById('otHours').value = '';
+        document.getElementById('otRate').value = '';
+        document.getElementById('otReason').value = '';
+        loadOTRecords();
+    }
+    
+    function loadOTRecords() {
+        const records = JSON.parse(localStorage.getItem('otRecords') || '[]');
+        const tbody = document.getElementById('otTableBody');
+        tbody.innerHTML = '';
+        records.sort((a, b) => b.id - a.id).forEach((record, index) => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = index + 1;
+            row.insertCell(1).innerText = record.employee;
+            row.insertCell(2).innerText = record.date;
+            row.insertCell(3).innerText = record.hours;
+            row.insertCell(4).innerText = record.rate || '—';
+            row.insertCell(5).innerText = record.total ? `${record.total} IQD` : '—';
+            row.insertCell(6).innerText = record.reason || '—';
+            row.insertCell(7).innerHTML = `<button onclick="deleteOTRecord(${record.id})" style="background:#d32f2f;color:white;border:none;padding:4px 10px;border-radius:3px;cursor:pointer;">سڕینەوە</button>`;
+        });
+    }
+    
+    function deleteOTRecord(id) {
+        if (confirm('دڵنیای لە سڕینەوە؟')) {
+            let records = JSON.parse(localStorage.getItem('otRecords') || '[]');
+            records = records.filter(r => r.id !== id);
+            localStorage.setItem('otRecords', JSON.stringify(records));
+            loadOTRecords();
+        }
+    }
+    
+    loadOTRecords();
+</script>
+</body>
+</html>
