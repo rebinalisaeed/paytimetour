@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وەشانی سیستەم - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .version-card { background: #e8e8e8; border-radius: 12px; padding: 30px; text-align: center; margin-bottom: 20px; }
+        .version-number { font-size: 48px; font-weight: bold; color: #2d4a7a; margin-bottom: 10px; }
+        .version-date { color: #666; margin-bottom: 20px; }
+        .changelog { text-align: right; margin-top: 20px; }
+        .changelog-item { padding: 10px; border-bottom: 1px solid #ddd; display: flex; align-items: center; gap: 10px; }
+        .changelog-version { font-weight: bold; color: #2d4a7a; min-width: 80px; }
+        .changelog-date { color: #999; font-size: 12px; min-width: 100px; }
+        .changelog-desc { flex: 1; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📌 وەشانی سیستەم (Version)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="version-card">
+            <div class="version-number">v2.0.0</div>
+            <div class="version-date">ڕێکەوتی بڵاوبوونەوە: 2026-04-15</div>
+            <p>وەشانی جێگیر (Stable Release)</p>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 مێژووی گۆڕانکارییەکان (Changelog)</h3>
+            <div class="changelog">
+                <div class="changelog-item">
+                    <span class="changelog-version">v2.0.0</span>
+                    <span class="changelog-date">2026-04-15</span>
+                    <span class="changelog-desc">✅ وەشانی تەواو - هەموو تایبەتمەندییەکان زیاد کرا</span>
+                </div>
+                <div class="changelog-item">
+                    <span class="changelog-version">v1.5.0</span>
+                    <span class="changelog-date">2026-03-01</span>
+                    <span class="changelog-desc">➕ زیادکردنی سیستەمی مووچە و ڕاپۆرتەکان</span>
+                </div>
+                <div class="changelog-item">
+                    <span class="changelog-version">v1.0.0</span>
+                    <span class="changelog-date">2026-01-15</span>
+                    <span class="changelog-desc">🎉 یەکەم وەشانی سیستەم - تۆمارکردنی هاتن و دەرچوون</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>🔮 پلانەکانی داهاتوو (Roadmap)</h3>
+            <div class="changelog">
+                <div class="changelog-item">
+                    <span class="changelog-version">v2.1.0</span>
+                    <span class="changelog-date">2026-05</span>
+                    <span class="changelog-desc">📱 ئەپڵیکەیشنی مۆبایل</span>
+                </div>
+                <div class="changelog-item">
+                    <span class="changelog-version">v2.2.0</span>
+                    <span class="changelog-date">2026-06</span>
+                    <span class="changelog-desc">🔔 ئاگادارکردنەوە بە ئیمەیڵ و SMS</span>
+                </div>
+                <div class="changelog-item">
+                    <span class="changelog-version">v3.0.0</span>
+                    <span class="changelog-date">2026-09</span>
+                    <span class="changelog-desc">🤖 AI بۆ پێشبینی دواکەوتنەکان</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
