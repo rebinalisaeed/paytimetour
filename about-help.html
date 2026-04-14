@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>یارمەتی - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .help-section { margin-bottom: 25px; }
+        .help-section h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; cursor: pointer; }
+        .help-content { display: none; padding: 15px; background: #f5f5f5; border-radius: 8px; margin-top: 10px; line-height: 1.8; }
+        .help-content.show { display: block; }
+        .help-content ul { padding-right: 20px; }
+        .help-content li { margin: 8px 0; }
+        .search-box { margin-bottom: 20px; }
+        .search-box input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>❓ یارمەتی (Help)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="search-box">
+            <input type="text" id="helpSearch" placeholder="🔍 گەڕان لە ناو یارمەتی...">
+        </div>
+        
+        <div class="help-section" data-title="هاتن و دەرچوون">
+            <h3>✅ تۆمارکردنی هاتن و دەرچوون</h3>
+            <div class="help-content">
+                <ul>
+                    <li>بۆ تۆمارکردنی هاتن، لە مێنووی "هاتن و دەرچوون" -> "تۆمارکردنی هاتن" هەڵبژێرە</li>
+                    <li>کارمەند و شوێن و کاتەکە هەڵبژێرە، پاشان کلیکی "تۆمارکردنی هاتن" بکە</li>
+                    <li>بۆ تۆمارکردنی دەرچوون، هەمان شێواز بەڵام "تۆمارکردنی دەرچوون" هەڵبژێرە</li>
+                    <li>هەموو تۆمارەکان لە "لیستی هاتن و دەرچوون" دەبینرێت</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="help-section" data-title="شەفت و گروپ">
+            <h3>⏰ ڕێکخستنی شەفت و گروپ</h3>
+            <div class="help-content">
+                <ul>
+                    <li>لە مێنووی "شەفت و گروپ" دەتوانیت گروپ و شەفتەکان پێناسە بکەیت</li>
+                    <li>بۆ پێناسەکردنی شەفت، کاتی دەستپێک و کۆتایی و جۆری شەفت دیاری بکە</li>
+                    <li>بۆ پێناسەکردنی گروپ، ناو و بەش و ئەندامەکان دیاری بکە</li>
+                    <li>دەتوانیت خشتەی سوڕانەوەی شەفت بۆ گروپەکان پێناسە بکەیت</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="help-section" data-title="کارمەندان">
+            <h3>👥 بەڕێوەبردنی کارمەندان</h3>
+            <div class="help-content">
+                <ul>
+                    <li>لە مێنووی "زانیاری کارمەندان" دەتوانیت کارمەندانی نوێ زیاد بکەیت</li>
+                    <li>کۆدی کارمەند بە شێوەی خۆکار زیاد دەبێت (دواین کۆد + ١)</li>
+                    <li>هەموو زانیارییەکانی کارمەند (ناو، پلە، گروپ، مۆبایل) تۆمار بکە</li>
+                    <li>دەتوانیت وێنەی کارمەند باربکەیت</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="help-section" data-title="مووچە">
+            <h3>💰 بەڕێوەبردنی مووچە</h3>
+            <div class="help-content">
+                <ul>
+                    <li>لە مێنووی "مووچە" دەتوانیت گرێبەست و زیادکردن/کەمکردنەکان دیاری بکەیت</li>
+                    <li>فەرمانەکانی مووچە (خواردنەوە، گواستنەوە، باج) پێناسە بکە</li>
+                    <li>مووچەی کارمەند بە شێوەی خۆکار حساب بکە</li>
+                    <li>لیستی گرێبەستە بەسەرچووەکان ببینە و نوێیان بکەوە</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="help-section" data-title="داتابەیس">
+            <h3>💾 بەڕێوەبردنی داتابەیس</h3>
+            <div class="help-content">
+                <ul>
+                    <li>دەتوانیت لە داتاکان Backup و Restore بکەیت</li>
+                    <li>داتاکان Export بکە بە CSV/JSON</li>
+                    <li>داتا Import بکە لە فایلەوە</li>
+                    <li>داتاکانی ناپێویست پاک بکەوە</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="help-section" data-title="ڕاپۆرت">
+            <h3>📊 ڕاپۆرتەکان</h3>
+            <div class="help-content">
+                <ul>
+                    <li>ڕاپۆرتی دەوام، هاتن و دەرچوون، مۆڵەتەکان ببینە</li>
+                    <li>دەتوانیت ڕاپۆرتەکان Export بکەیت بۆ CSV</li>
+                    <li>فلتەر بەکاربهێنە بۆ دۆزینەوەی تۆمارە تایبەتییەکان</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // نمایش/شاردنەوەی ناوەڕۆک
+    document.querySelectorAll('.help-section h3').forEach(header => {
+        header.addEventListener('click', () => {
+            const content = header.nextElementSibling;
+            content.classList.toggle('show');
+        });
+    });
+    
+    // گەڕان
+    document.getElementById('helpSearch').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.trim().toLowerCase();
+        document.querySelectorAll('.help-section').forEach(section => {
+            const title = section.dataset.title.toLowerCase();
+            const content = section.querySelector('.help-content').innerText.toLowerCase();
+            if (searchTerm === '' || title.includes(searchTerm) || content.includes(searchTerm)) {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        });
+    });
+    
+    // کردنەوەی یەکەم بەش
+    document.querySelector('.help-section .help-content').classList.add('show');
+</script>
+</body>
+</html>
