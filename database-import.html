@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Data - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .file-input { margin: 15px 0; }
+        .import-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; }
+        .warning { color: #d32f2f; font-size: 12px; margin-top: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📥 Import Data - هێنانی داتا</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>📂 هەڵبژاردنی فایلی JSON یان CSV</h3>
+            <p>تکایە فایلێک هەڵبژێرە کە پێشتر Export کراوە</p>
+            <input type="file" id="importFile" accept=".json,.csv" class="file-input">
+            <select id="importType" style="padding:8px;margin:10px;border-radius:5px;">
+                <option value="attendance">هاتن و دەرچوون</option>
+                <option value="late">دواکەوتنەکان</option>
+                <option value="absence">غیابەکان</option>
+                <option value="ot">Overtime</option>
+                <option value="leave">مۆڵەتەکان</option>
+            </select>
+            <button class="import-btn" onclick="importData()">📥 Import کردن</button>
+            <div class="warning">⚠️ ئاگاداری: ئەمە داتاکانی ئێستا دەسڕێتەوە و شوێنی دەگرێتەوە!</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function importData() {
+        const fileInput = document.getElementById('importFile');
+        const file = fileInput.files[0];
+        const importType = document.getElementById('importType').value;
+        
+        if (!file) { alert('تکایە فایلێک هەڵبژێرە!'); return; }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                let data;
+                if (file.name.endsWith('.csv')) {
+                    const text = e.target.result;
+                    const lines = text.split('\n');
+                    const headers = lines[0].split(',');
+                    data = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const values = lines[i].split(',');
+                        if (values.length === headers.length) {
+                            const obj = {};
+                            headers.forEach((h, idx) => obj[h] = values[idx]);
+                            data.push(obj);
+                        }
+                    }
+                } else {
+                    data = JSON.parse(e.target.result);
+                    if (data.records) data = data.records;
+                }
+                
+                if (confirm(`دڵنیای لە Import کردنی ${data.length} تۆمار بۆ ${importType}؟`)) {
+                    const storageKey = { attendance: 'attendanceRecords', late: 'lateRecords', absence: 'absenceRecords', ot: 'otRecords', leave: 'leaveRequests' }[importType];
+                    localStorage.setItem(storageKey, JSON.stringify(data));
+                    alert(`✅ ${data.length} تۆمار بە سەرکەوتوویی Import کرا!`);
+                }
+            } catch(err) { alert('فایلەکە دروست نیە!'); }
+        };
+        reader.readAsText(file);
+    }
+</script>
+</body>
+</html>
