@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Log - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input, .filters select { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .log-table { width: 100%; border-collapse: collapse; }
+        .log-table th, .log-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .log-table th { background: #2d4a7a; color: white; }
+        .clear-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        .export-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        .log-create { color: #2e7d32; }
+        .log-update { color: #ff9800; }
+        .log-delete { color: #d32f2f; }
+        .log-login { color: #2d4a7a; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📜 Audit Log (کێ چی گۆڕی؟)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="filters">
+            <input type="text" id="filterUser" placeholder="بەکارهێنەر...">
+            <input type="date" id="filterDate">
+            <select id="filterAction">
+                <option value="all">هەموو کردارەکان</option>
+                <option value="create">دروستکردن</option>
+                <option value="update">گۆڕانکاری</option>
+                <option value="delete">سڕینەوە</option>
+                <option value="login">چوونە ناو</option>
+            </select>
+            <button class="export-btn" onclick="exportAuditLogs()">📎 Export</button>
+            <button class="clear-btn" onclick="clearAuditLogs()">🗑 پاککردنەوە</button>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="log-table" id="auditTable">
+                <thead><tr><th>#</th><th>کات</th><th>بەکارهێنەر</th><th>کردار</th><th>بەش</th><th>وردەکاری</th></tr></thead>
+                <tbody id="auditBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadAuditLogs() {
+        let logs = JSON.parse(localStorage.getItem('auditLogs') || '[]');
+        const filterUser = document.getElementById('filterUser').value.trim().toLowerCase();
+        const filterDate = document.getElementById('filterDate').value;
+        const filterAction = document.getElementById('filterAction').value;
+        
+        if (filterUser) logs = logs.filter(l => l.user.toLowerCase().includes(filterUser));
+        if (filterDate) logs = logs.filter(l => l.timestamp.includes(filterDate));
+        if (filterAction !== 'all') logs = logs.filter(l => l.action === filterAction);
+        
+        const tbody = document.getElementById('auditBody');
+        tbody.innerHTML = logs.slice(0, 500).map((log, idx) => {
+            let actionClass = '';
+            if (log.action === 'create') actionClass = 'log-create';
+            else if (log.action === 'update') actionClass = 'log-update';
+            else if (log.action === 'delete') actionClass = 'log-delete';
+            else if (log.action === 'login') actionClass = 'log-login';
+            return `<tr><td>${idx+1}</td><td>${log.timestamp}</td><td>${log.user}</td><td class="${actionClass}">${log.action}</td><td>${log.section}</td><td>${log.details}</td></tr>`;
+        }).join('');
+    }
+    
+    function exportAuditLogs() {
+        const logs = JSON.parse(localStorage.getItem('auditLogs') || '[]');
+        const csv = [['#','کات','بەکارهێنەر','کردار','بەش','وردەکاری']];
+        logs.forEach((log, idx) => csv.push([idx+1, log.timestamp, log.user, log.action, log.section, log.details]));
+        const csvText = csv.map(row => row.join(',')).join('\n');
+        const blob = new Blob(["\uFEFF" + csvText], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `audit_log_${new Date().toISOString().slice(0,19)}.csv`;
+        link.click();
+        alert('لۆگەکان Export کرا!');
+    }
+    
+    function clearAuditLogs() {
+        if (confirm('دڵنیای لە پاککردنەوەی هەموو لۆگەکان؟')) {
+            localStorage.setItem('auditLogs', '[]');
+            loadAuditLogs();
+            alert('هەموو لۆگەکان پاک کرانەوە!');
+        }
+    }
+    
+    if (!localStorage.getItem('auditLogs')) {
+        localStorage.setItem('auditLogs', JSON.stringify([
+            { id: 1, timestamp: new Date().toLocaleString(), user: 'Admin', action: 'login', section: 'سیستەم', details: 'چوونە ناو سیستەم' }
+        ]));
+    }
+    
+    loadAuditLogs();
+    setInterval(loadAuditLogs, 5000);
+</script>
+</body>
+</html>
