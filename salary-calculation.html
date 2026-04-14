@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ئەژماری مووچە - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 160px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .salary-result { background: #c8e6c9; padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px; }
+        .salary-result h3 { color: #2e7d32; border: none; }
+        .salary-result .amount { font-size: 28px; font-weight: bold; color: #2e7d32; }
+        .calculate-btn { background: #2d4a7a; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>💰 ئەژماری مووچە (Salary Calculation)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>📊 زانیاری کارمەند</h3>
+            <div class="info-row">
+                <div class="info-label">هەڵبژاردنی کارمەند:</div>
+                <div class="info-value">
+                    <select id="salaryEmployee" onchange="loadEmployeeData()">
+                        <option value="">-- هەڵبژاردنی کارمەند --</option>
+                        <option value="ئەحمەد علی">ئەحمەد علی (1001)</option>
+                        <option value="سارا محمد">سارا محمد (1002)</option>
+                        <option value="کارزان حسێن">کارزان حسێن (1003)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">مووچەی بنەڕەت:</div>
+                <div class="info-value"><span id="baseSalaryDisplay">—</span> IQD</div>
+            </div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 زیادکردنەکان (Increases)</h3>
+            <div id="increasesList"></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 کەمکردنەکان (Deductions)</h3>
+            <div id="decreasesList"></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📅 مانگ و ساڵ</h3>
+            <div class="info-row">
+                <div class="info-label">مانگ:</div>
+                <div class="info-value"><select id="salaryMonth"><option value="1">کانوونی دووەم</option><option value="2">شوبات</option><option value="3">ئازار</option><option value="4">نیسان</option><option value="5">مایس</option><option value="6">حوزەیران</option><option value="7">تەمموز</option><option value="8">ئاب</option><option value="9">ئەیلول</option><option value="10">تشرینی یەکەم</option><option value="11">تشرینی دووەم</option><option value="12">کانوونی یەکەم</option></select></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ساڵ:</div>
+                <div class="info-value"><input type="number" id="salaryYear" value="2026"></div>
+            </div>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculateSalary()">🧮 ئەژمارکردنی مووچە</button>
+        
+        <div class="salary-result" id="salaryResult" style="display: none;">
+            <h3>💰 کۆی مووچە</h3>
+            <div class="amount" id="totalSalary">0</div>
+            <div id="salaryBreakdown"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentEmployee = null;
+    let baseSalary = 0;
+    
+    function loadEmployeeData() {
+        const employee = document.getElementById('salaryEmployee').value;
+        currentEmployee = employee;
+        
+        const contracts = JSON.parse(localStorage.getItem('employeeContracts') || '[]');
+        const activeContract = contracts.find(c => c.employee === employee && c.status === 'active');
+        baseSalary = activeContract ? activeContract.salary : 0;
+        document.getElementById('baseSalaryDisplay').innerText = baseSalary.toLocaleString();
+        
+        loadAdjustmentsForEmployee();
+    }
+    
+    function loadAdjustmentsForEmployee() {
+        if (!currentEmployee) return;
+        
+        const adjustments = JSON.parse(localStorage.getItem('salaryAdjustments') || '[]');
+        const employeeAdjustments = adjustments.filter(a => a.employee === currentEmployee);
+        
+        const increases = employeeAdjustments.filter(a => a.type === 'increase');
+        const decreases = employeeAdjustments.filter(a => a.type === 'decrease');
+        
+        document.getElementById('increasesList').innerHTML = increases.length === 0 ? '<p style="color:#999;">هیچ زیادکردنێک نیە</p>' :
+            increases.map(inc => `<div class="info-row"><div class="info-label">${inc.reason}:</div><div class="info-value">+ ${inc.amount.toLocaleString()} ${inc.unit === 'percentage' ? '%' : 'IQD'}</div></div>`).join('');
+        
+        document.getElementById('decreasesList').innerHTML = decreases.length === 0 ? '<p style="color:#999;">هیچ کەمکردنێک نیە</p>' :
+            decreases.map(dec => `<div class="info-row"><div class="info-label">${dec.reason}:</div><div class="info-value">- ${dec.amount.toLocaleString()} ${dec.unit === 'percentage' ? '%' : 'IQD'}</div></div>`).join('');
+    }
+    
+    function calculateSalary() {
+        if (!currentEmployee) {
+            alert('تکایە کارمەندێک هەڵبژێرە!');
+            return;
+        }
+        
+        let total = baseSalary;
+        let increaseTotal = 0;
+        let decreaseTotal = 0;
+        let breakdownHtml = '';
+        
+        const adjustments = JSON.parse(localStorage.getItem('salaryAdjustments') || '[]');
+        const employeeAdjustments = adjustments.filter(a => a.employee === currentEmployee);
+        
+        employeeAdjustments.forEach(adj => {
+            if (adj.type === 'increase') {
+                let amount = adj.amount;
+                if (adj.unit === 'percentage') amount = (baseSalary * adj.amount) / 100;
+                increaseTotal += amount;
+                breakdownHtml += `<div>+ ${adj.reason}: ${amount.toLocaleString()} IQD</div>`;
+            } else {
+                let amount = adj.amount;
+                if (adj.unit === 'percentage') amount = (baseSalary * adj.amount) / 100;
+                decreaseTotal += amount;
+                breakdownHtml += `<div>- ${adj.reason}: ${amount.toLocaleString()} IQD</div>`;
+            }
+        });
+        
+        total = total + increaseTotal - decreaseTotal;
+        
+        document.getElementById('totalSalary').innerHTML = total.toLocaleString() + ' IQD';
+        document.getElementById('salaryBreakdown').innerHTML = `
+            <div style="margin-top:15px; text-align:right;">
+                <div>مووچەی بنەڕەت: ${baseSalary.toLocaleString()} IQD</div>
+                <div>کۆی زیادکردنەکان: + ${increaseTotal.toLocaleString()} IQD</div>
+                <div>کۆی کەمکردنەکان: - ${decreaseTotal.toLocaleString()} IQD</div>
+                <hr style="margin:10px 0;">
+                <div><strong>کۆی گشتی: ${total.toLocaleString()} IQD</strong></div>
+            </div>
+        `;
+        
+        document.getElementById('salaryResult').style.display = 'block';
+        
+        // Save calculation to history
+        let calculations = JSON.parse(localStorage.getItem('salaryCalculations') || '[]');
+        calculations.push({
+            id: Date.now(),
+            employee: currentEmployee,
+            baseSalary: baseSalary,
+            total: total,
+            month: document.getElementById('salaryMonth').value,
+            year: document.getElementById('salaryYear').value,
+            date: new Date().toISOString()
+        });
+        localStorage.setItem('salaryCalculations', JSON.stringify(calculations));
+    }
+</script>
+</body>
+</html>
