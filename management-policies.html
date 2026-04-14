@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>یاساکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 220px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 250px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📜 یاساکان (Policies)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>⏰ یاساکانی دەوام (Attendance Policies)</h3>
+            <div class="info-row"><div class="info-label">ڕێگەپێدراوی دواکەوتن (خولەک):</div><div class="info-value"><input type="number" id="lateGracePeriod" value="10"></div></div>
+            <div class="info-row"><div class="info-label">دوای چەند دواکەوتن سزا:</div><div class="info-value"><input type="number" id="latePenaltyAfter" value="3"></div></div>
+            <div class="info-row"><div class="info-label">بڕی سزا بۆ هەر دواکەوتن (IQD):</div><div class="info-value"><input type="number" id="latePenaltyAmount" value="10000"></div></div>
+            <div class="info-row"><div class="info-label">ڕێگەپێدراوی غیاب لە مانگدا:</div><div class="info-value"><input type="number" id="maxAbsencePerMonth" value="2"></div></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 یاساکانی مۆڵەت (Leave Policies)</h3>
+            <div class="info-row"><div class="info-label">کەمترین ئاگاداری پێش مۆڵەت (ڕۆژ):</div><div class="info-value"><input type="number" id="minNoticeDays" value="3"></div></div>
+            <div class="info-row"><div class="info-label">زیاترین مۆڵەتی بەردەوام (ڕۆژ):</div><div class="info-value"><input type="number" id="maxContinuousLeave" value="30"></div></div>
+            <div class="info-row"><div class="info-label">مۆڵەتی نەخۆشی پێویستی بە بەڵگەی پزیشکی:</div><div class="info-value"><input type="checkbox" id="sickLeaveRequireDoc" checked></div></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>⏱️ یاساکانی Overtime</h3>
+            <div class="info-row"><div class="info-label">کەمترین کاتژمێر بۆ OT:</div><div class="info-value"><input type="number" id="minOTHours" value="1"></div></div>
+            <div class="info-row"><div class="info-label">نرخی OT (بۆ هەر کاتژمێر):</div><div class="info-value"><input type="number" id="otRateDefault" value="6000"></div></div>
+            <div class="info-row"><div class="info-label">زیاترین OT لە ڕۆژێکدا (کاتژمێر):</div><div class="info-value"><input type="number" id="maxOTPerDay" value="4"></div></div>
+        </div>
+        
+        <button class="save-btn" onclick="savePolicies()">💾 پاشەکەوتکردنی یاساکان</button>
+    </div>
+</div>
+
+<script>
+    function loadPolicies() {
+        const policies = JSON.parse(localStorage.getItem('systemPolicies') || '{}');
+        document.getElementById('lateGracePeriod').value = policies.lateGracePeriod || 10;
+        document.getElementById('latePenaltyAfter').value = policies.latePenaltyAfter || 3;
+        document.getElementById('latePenaltyAmount').value = policies.latePenaltyAmount || 10000;
+        document.getElementById('maxAbsencePerMonth').value = policies.maxAbsencePerMonth || 2;
+        document.getElementById('minNoticeDays').value = policies.minNoticeDays || 3;
+        document.getElementById('maxContinuousLeave').value = policies.maxContinuousLeave || 30;
+        document.getElementById('sickLeaveRequireDoc').checked = policies.sickLeaveRequireDoc !== false;
+        document.getElementById('minOTHours').value = policies.minOTHours || 1;
+        document.getElementById('otRateDefault').value = policies.otRateDefault || 6000;
+        document.getElementById('maxOTPerDay').value = policies.maxOTPerDay || 4;
+    }
+    
+    function savePolicies() {
+        const policies = {
+            lateGracePeriod: parseInt(document.getElementById('lateGracePeriod').value),
+            latePenaltyAfter: parseInt(document.getElementById('latePenaltyAfter').value),
+            latePenaltyAmount: parseInt(document.getElementById('latePenaltyAmount').value),
+            maxAbsencePerMonth: parseInt(document.getElementById('maxAbsencePerMonth').value),
+            minNoticeDays: parseInt(document.getElementById('minNoticeDays').value),
+            maxContinuousLeave: parseInt(document.getElementById('maxContinuousLeave').value),
+            sickLeaveRequireDoc: document.getElementById('sickLeaveRequireDoc').checked,
+            minOTHours: parseInt(document.getElementById('minOTHours').value),
+            otRateDefault: parseInt(document.getElementById('otRateDefault').value),
+            maxOTPerDay: parseInt(document.getElementById('maxOTPerDay').value),
+            updatedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('systemPolicies', JSON.stringify(policies));
+        alert('✅ یاساکان پاشەکەوت کران!');
+    }
+    
+    loadPolicies();
+</script>
+</body>
+</html>
