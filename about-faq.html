@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid #eee; }
+        .faq-question { background: #e8e8e8; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: 700; color: #2d4a7a; display: flex; justify-content: space-between; align-items: center; }
+        .faq-question:hover { background: #B8CFF0; }
+        .faq-answer { display: none; padding: 15px; background: #f9f9f9; border-radius: 8px; margin-top: 5px; line-height: 1.8; }
+        .faq-answer.show { display: block; }
+        .faq-icon { font-size: 18px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>❓ پرسیارە دووبارەکان (FAQ)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="faq-item">
+            <div class="faq-question">🔹 چۆن دەتوانم کارمەندێکی نوێ زیاد بکەم؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">لە پەنجەرەی "زانیاری کارمەندان" لەسەر دوگمەی "نوێ" کلیک بکە، پاشان هەموو زانیارییەکانی کارمەند پڕ بکەوە و کلیکی پاشەکەوتکردن بکە. کۆدی کارمەند بە شێوەی خۆکار زیاد دەبێت.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔹 چۆن دەتوانم هاتن و دەرچوونی کارمەند تۆمار بکەم؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">لە مێنووی "هاتن و دەرچوون" -> "تۆمارکردنی هاتن" یان "تۆمارکردنی دەرچوون" هەڵبژێرە، کارمەند و شوێنەکە هەڵبژێرە، پاشان کلیکی تۆمارکردن بکە. کات و ڕێکەوت بە شێوەی خۆکار تۆمار دەبێت.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔹 چۆن دەتوانم مووچەی کارمەند حساب بکەم؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">لە مێنووی "مووچە" -> "ئەژماری مووچە" کارمەند و مانگ و ساڵەکە هەڵبژێرە، پاشان کلیکی "ئەژمارکردنی مووچە" بکە. سیستەم مووچەی بنەڕەت و زیادکردن/کەمکردنەکان حساب دەکات.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔹 چۆن دەتوانم Backup لە داتاکان بگرم؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">لە مێنووی "داتابەیس" -> "Backup" بڕۆ، پاشان کلیکی "دروستکردنی Backup" بکە. داتاکان لە ناوخۆی براوسەرەکەتدا هەڵدەگیرێت.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔹 چۆن دەتوانم داتاکان Export بکەم بۆ CSV؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">لە مێنووی "داتابەیس" -> "Export" بڕۆ، جۆری داتاکە هەڵبژێرە و دواتر کلیکی "Export to CSV" یان "Export to JSON" بکە. فایلەکە داونلۆد دەبێت.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔹 چۆن دەتوانم شەفتێکی نوێ پێناسە بکەم؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">لە مێنووی "شەفت و گروپ" -> "پێناسەکردنی شەفت" بڕۆ، ناو، کاتی دەستپێک و کۆتایی، جۆری شەفت و ڕۆژەکانی کار دیاری بکە.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔹 داتاکانم ون بوون، چۆن بیان گەڕێنمەوە؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">ئەگەر پێشتر Backupتان گرتبێت، لە مێنووی "داتابەیس" -> "Restore" بڕۆ و فایلی Backup هەڵبژێرە. ئاگادار! ئەمە داتاکانی ئێستا دەسڕێتەوە.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">🔹 چۆن دەتوانم بەکارهێنەرێکی نوێ زیاد بکەم؟<span class="faq-icon">▼</span></div>
+            <div class="faq-answer">لە مێنووی "بەڕێوەبەردن" -> "بەکارهێنەران" بڕۆ، کلیکی "زیادکردنی بەکارهێنەر" بکە و زانیارییەکانی پڕ بکەوە.</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const icon = question.querySelector('.faq-icon');
+            answer.classList.toggle('show');
+            icon.textContent = answer.classList.contains('show') ? '▲' : '▼';
+        });
+    });
+</script>
+</body>
+</html>
