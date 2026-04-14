@@ -15,7 +15,7 @@
         .back-btn:hover { background: #b71c1c; }
         .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
         .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
-        .filters select, .filters input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .filters select, .filters input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
         .report-table { width: 100%; border-collapse: collapse; }
         .report-table th, .report-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
         .report-table th { background: #2d4a7a; color: white; }
@@ -40,13 +40,21 @@
             <input type="date" id="filterDate">
             <input type="text" id="filterEmployee" placeholder="ناوی کارمەند">
             <button class="export-btn" onclick="exportReport()">📎 Export to CSV</button>
-            <button onclick="loadReport()" style="background:#2d4a7a; color:white; border:none; padding:8px 16px; border-radius:5px;">🔍 نمایش</button>
+            <button onclick="loadReport()" style="background:#2d4a7a; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🔍 نمایش</button>
         </div>
         
         <div style="overflow-x: auto;">
             <table class="report-table" id="reportTable">
                 <thead>
-                    <tr><th>#</th><th>ڕێکەوت</th><th>ناوی کارمەند</th><th>جۆر</th><th>نرخ</th><th>یەکە</th><th>هۆکار</th></tr>
+                    <tr>
+                        <th>#</th>
+                        <th>ڕێکەوت</th>
+                        <th>ناوی کارمەند</th>
+                        <th>جۆر</th>
+                        <th>نرخ</th>
+                        <th>یەکە</th>
+                        <th>هۆکار</th>
+                    </tr>
                 </thead>
                 <tbody id="reportBody"></tbody>
                 <tfoot id="reportFooter"></tfoot>
@@ -66,50 +74,58 @@
         if (filterDate) adjustments = adjustments.filter(a => a.date === filterDate);
         if (filterEmployee) adjustments = adjustments.filter(a => a.employee.toLowerCase().includes(filterEmployee));
         
-        adjustments.sort((a, b) => b.date.localeCompare(a.date));
+        adjustments.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
         
         let totalIncrease = 0;
         let totalDecrease = 0;
         
         const tbody = document.getElementById('reportBody');
+        if (adjustments.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">هیچ تۆمارێک نەدۆزرایەوە</td></tr>';
+            document.getElementById('reportFooter').innerHTML = '';
+            return;
+        }
+        
         tbody.innerHTML = adjustments.map((adj, idx) => {
-            if (adj.type === 'increase') totalIncrease += adj.unit === 'percentage' ? adj.amount : adj.amount;
-            else totalDecrease += adj.unit === 'percentage' ? adj.amount : adj.amount;
+            if (adj.type === 'increase') totalIncrease += adj.amount;
+            else totalDecrease += adj.amount;
             
             return `
                 <tr>
                     <td>${idx+1}</td>
-                    <td>${adj.date}</td>
+                    <td>${adj.date || '—'}</td>
                     <td>${adj.employee}</td>
                     <td style="color:${adj.type === 'increase' ? '#2e7d32' : '#d32f2f'}">${adj.type === 'increase' ? '➕ زیادکردن' : '➖ کەمکردن'}</td>
                     <td>${adj.amount.toLocaleString()}</td>
                     <td>${adj.unit === 'percentage' ? '%' : 'IQD'}</td>
-                    <td>${adj.reason}</td>
+                    <td>${adj.reason || '—'}</td>
                 </tr>
             `;
         }).join('');
         
         document.getElementById('reportFooter').innerHTML = `
-            <tr> class="total-row">
-                <td colspan="4"><strong>کۆی گشتی</strong></td>
+            <tr class="total-row">
+                <td colspan="3"><strong>کۆی گشتی</strong></td>
                 <td><strong style="color:#2e7d32;">+ ${totalIncrease.toLocaleString()}</strong></td>
                 <td colspan="2"><strong style="color:#d32f2f;">- ${totalDecrease.toLocaleString()}</strong></td>
+                <td></td>
             </tr>
         `;
-        
-        if (adjustments.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">هیچ تۆمارێک نەدۆزرایەوە</td></tr>';
-        }
     }
     
     function exportReport() {
         const adjustments = JSON.parse(localStorage.getItem('salaryAdjustments') || '[]');
-        const csv = [['#','ڕێکەوت','ناوی کارمەند','جۆر','نرخ','یەکە','هۆکار']];
+        if (adjustments.length === 0) {
+            alert('هیچ تۆمارێک نیە بۆ هەناردن!');
+            return;
+        }
+        
+        let csv = "ژمارە,ڕێکەوت,ناوی کارمەند,جۆر,نرخ,یەکە,هۆکار\n";
         adjustments.forEach((adj, idx) => {
-            csv.push([idx+1, adj.date, adj.employee, adj.type === 'increase' ? 'زیادکردن' : 'کەمکردن', adj.amount, adj.unit === 'percentage' ? '%' : 'IQD', adj.reason]);
+            csv += `${idx+1},${adj.date || ''},${adj.employee},${adj.type === 'increase' ? 'زیادکردن' : 'کەمکردن'},${adj.amount},${adj.unit === 'percentage' ? '%' : 'IQD'},${adj.reason || ''}\n`;
         });
-        const csvText = csv.map(row => row.join(',')).join('\n');
-        const blob = new Blob(["\uFEFF" + csvText], { type: 'text/csv;charset=utf-8;' });
+        
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
         link.download = `salary_report_${new Date().toISOString().slice(0,19)}.csv`;
