@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Settings - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 220px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 250px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔒 ڕێکخستنەکانی ئاسایش (Security Settings)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>🔐 ڕێکخستنەکانی وشەی نهێنی</h3>
+            <div class="info-row"><div class="info-label">کەمترین درێژی وشەی نهێنی:</div><div class="info-value"><input type="number" id="minPasswordLength" value="6"></div></div>
+            <div class="info-row"><div class="info-label">پێویستی بە پیتی گەورە:</div><div class="info-value"><input type="checkbox" id="requireUppercase"></div></div>
+            <div class="info-row"><div class="info-label">پێویستی بە ژمارە:</div><div class="info-value"><input type="checkbox" id="requireNumber"></div></div>
+            <div class="info-row"><div class="info-label">کۆنبوونەوەی وشەی نهێنی (ڕۆژ):</div><div class="info-value"><input type="number" id="passwordExpiry" value="90"></div></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>🔑 ڕێکخستنەکانی چوونە ناو (Login)</h3>
+            <div class="info-row"><div class="info-label">هەوڵی هەڵە بۆ چوونە ناو:</div><div class="info-value"><input type="number" id="maxLoginAttempts" value="5"></div></div>
+            <div class="info-row"><div class="info-label">دوای چەند هەوڵێک قەدەغە بکرێت:</div><div class="info-value"><input type="number" id="lockoutAfterAttempts" value="5"></div></div>
+            <div class="info-row"><div class="info-label">ماوەی قەدەغەکردن (خولەک):</div><div class="info-value"><input type="number" id="lockoutDuration" value="30"></div></div>
+            <div class="info-row"><div class="info-label">دوو پلەیی (2FA):</div><div class="info-value"><input type="checkbox" id="enable2FA"></div></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>🌐 ڕێکخستنەکانی سێشن (Session)</h3>
+            <div class="info-row"><div class="info-label">کۆتایی هاتنی سێشن دوای (خولەک):</div><div class="info-value"><input type="number" id="sessionTimeout" value="60"></div></div>
+            <div class="info-row"><div class="info-label">چوونە ناو لە چەند ئامێرێک:</div><div class="info-value"><select id="maxSessions"><option value="1">تەنها یەک ئامێر</option><option value="3" selected>زیاترین 3 ئامێر</option><option value="unlimited">بێ سنوور</option></select></div></div>
+        </div>
+        
+        <button class="save-btn" onclick="saveSecuritySettings()">💾 پاشەکەوتکردن</button>
+    </div>
+</div>
+
+<script>
+    function loadSecuritySettings() {
+        const settings = JSON.parse(localStorage.getItem('securitySettings') || '{}');
+        document.getElementById('minPasswordLength').value = settings.minPasswordLength || 6;
+        document.getElementById('requireUppercase').checked = settings.requireUppercase || false;
+        document.getElementById('requireNumber').checked = settings.requireNumber || false;
+        document.getElementById('passwordExpiry').value = settings.passwordExpiry || 90;
+        document.getElementById('maxLoginAttempts').value = settings.maxLoginAttempts || 5;
+        document.getElementById('lockoutAfterAttempts').value = settings.lockoutAfterAttempts || 5;
+        document.getElementById('lockoutDuration').value = settings.lockoutDuration || 30;
+        document.getElementById('enable2FA').checked = settings.enable2FA || false;
+        document.getElementById('sessionTimeout').value = settings.sessionTimeout || 60;
+        document.getElementById('maxSessions').value = settings.maxSessions || '3';
+    }
+    
+    function saveSecuritySettings() {
+        const settings = {
+            minPasswordLength: parseInt(document.getElementById('minPasswordLength').value),
+            requireUppercase: document.getElementById('requireUppercase').checked,
+            requireNumber: document.getElementById('requireNumber').checked,
+            passwordExpiry: parseInt(document.getElementById('passwordExpiry').value),
+            maxLoginAttempts: parseInt(document.getElementById('maxLoginAttempts').value),
+            lockoutAfterAttempts: parseInt(document.getElementById('lockoutAfterAttempts').value),
+            lockoutDuration: parseInt(document.getElementById('lockoutDuration').value),
+            enable2FA: document.getElementById('enable2FA').checked,
+            sessionTimeout: parseInt(document.getElementById('sessionTimeout').value),
+            maxSessions: document.getElementById('maxSessions').value,
+            updatedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('securitySettings', JSON.stringify(settings));
+        alert('✅ ڕێکخستنەکانی ئاسایش پاشەکەوت کرا!');
+    }
+    
+    loadSecuritySettings();
+</script>
+</body>
+</html>
