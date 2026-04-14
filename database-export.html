@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Data - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .export-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .export-card { background: #e8e8e8; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .export-card:hover { background: #B8CFF0; }
+        .export-card h3 { color: #2d4a7a; margin-bottom: 10px; }
+        .export-card p { font-size: 12px; color: #666; }
+        .format-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .format-btn { padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .csv-btn { background: #2e7d32; color: white; }
+        .json-btn { background: #2d4a7a; color: white; }
+        .print-btn { background: #ff9800; color: white; }
+        h2 { color: #2d4a7a; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📎 Export Data (Excel / PDF / CSV / JSON)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <h2>📊 هەڵبژاردنی جۆری داتا</h2>
+        <div class="export-options">
+            <div class="export-card" onclick="selectDataType('attendance')"><h3>✅ هاتن و دەرچوون</h3><p>هەموو تۆمارەکانی هاتن و دەرچوون</p></div>
+            <div class="export-card" onclick="selectDataType('late')"><h3>⏰ دواکەوتنەکان</h3><p>هەموو تۆمارەکانی دواکەوتن</p></div>
+            <div class="export-card" onclick="selectDataType('absence')"><h3>🚫 غیابەکان</h3><p>هەموو تۆمارەکانی غیاب</p></div>
+            <div class="export-card" onclick="selectDataType('ot')"><h3>⏱️ Overtime</h3><p>هەموو تۆمارەکانی OT</p></div>
+            <div class="export-card" onclick="selectDataType('leave')"><h3>📋 مۆڵەتەکان</h3><p>هەموو داواکارییەکانی مۆڵەت</p></div>
+            <div class="export-card" onclick="selectDataType('all')"><h3>📦 هەموو داتاکان</h3><p>هەموو داتاکانی سیستەم</p></div>
+        </div>
+        
+        <div class="format-buttons" id="formatButtons" style="display: none;">
+            <button class="format-btn csv-btn" onclick="exportToCSV()">📎 Export to CSV</button>
+            <button class="format-btn json-btn" onclick="exportToJSON()">📄 Export to JSON</button>
+            <button class="format-btn print-btn" onclick="printData()">🖨️ چاپکردن / PDF</button>
+        </div>
+        
+        <div id="preview" style="margin-top: 20px; max-height: 400px; overflow: auto; display: none;">
+            <h3>پێشبینین:</h3>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentData = [];
+    let currentDataType = '';
+    
+    function selectDataType(type) {
+        currentDataType = type;
+        const data = {};
+        
+        if (type === 'attendance') data.records = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+        else if (type === 'late') data.records = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+        else if (type === 'absence') data.records = JSON.parse(localStorage.getItem('absenceRecords') || '[]');
+        else if (type === 'ot') data.records = JSON.parse(localStorage.getItem('otRecords') || '[]');
+        else if (type === 'leave') data.records = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+        else if (type === 'all') {
+            data.attendance = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+            data.late = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+            data.absence = JSON.parse(localStorage.getItem('absenceRecords') || '[]');
+            data.ot = JSON.parse(localStorage.getItem('otRecords') || '[]');
+            data.leave = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+        }
+        
+        currentData = data;
+        document.getElementById('formatButtons').style.display = 'flex';
+        
+        const preview = document.getElementById('preview');
+        preview.style.display = 'block';
+        const count = data.records ? data.records.length : Object.keys(data).reduce((sum, k) => sum + data[k].length, 0);
+        document.getElementById('previewContent').innerHTML = `<p>${count} تۆمار بۆ هەناردن ئامادەیە</p>`;
+    }
+    
+    function exportToCSV() {
+        let csv = '';
+        if (currentData.records) {
+            const records = currentData.records;
+            if (records.length === 0) { alert('هیچ تۆمارێک نیە!'); return; }
+            const headers = Object.keys(records[0]);
+            csv = headers.join(',') + '\n';
+            records.forEach(r => { csv += headers.map(h => `"${r[h] || ''}"`).join(',') + '\n'; });
+        } else {
+            csv = JSON.stringify(currentData, null, 2);
+        }
+        
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${currentDataType}_export_${new Date().toISOString().slice(0,19)}.csv`;
+        link.click();
+        alert('فایل CSV داونلۆد کرا!');
+    }
+    
+    function exportToJSON() {
+        const json = JSON.stringify(currentData, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${currentDataType}_export_${new Date().toISOString().slice(0,19)}.json`;
+        link.click();
+        alert('فایل JSON داونلۆد کرا!');
+    }
+    
+    function printData() {
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html dir="rtl"><head><meta charset="UTF-8"><title>Export ${currentDataType}</title>
+            <style>body{font-family:'Noto Sans Arabic',sans-serif;padding:20px;} table{border-collapse:collapse;width:100%;} th,td{border:1px solid #ddd;padding:8px;text-align:center;}</style>
+            </head><body><h1>ڕاپۆرتی ${currentDataType}</h1><pre>${JSON.stringify(currentData, null, 2)}</pre></body></html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>
+</body>
+</html>
