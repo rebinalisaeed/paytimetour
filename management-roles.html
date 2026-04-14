@@ -3,176 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بەکارهێنەران - Pay Time Tour</title>
+    <title>ڕۆڵ و دەسەڵات - Pay Time Tour</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1000px; margin: 0 auto; }
         .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
         .header h1 { font-size: 20px; }
         .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
         .back-btn:hover { background: #b71c1c; }
         .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
-        .add-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
-        .user-table { width: 100%; border-collapse: collapse; }
-        .user-table th, .user-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
-        .user-table th { background: #2d4a7a; color: white; }
-        .edit-btn { background: #ff9800; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; margin: 2px; }
-        .delete-btn { background: #d32f2f; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; margin: 2px; }
+        .role-card { background: #e8e8e8; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .role-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .role-header h3 { color: #2d4a7a; }
+        .permission-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 15px; }
+        .permission-item { display: flex; align-items: center; gap: 8px; background: white; padding: 8px; border-radius: 5px; }
+        .add-role-btn { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
+        .edit-role-btn { background: #ff9800; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; }
+        .delete-role-btn { background: #d32f2f; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; margin-right: 5px; }
+        .save-permissions-btn { background: #2e7d32; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; margin-top: 10px; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
         .modal-content { background: white; padding: 25px; border-radius: 10px; width: 400px; max-width: 90%; }
-        .modal-content input, .modal-content select { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        .modal-btn { background: #2d4a7a; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        .close-modal { background: #999; }
-        h3 { color: #2d4a7a; margin-bottom: 15px; }
+        .modal-content input { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>👥 بەڕێوەبردنی بەکارهێنەران (Users Management)</h1>
+        <h1>🔐 ڕۆڵ و دەسەڵاتەکان (Roles & Permissions)</h1>
         <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
     </div>
     <div class="content">
-        <button class="add-btn" onclick="openUserModal()">➕ زیادکردنی بەکارهێنەری نوێ</button>
+        <button class="add-role-btn" onclick="openRoleModal()">➕ زیادکردنی ڕۆڵی نوێ</button>
         
-        <div style="overflow-x: auto;">
-            <table class="user-table" id="userTable">
-                <thead><tr><th>#</th><th>ناوی بەکارهێنەر</th><th>ناوی تەواو</th><th>ئیمەیڵ</th><th>ڕۆڵ</th><th>دۆخ</th><th>کردار</th></tr></thead>
-                <tbody id="userTableBody"></tbody>
-            </table>
-        </div>
+        <div id="rolesContainer"></div>
     </div>
 </div>
 
-<div id="userModal" class="modal">
+<div id="roleModal" class="modal">
     <div class="modal-content">
-        <h3 id="modalTitle">زیادکردنی بەکارهێنەر</h3>
-        <input type="hidden" id="editUserId">
-        <input type="text" id="username" placeholder="ناوی بەکارهێنەر" required>
-        <input type="text" id="fullname" placeholder="ناوی تەواو" required>
-        <input type="email" id="email" placeholder="ئیمەیڵ" required>
-        <input type="password" id="password" placeholder="وشەی نهێنی">
-        <select id="role">
-            <option value="admin">Admin</option>
-            <option value="manager">Manager</option>
-            <option value="user">User</option>
-            <option value="viewer">Viewer</option>
-        </select>
-        <select id="status">
-            <option value="active">چالاک</option>
-            <option value="inactive">ناچالاک</option>
-        </select>
-        <button class="modal-btn" onclick="saveUser()">💾 پاشەکەوتکردن</button>
-        <button class="modal-btn close-modal" onclick="closeUserModal()">داخستن</button>
+        <h3 id="modalTitle">زیادکردنی ڕۆڵ</h3>
+        <input type="hidden" id="editRoleId">
+        <input type="text" id="roleName" placeholder="ناوی ڕۆڵ" required>
+        <button class="modal-btn" onclick="saveRole()">💾 پاشەکەوتکردن</button>
+        <button class="modal-btn close-modal" onclick="closeRoleModal()">داخستن</button>
     </div>
 </div>
 
 <script>
-    let users = [];
+    let roles = [];
     
-    function loadUsers() {
-        users = JSON.parse(localStorage.getItem('systemUsers') || '[]');
-        if (users.length === 0) {
-            users = [
-                { id: 1, username: 'admin', fullname: 'Administrator', email: 'admin@paytime.com', role: 'admin', status: 'active', password: 'admin123' },
-                { id: 2, username: 'manager1', fullname: 'سەرپەرشتیار', email: 'manager@paytime.com', role: 'manager', status: 'active', password: '123456' }
+    const allPermissions = [
+        { id: 'view_employees', name: 'بینینی کارمەندان' },
+        { id: 'edit_employees', name: 'دەستکاری کارمەندان' },
+        { id: 'delete_employees', name: 'سڕینەوەی کارمەندان' },
+        { id: 'view_attendance', name: 'بینینی هاتن و دەرچوون' },
+        { id: 'edit_attendance', name: 'دەستکاری هاتن و دەرچوون' },
+        { id: 'view_reports', name: 'بینینی ڕاپۆرتەکان' },
+        { id: 'export_data', name: 'هەناردنی داتا' },
+        { id: 'manage_users', name: 'بەڕێوەبردنی بەکارهێنەران' },
+        { id: 'manage_roles', name: 'بەڕێوەبردنی ڕۆڵەکان' },
+        { id: 'system_settings', name: 'ڕێکخستنەکانی سیستەم' },
+        { id: 'view_logs', name: 'بینینی لۆگەکان' }
+    ];
+    
+    function loadRoles() {
+        roles = JSON.parse(localStorage.getItem('systemRoles') || '[]');
+        if (roles.length === 0) {
+            roles = [
+                { id: 1, name: 'Admin', permissions: allPermissions.map(p => p.id) },
+                { id: 2, name: 'Manager', permissions: ['view_employees', 'edit_employees', 'view_attendance', 'edit_attendance', 'view_reports'] },
+                { id: 3, name: 'User', permissions: ['view_employees', 'view_attendance'] },
+                { id: 4, name: 'Viewer', permissions: ['view_employees', 'view_attendance', 'view_reports'] }
             ];
-            localStorage.setItem('systemUsers', JSON.stringify(users));
+            localStorage.setItem('systemRoles', JSON.stringify(roles));
         }
-        displayUsers();
+        displayRoles();
     }
     
-    function displayUsers() {
-        const tbody = document.getElementById('userTableBody');
-        tbody.innerHTML = users.map((user, idx) => `
-            <tr>
-                <td>${idx+1}</td>
-                <td>${user.username}</td>
-                <td>${user.fullname}</td>
-                <td>${user.email}</td>
-                <td>${user.role}</td>
-                <td style="color:${user.status === 'active' ? '#2e7d32' : '#d32f2f'}">${user.status === 'active' ? 'چالاک' : 'ناچالاک'}</td>
-                <td>
-                    <button class="edit-btn" onclick="editUser(${user.id})">✏️ دەستکاری</button>
-                    <button class="delete-btn" onclick="deleteUser(${user.id})">🗑 سڕینەوە</button>
-                </td>
-            </tr>
+    function displayRoles() {
+        const container = document.getElementById('rolesContainer');
+        container.innerHTML = roles.map(role => `
+            <div class="role-card">
+                <div class="role-header">
+                    <h3>📌 ${role.name}</h3>
+                    <div>
+                        <button class="edit-role-btn" onclick="editRole(${role.id})">✏️ دەستکاری ناو</button>
+                        <button class="delete-role-btn" onclick="deleteRole(${role.id})">🗑 سڕینەوە</button>
+                    </div>
+                </div>
+                <div class="permission-list">
+                    ${allPermissions.map(perm => `
+                        <label class="permission-item">
+                            <input type="checkbox" class="perm-${role.id}" value="${perm.id}" ${role.permissions.includes(perm.id) ? 'checked' : ''} onchange="updatePermissions(${role.id})">
+                            <span>${perm.name}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
         `).join('');
     }
     
-    function openUserModal() {
-        document.getElementById('modalTitle').innerText = 'زیادکردنی بەکارهێنەر';
-        document.getElementById('editUserId').value = '';
-        document.getElementById('username').value = '';
-        document.getElementById('fullname').value = '';
-        document.getElementById('email').value = '';
-        document.getElementById('password').value = '';
-        document.getElementById('role').value = 'user';
-        document.getElementById('status').value = 'active';
-        document.getElementById('userModal').style.display = 'flex';
-    }
-    
-    function closeUserModal() {
-        document.getElementById('userModal').style.display = 'none';
-    }
-    
-    function editUser(id) {
-        const user = users.find(u => u.id === id);
-        if (user) {
-            document.getElementById('modalTitle').innerText = 'دەستکاری بەکارهێنەر';
-            document.getElementById('editUserId').value = user.id;
-            document.getElementById('username').value = user.username;
-            document.getElementById('fullname').value = user.fullname;
-            document.getElementById('email').value = user.email;
-            document.getElementById('password').value = '';
-            document.getElementById('role').value = user.role;
-            document.getElementById('status').value = user.status;
-            document.getElementById('userModal').style.display = 'flex';
+    function updatePermissions(roleId) {
+        const role = roles.find(r => r.id === roleId);
+        if (role) {
+            const checkedBoxes = document.querySelectorAll(`.perm-${roleId}:checked`);
+            role.permissions = Array.from(checkedBoxes).map(cb => cb.value);
+            localStorage.setItem('systemRoles', JSON.stringify(roles));
         }
     }
     
-    function saveUser() {
-        const id = document.getElementById('editUserId').value;
-        const userData = {
-            id: id ? parseInt(id) : Date.now(),
-            username: document.getElementById('username').value,
-            fullname: document.getElementById('fullname').value,
-            email: document.getElementById('email').value,
-            role: document.getElementById('role').value,
-            status: document.getElementById('status').value,
-            password: document.getElementById('password').value || 'default123'
-        };
-        
-        if (!userData.username || !userData.fullname || !userData.email) {
-            alert('تکایە هەموو خانە پێویستەکان پڕ بکەوە!');
-            return;
+    function openRoleModal() {
+        document.getElementById('modalTitle').innerText = 'زیادکردنی ڕۆڵ';
+        document.getElementById('editRoleId').value = '';
+        document.getElementById('roleName').value = '';
+        document.getElementById('roleModal').style.display = 'flex';
+    }
+    
+    function closeRoleModal() {
+        document.getElementById('roleModal').style.display = 'none';
+    }
+    
+    function editRole(id) {
+        const role = roles.find(r => r.id === id);
+        if (role) {
+            document.getElementById('modalTitle').innerText = 'دەستکاری ڕۆڵ';
+            document.getElementById('editRoleId').value = role.id;
+            document.getElementById('roleName').value = role.name;
+            document.getElementById('roleModal').style.display = 'flex';
         }
+    }
+    
+    function saveRole() {
+        const id = document.getElementById('editRoleId').value;
+        const name = document.getElementById('roleName').value;
+        if (!name) { alert('تکایە ناوی ڕۆڵ پڕ بکەوە!'); return; }
         
         if (id) {
-            const index = users.findIndex(u => u.id === parseInt(id));
-            if (index !== -1) users[index] = userData;
+            const index = roles.findIndex(r => r.id === parseInt(id));
+            if (index !== -1) roles[index].name = name;
         } else {
-            users.push(userData);
+            roles.push({ id: Date.now(), name: name, permissions: [] });
         }
         
-        localStorage.setItem('systemUsers', JSON.stringify(users));
-        closeUserModal();
-        displayUsers();
-        alert('✅ بەکارهێنەر پاشەکەوت کرا!');
+        localStorage.setItem('systemRoles', JSON.stringify(roles));
+        closeRoleModal();
+        displayRoles();
+        alert('✅ ڕۆڵ پاشەکەوت کرا!');
     }
     
-    function deleteUser(id) {
-        if (confirm('دڵنیای لە سڕینەوەی ئەم بەکارهێنەرە؟')) {
-            users = users.filter(u => u.id !== id);
-            localStorage.setItem('systemUsers', JSON.stringify(users));
-            displayUsers();
-            alert('بەکارهێنەر سڕایەوە!');
+    function deleteRole(id) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم ڕۆڵە؟')) {
+            roles = roles.filter(r => r.id !== id);
+            localStorage.setItem('systemRoles', JSON.stringify(roles));
+            displayRoles();
+            alert('ڕۆڵ سڕایەوە!');
         }
     }
     
-    loadUsers();
+    loadRoles();
 </script>
 </body>
 </html>
