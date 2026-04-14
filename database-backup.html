@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .backup-btn { background: #2e7d32; color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer; font-size: 16px; margin: 10px; }
+        .backup-btn:hover { background: #1b5e20; }
+        .backup-list { margin-top: 20px; }
+        .backup-item { background: #f5f5f5; padding: 12px; border-radius: 5px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .restore-btn { background: #ff9800; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; }
+        .delete-backup-btn { background: #d32f2f; color: white; border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>💾 Backup - پاشەکەوتکردنی داتاکان</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>📦 دروستکردنی Backup</h3>
+            <button class="backup-btn" onclick="createBackup()">➕ دروستکردنی Backup نوێ</button>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 لیستی Backupەکان</h3>
+            <div id="backupList"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getAllData() {
+        return {
+            employees: JSON.parse(localStorage.getItem('employeesData') || '[]'),
+            attendanceRecords: JSON.parse(localStorage.getItem('attendanceRecords') || '[]'),
+            lateRecords: JSON.parse(localStorage.getItem('lateRecords') || '[]'),
+            absenceRecords: JSON.parse(localStorage.getItem('absenceRecords') || '[]'),
+            otRecords: JSON.parse(localStorage.getItem('otRecords') || '[]'),
+            leaveRequests: JSON.parse(localStorage.getItem('leaveRequests') || '[]'),
+            createdAt: new Date().toISOString()
+        };
+    }
+    
+    function createBackup() {
+        const data = getAllData();
+        const backupId = Date.now();
+        const backupName = `backup_${new Date().toLocaleDateString('ckb').replace(/\//g, '-')}_${new Date().toLocaleTimeString('ckb').replace(/:/g, '-')}`;
+        const backup = { id: backupId, name: backupName, data: data, createdAt: new Date().toLocaleString() };
+        
+        let backups = JSON.parse(localStorage.getItem('databaseBackups') || '[]');
+        backups.unshift(backup);
+        localStorage.setItem('databaseBackups', JSON.stringify(backups));
+        
+        alert(`✅ Backup بە ناوی "${backupName}" دروست کرا!`);
+        loadBackupList();
+    }
+    
+    function restoreBackup(backup) {
+        if (confirm(`دڵنیای لە گەڕاندنەوەی Backup "${backup.name}"؟ ئەمە داتاکانی ئێستا دەسڕێتەوە!`)) {
+            localStorage.setItem('attendanceRecords', JSON.stringify(backup.data.attendanceRecords || []));
+            localStorage.setItem('lateRecords', JSON.stringify(backup.data.lateRecords || []));
+            localStorage.setItem('absenceRecords', JSON.stringify(backup.data.absenceRecords || []));
+            localStorage.setItem('otRecords', JSON.stringify(backup.data.otRecords || []));
+            localStorage.setItem('leaveRequests', JSON.stringify(backup.data.leaveRequests || []));
+            alert(`✅ Backup "${backup.name}" گەڕێنرایەوە!`);
+        }
+    }
+    
+    function deleteBackup(id) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم Backupە؟')) {
+            let backups = JSON.parse(localStorage.getItem('databaseBackups') || '[]');
+            backups = backups.filter(b => b.id !== id);
+            localStorage.setItem('databaseBackups', JSON.stringify(backups));
+            loadBackupList();
+        }
+    }
+    
+    function loadBackupList() {
+        const backups = JSON.parse(localStorage.getItem('databaseBackups') || '[]');
+        const container = document.getElementById('backupList');
+        if (backups.length === 0) { container.innerHTML = '<p style="color:#999;">هیچ Backupێک نیە</p>'; return; }
+        
+        container.innerHTML = backups.map(b => `
+            <div class="backup-item">
+                <div><strong>📁 ${b.name}</strong><br><small>${b.createdAt}</small></div>
+                <div><button class="restore-btn" onclick="restoreBackup(${JSON.stringify(b).replace(/"/g, '&quot;')})">🔄 گەڕاندنەوە</button>
+                <button class="delete-backup-btn" onclick="deleteBackup(${b.id})">🗑 سڕینەوە</button></div>
+            </div>
+        `).join('');
+    }
+    
+    if (!localStorage.getItem('employeesData')) localStorage.setItem('employeesData', JSON.stringify([
+        { name:'ئەحمەد علی', code:'1001', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی' }
+    ]));
+    
+    loadBackupList();
+</script>
+</body>
+</html>
