@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پەیوەندی - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .contact-card { background: #e8e8e8; border-radius: 12px; padding: 25px; margin-bottom: 20px; }
+        .contact-item { display: flex; align-items: center; gap: 15px; padding: 15px; border-bottom: 1px solid #ddd; }
+        .contact-item:last-child { border-bottom: none; }
+        .contact-icon { font-size: 24px; min-width: 50px; text-align: center; }
+        .contact-info { flex: 1; }
+        .contact-label { font-weight: 700; color: #2d4a7a; margin-bottom: 5px; }
+        .contact-value { color: #333; direction: ltr; }
+        .message-form { margin-top: 20px; }
+        .message-form input, .message-form textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .send-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📞 پەیوەندی (Contact)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="contact-card">
+            <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <div class="contact-info"><div class="contact-label">ناونیشان:</div><div class="contact-value">هەولێر، عێراق</div></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">📞</div>
+                <div class="contact-info"><div class="contact-label">تێلیفۆن:</div><div class="contact-value">+964 750 123 4567</div></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">✉️</div>
+                <div class="contact-info"><div class="contact-label">ئیمەیڵ:</div><div class="contact-value">info@paytime.com</div></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">🌐</div>
+                <div class="contact-info"><div class="contact-label">وێبسایت:</div><div class="contact-value">www.paytime.com</div></div>
+            </div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📨 ناردنی پەیام</h3>
+            <div class="message-form">
+                <input type="text" id="contactName" placeholder="ناوی تەواو">
+                <input type="email" id="contactEmail" placeholder="ئیمەیڵ">
+                <input type="text" id="contactSubject" placeholder="ناونیشان">
+                <textarea id="contactMessage" rows="4" placeholder="پەیامەکەت..."></textarea>
+                <button class="send-btn" onclick="sendMessage()">📤 ناردنی پەیام</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sendMessage() {
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const subject = document.getElementById('contactSubject').value;
+        const message = document.getElementById('contactMessage').value;
+        
+        if (!name || !email || !message) {
+            alert('تکایە ناو، ئیمەیڵ و پەیامەکەت پڕ بکەوە!');
+            return;
+        }
+        
+        // پاشەکەوتکردنی پەیامەکە
+        let messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+        messages.push({
+            id: Date.now(),
+            name: name,
+            email: email,
+            subject: subject,
+            message: message,
+            date: new Date().toLocaleString()
+        });
+        localStorage.setItem('contactMessages', JSON.stringify(messages));
+        
+        alert('✅ پەیامەکەت بە سەرکەوتوویی نێردرا! ئێمە پەیوەندیت پێوە دەکەین.');
+        
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactSubject').value = '';
+        document.getElementById('contactMessage').value = '';
+    }
+</script>
+</body>
+</html>
