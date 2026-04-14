@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گەڕان لە داتابەیس - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .search-box { background: #e8e8e8; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .search-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
+        .search-row input, .search-row select { padding: 10px; border: 1px solid #ccc; border-radius: 5px; flex: 1; min-width: 150px; font-family: inherit; }
+        .search-btn { background: #2d4a7a; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .reset-btn { background: #999; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .results-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .results-table th, .results-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .results-table th { background: #2d4a7a; color: white; }
+        .table-container { overflow-x: auto; max-height: 500px; overflow-y: auto; }
+        .result-count { margin-top: 10px; color: #2d4a7a; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔍 گەڕان لە داتابەیس (Search / Filter)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="search-box">
+            <div class="search-row">
+                <select id="searchType">
+                    <option value="all">هەموو تۆمارەکان</option>
+                    <option value="attendance">هاتن و دەرچوون</option>
+                    <option value="late">دواکەوتنەکان</option>
+                    <option value="absence">غیابەکان</option>
+                    <option value="ot">Overtime</option>
+                    <option value="leave">مۆڵەتەکان</option>
+                </select>
+                <input type="text" id="searchEmployee" placeholder="ناوی کارمەند...">
+                <input type="date" id="searchDate">
+                <button class="search-btn" onclick="performSearch()">🔍 گەڕان</button>
+                <button class="reset-btn" onclick="resetSearch()">🔄 ڕێکخستنەوە</button>
+            </div>
+        </div>
+        
+        <div class="result-count" id="resultCount"></div>
+        <div class="table-container">
+            <table class="results-table" id="resultsTable">
+                <thead id="tableHeader"></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const employees = ['ئەحمەد علی', 'سارا محمد', 'کارزان حسێن'];
+    
+    function performSearch() {
+        const searchType = document.getElementById('searchType').value;
+        const searchEmployee = document.getElementById('searchEmployee').value.trim().toLowerCase();
+        const searchDate = document.getElementById('searchDate').value;
+        
+        let data = [];
+        let headers = [];
+        
+        if (searchType === 'all' || searchType === 'attendance') {
+            const attendance = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+            attendance.forEach(r => { if ((!searchEmployee || r.employee.toLowerCase().includes(searchEmployee)) && (!searchDate || r.date === searchDate)) data.push({ type: 'هاتن/دەرچوون', ...r }); });
+        }
+        if (searchType === 'all' || searchType === 'late') {
+            const late = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+            late.forEach(r => { if ((!searchEmployee || r.employee.toLowerCase().includes(searchEmployee)) && (!searchDate || r.date === searchDate)) data.push({ type: 'دواکەوتن', ...r }); });
+        }
+        if (searchType === 'all' || searchType === 'absence') {
+            const absence = JSON.parse(localStorage.getItem('absenceRecords') || '[]');
+            absence.forEach(r => { if ((!searchEmployee || r.employee.toLowerCase().includes(searchEmployee)) && (!searchDate || r.startDate === searchDate || r.endDate === searchDate)) data.push({ type: 'غیاب', ...r }); });
+        }
+        if (searchType === 'all' || searchType === 'ot') {
+            const ot = JSON.parse(localStorage.getItem('otRecords') || '[]');
+            ot.forEach(r => { if ((!searchEmployee || r.employee.toLowerCase().includes(searchEmployee)) && (!searchDate || r.date === searchDate)) data.push({ type: 'Overtime', ...r }); });
+        }
+        if (searchType === 'all' || searchType === 'leave') {
+            const leave = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+            leave.forEach(r => { if ((!searchEmployee || r.employee.toLowerCase().includes(searchEmployee)) && (!searchDate || r.startDate === searchDate)) data.push({ type: 'مۆڵەت', ...r }); });
+        }
+        
+        document.getElementById('resultCount').innerHTML = `📊 ${data.length} تۆمار دۆزرایەوە`;
+        
+        if (data.length === 0) {
+            document.getElementById('tableHeader').innerHTML = '';
+            document.getElementById('tableBody').innerHTML = '<tr><td colspan="10" style="text-align:center;">هیچ تۆمارێک نەدۆزرایەوە</td></tr>';
+            return;
+        }
+        
+        const allKeys = new Set();
+        data.forEach(item => { Object.keys(item).forEach(key => allKeys.add(key)); });
+        const displayKeys = ['type', 'employee', 'employeeCode', 'date', 'startDate', 'time', 'hours', 'lateMinutes', 'status'];
+        const filteredKeys = displayKeys.filter(k => allKeys.has(k));
+        
+        headers = ['#', ...filteredKeys.map(k => { const names = { type:'جۆر', employee:'ناو', employeeCode:'کۆد', date:'ڕێکەوت', startDate:'دەستپێک', time:'کات', hours:'کاتژمێر', lateMinutes:'دواکەوتن', status:'دۆخ' }; return names[k] || k; })];
+        document.getElementById('tableHeader').innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr>`;
+        
+        document.getElementById('tableBody').innerHTML = data.map((item, idx) => {
+            const row = filteredKeys.map(key => {
+                let val = item[key];
+                if (key === 'lateMinutes') val = `${val} خولەک`;
+                if (key === 'status') val = val === 'pending' ? 'چاوەڕوان' : val === 'approved' ? 'پەسەندکراو' : val === 'rejected' ? 'ڕەتکراو' : val;
+                return `<td>${val || '—'}</td>`;
+            }).join('');
+            return `<tr><td>${idx + 1}</td>${row}</tr>`;
+        }).join('');
+    }
+    
+    function resetSearch() {
+        document.getElementById('searchType').value = 'all';
+        document.getElementById('searchEmployee').value = '';
+        document.getElementById('searchDate').value = '';
+        performSearch();
+    }
+    
+    performSearch();
+</script>
+</body>
+</html>
