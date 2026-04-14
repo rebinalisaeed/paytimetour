@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پاککردنەوەی داتا - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .cleanup-card { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .cleanup-card h3 { color: #2d4a7a; margin-bottom: 15px; }
+        .cleanup-card p { margin-bottom: 15px; color: #666; }
+        .cleanup-btn { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+        .cleanup-btn:hover { background: #b71c1c; }
+        .danger { color: #d32f2f; font-weight: bold; }
+        .warning-box { background: #ffeb3b; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🧹 پاککردنەوەی داتا (Cleanup)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="warning-box">
+            ⚠️ ئاگاداری! پاککردنەوە هەمیشەییە و ناتوانرێت گەڕێنرێتەوە. تکایە پێش پاککردنەوە Backupێک دروست بکە.
+        </div>
+        
+        <div class="cleanup-card">
+            <h3>✅ پاککردنەوەی تۆمارەکانی هاتن و دەرچوون</h3>
+            <p>هەموو تۆمارەکانی هاتن و دەرچوون دەسڕێتەوە</p>
+            <button class="cleanup-btn" onclick="cleanupData('attendance')">🗑 پاککردنەوە</button>
+        </div>
+        
+        <div class="cleanup-card">
+            <h3>⏰ پاککردنەوەی دواکەوتنەکان</h3>
+            <p>هەموو تۆمارەکانی دواکەوتن دەسڕێتەوە</p>
+            <button class="cleanup-btn" onclick="cleanupData('late')">🗑 پاککردنەوە</button>
+        </div>
+        
+        <div class="cleanup-card">
+            <h3>🚫 پاککردنەوەی غیابەکان</h3>
+            <p>هەموو تۆمارەکانی غیاب دەسڕێتەوە</p>
+            <button class="cleanup-btn" onclick="cleanupData('absence')">🗑 پاککردنەوە</button>
+        </div>
+        
+        <div class="cleanup-card">
+            <h3>⏱️ پاککردنەوەی Overtime</h3>
+            <p>هەموو تۆمارەکانی OT دەسڕێتەوە</p>
+            <button class="cleanup-btn" onclick="cleanupData('ot')">🗑 پاککردنەوە</button>
+        </div>
+        
+        <div class="cleanup-card">
+            <h3>📋 پاککردنەوەی مۆڵەتەکان</h3>
+            <p>هەموو داواکارییەکانی مۆڵەت دەسڕێتەوە</p>
+            <button class="cleanup-btn" onclick="cleanupData('leave')">🗑 پاککردنەوە</button>
+        </div>
+        
+        <div class="cleanup-card">
+            <h3 class="danger">🔥 پاککردنەوەی هەموو داتاکان</h3>
+            <p>هەموو داتاکانی سیستەم دەسڕێتەوە (جگە لە کارمەندان)</p>
+            <button class="cleanup-btn" onclick="cleanupData('all')" style="background:#b71c1c;">⚠️ پاککردنەوەی هەموو داتاکان</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function cleanupData(type) {
+        const confirmMsg = {
+            attendance: 'دڵنیای لە پاککردنەوەی هەموو تۆمارەکانی هاتن و دەرچوون؟',
+            late: 'دڵنیای لە پاککردنەوەی هەموو تۆمارەکانی دواکەوتن؟',
+            absence: 'دڵنیای لە پاککردنەوەی هەموو تۆمارەکانی غیاب؟',
+            ot: 'دڵنیای لە پاککردنەوەی هەموو تۆمارەکانی Overtime؟',
+            leave: 'دڵنیای لە پاککردنەوەی هەموو داواکارییەکانی مۆڵەت؟',
+            all: 'ئاگادار! دڵنیای لە پاککردنەوەی هەموو داتاکان؟ ئەمە گەڕانەوەی نیە!'
+        };
+        
+        if (confirm(confirmMsg[type])) {
+            if (type === 'attendance') localStorage.setItem('attendanceRecords', '[]');
+            else if (type === 'late') localStorage.setItem('lateRecords', '[]');
+            else if (type === 'absence') localStorage.setItem('absenceRecords', '[]');
+            else if (type === 'ot') localStorage.setItem('otRecords', '[]');
+            else if (type === 'leave') localStorage.setItem('leaveRequests', '[]');
+            else if (type === 'all') {
+                localStorage.setItem('attendanceRecords', '[]');
+                localStorage.setItem('lateRecords', '[]');
+                localStorage.setItem('absenceRecords', '[]');
+                localStorage.setItem('otRecords', '[]');
+                localStorage.setItem('leaveRequests', '[]');
+            }
+            alert(`✅ ${type === 'all' ? 'هەموو داتاکان' : type} بە سەرکەوتوویی پاک کرایەوە!`);
+        }
+    }
+</script>
+</body>
+</html>
