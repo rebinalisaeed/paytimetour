@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دواکەوتنەکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 140px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .late-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .late-table th, .late-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .late-table th { background: #2d4a7a; color: white; }
+        .late-minute { color: #d32f2f; font-weight: bold; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>⏰ دواکەوتنەکان (Late Records)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>➕ زیادکردنی دواکەوتن</h3>
+            <div class="info-row">
+                <div class="info-label">ناوی کارمەند:</div>
+                <div class="info-value"><select id="employeeSelect"><option value="">-- هەڵبژێرە --</option><option value="ئەحمەد علی">ئەحمەد علی</option><option value="سارا محمد">سارا محمد</option><option value="کارزان حسێن">کارزان حسێن</option></select></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ڕێکەوت:</div>
+                <div class="info-value"><input type="date" id="lateDate"></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">کاتی دەستپێکی شەفت:</div>
+                <div class="info-value"><input type="time" id="shiftStart" value="08:00"></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">کاتی هاتنی ڕاستەقینە:</div>
+                <div class="info-value"><input type="time" id="actualArrival"></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ماوەی دواکەوتن:</div>
+                <div class="info-value"><span id="lateMinutes">٠ خولەک</span></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">هۆکار:</div>
+                <div class="info-value"><textarea id="lateReason" rows="2" placeholder="هۆکاری دواکەوتن..."></textarea></div>
+            </div>
+            <button class="save-btn" onclick="saveLateRecord()">💾 تۆمارکردنی دواکەوتن</button>
+        </div>
+        
+        <h3>📋 لیستی دواکەوتنەکان</h3>
+        <div style="overflow-x: auto;">
+            <table class="late-table" id="lateTable">
+                <thead><tr><th>#</th><th>ناوی کارمەند</th><th>ڕێکەوت</th><th>کاتی شەفت</th><th>کاتی هاتن</th><th>ماوەی دواکەوتن</th><th>هۆکار</th><th>کردار</th></tr></thead>
+                <tbody id="lateTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculateLateMinutes() {
+        const shiftStart = document.getElementById('shiftStart').value;
+        const actualArrival = document.getElementById('actualArrival').value;
+        if (shiftStart && actualArrival) {
+            const [shiftH, shiftM] = shiftStart.split(':').map(Number);
+            const [actualH, actualM] = actualArrival.split(':').map(Number);
+            let minutes = (actualH * 60 + actualM) - (shiftH * 60 + shiftM);
+            if (minutes < 0) minutes = 0;
+            document.getElementById('lateMinutes').innerText = `${minutes} خولەک`;
+        }
+    }
+    
+    document.getElementById('shiftStart').addEventListener('change', calculateLateMinutes);
+    document.getElementById('actualArrival').addEventListener('change', calculateLateMinutes);
+    
+    function saveLateRecord() {
+        const employee = document.getElementById('employeeSelect').value;
+        const date = document.getElementById('lateDate').value;
+        const shiftStart = document.getElementById('shiftStart').value;
+        const actualArrival = document.getElementById('actualArrival').value;
+        const reason = document.getElementById('lateReason').value;
+        
+        if (!employee || !date || !actualArrival) { alert('تکایە هەموو خانە پێویستەکان پڕ بکەوە!'); return; }
+        
+        const [shiftH, shiftM] = shiftStart.split(':').map(Number);
+        const [actualH, actualM] = actualArrival.split(':').map(Number);
+        let lateMinutes = (actualH * 60 + actualM) - (shiftH * 60 + shiftM);
+        if (lateMinutes < 0) lateMinutes = 0;
+        
+        const lateRecord = {
+            id: Date.now(),
+            employee: employee,
+            date: date,
+            shiftStart: shiftStart,
+            actualArrival: actualArrival,
+            lateMinutes: lateMinutes,
+            reason: reason
+        };
+        
+        let records = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+        records.push(lateRecord);
+        localStorage.setItem('lateRecords', JSON.stringify(records));
+        
+        alert('دواکەوتن تۆمار کرا!');
+        document.getElementById('employeeSelect').value = '';
+        document.getElementById('lateDate').value = '';
+        document.getElementById('actualArrival').value = '';
+        document.getElementById('lateReason').value = '';
+        loadLateRecords();
+    }
+    
+    function loadLateRecords() {
+        const records = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+        const tbody = document.getElementById('lateTableBody');
+        tbody.innerHTML = '';
+        records.sort((a, b) => b.id - a.id).forEach((record, index) => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = index + 1;
+            row.insertCell(1).innerText = record.employee;
+            row.insertCell(2).innerText = record.date;
+            row.insertCell(3).innerText = record.shiftStart;
+            row.insertCell(4).innerText = record.actualArrival;
+            row.insertCell(5).innerHTML = `<span class="late-minute">${record.lateMinutes} خولەک</span>`;
+            row.insertCell(6).innerText = record.reason || '—';
+            row.insertCell(7).innerHTML = `<button class="delete-btn" style="background:#d32f2f;color:white;border:none;padding:4px 10px;border-radius:3px;cursor:pointer;" onclick="deleteLateRecord(${record.id})">سڕینەوە</button>`;
+        });
+    }
+    
+    function deleteLateRecord(id) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم تۆمارە؟')) {
+            let records = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+            records = records.filter(r => r.id !== id);
+            localStorage.setItem('lateRecords', JSON.stringify(records));
+            loadLateRecords();
+        }
+    }
+    
+    loadLateRecords();
+</script>
+</body>
+</html>
