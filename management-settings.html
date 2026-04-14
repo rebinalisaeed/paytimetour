@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دامەزراندنی سیستەم - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 180px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>⚙️ دامەزراندنی سیستەم (System Settings)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <form id="settingsForm">
+            <div class="silver-box">
+                <h3>🏢 زانیاری کۆمپانیا</h3>
+                <div class="info-row"><div class="info-label">ناوی کۆمپانیا:</div><div class="info-value"><input type="text" id="companyName" value="Pay Time Tour"></div></div>
+                <div class="info-row"><div class="info-label">ناونیشان:</div><div class="info-value"><input type="text" id="companyAddress" value="هەولێر، عێراق"></div></div>
+                <div class="info-row"><div class="info-label">تێلیفۆن:</div><div class="info-value"><input type="text" id="companyPhone" value="0750 123 4567"></div></div>
+                <div class="info-row"><div class="info-label">ئیمەیڵ:</div><div class="info-value"><input type="email" id="companyEmail" value="info@paytime.com"></div></div>
+            </div>
+            
+            <div class="silver-box">
+                <h3>🌐 ڕێکخستنەکانی سیستەم</h3>
+                <div class="info-row"><div class="info-label">زمان:</div><div class="info-value"><select id="systemLanguage"><option value="ckb" selected>کوردی</option><option value="ar">عەرەبی</option><option value="en">ئینگلیزی</option></select></div></div>
+                <div class="info-row"><div class="info-label">ناوچەی کاتی (Timezone):</div><div class="info-value"><select id="timezone"><option value="Asia/Baghdad" selected>Asia/Baghdad</option><option value="Asia/Dubai">Asia/Dubai</option></select></div></div>
+                <div class="info-row"><div class="info-label">فۆرماتی بەروار:</div><div class="info-value"><select id="dateFormat"><option value="YYYY-MM-DD" selected>YYYY-MM-DD</option><option value="DD/MM/YYYY">DD/MM/YYYY</option></select></div></div>
+                <div class="info-row"><div class="info-label">فۆرماتی کات:</div><div class="info-value"><select id="timeFormat"><option value="24h" selected>24 کاتژمێری</option><option value="12h">12 کاتژمێری (AM/PM)</option></select></div></div>
+            </div>
+            
+            <div class="silver-box">
+                <h3>🔔 ڕێکخستنەکانی ئاگادارکردنەوە</h3>
+                <div class="info-row"><div class="info-label">ئاگادارکردنەوە بە ئیمەیڵ:</div><div class="info-value"><input type="checkbox" id="emailNotifications" checked> چالاکە</div></div>
+                <div class="info-row"><div class="info-label">ئاگادارکردنەوە بۆ دواکەوتن:</div><div class="info-value"><input type="checkbox" id="lateNotification" checked> چالاکە</div></div>
+                <div class="info-row"><div class="info-label">ئاگادارکردنەوە بۆ غیاب:</div><div class="info-value"><input type="checkbox" id="absenceNotification" checked> چالاکە</div></div>
+            </div>
+            
+            <button type="button" class="save-btn" onclick="saveSystemSettings()">💾 پاشەکەوتکردنی ڕێکخستنەکان</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function loadSystemSettings() {
+        const settings = JSON.parse(localStorage.getItem('systemSettings') || '{}');
+        document.getElementById('companyName').value = settings.companyName || 'Pay Time Tour';
+        document.getElementById('companyAddress').value = settings.companyAddress || 'هەولێر، عێراق';
+        document.getElementById('companyPhone').value = settings.companyPhone || '0750 123 4567';
+        document.getElementById('companyEmail').value = settings.companyEmail || 'info@paytime.com';
+        document.getElementById('systemLanguage').value = settings.systemLanguage || 'ckb';
+        document.getElementById('timezone').value = settings.timezone || 'Asia/Baghdad';
+        document.getElementById('dateFormat').value = settings.dateFormat || 'YYYY-MM-DD';
+        document.getElementById('timeFormat').value = settings.timeFormat || '24h';
+        document.getElementById('emailNotifications').checked = settings.emailNotifications !== false;
+        document.getElementById('lateNotification').checked = settings.lateNotification !== false;
+        document.getElementById('absenceNotification').checked = settings.absenceNotification !== false;
+    }
+    
+    function saveSystemSettings() {
+        const settings = {
+            companyName: document.getElementById('companyName').value,
+            companyAddress: document.getElementById('companyAddress').value,
+            companyPhone: document.getElementById('companyPhone').value,
+            companyEmail: document.getElementById('companyEmail').value,
+            systemLanguage: document.getElementById('systemLanguage').value,
+            timezone: document.getElementById('timezone').value,
+            dateFormat: document.getElementById('dateFormat').value,
+            timeFormat: document.getElementById('timeFormat').value,
+            emailNotifications: document.getElementById('emailNotifications').checked,
+            lateNotification: document.getElementById('lateNotification').checked,
+            absenceNotification: document.getElementById('absenceNotification').checked,
+            updatedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('systemSettings', JSON.stringify(settings));
+        alert('✅ ڕێکخستنەکانی سیستەم پاشەکەوت کرا!');
+    }
+    
+    loadSystemSettings();
+</script>
+</body>
+</html>
