@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیستی هاتن و دەرچوون - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+        .filters select, .filters input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .attendance-table { width: 100%; border-collapse: collapse; }
+        .attendance-table th, .attendance-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .attendance-table th { background: #2d4a7a; color: white; }
+        .attendance-table tr:nth-child(even) { background: #f9f9f9; }
+        .checkin { color: #2e7d32; font-weight: bold; }
+        .checkout { color: #ff9800; font-weight: bold; }
+        .export-btn { background: #ff9800; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        .export-btn:hover { background: #f57c00; }
+        .delete-btn { background: #d32f2f; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; }
+        .delete-btn:hover { background: #b71c1c; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 لیستی هاتن و دەرچوون</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="filters">
+            <select id="filterType">
+                <option value="all">هەموو</option>
+                <option value="checkin">تەنها هاتن</option>
+                <option value="checkout">تەنها دەرچوون</option>
+            </select>
+            <input type="date" id="filterDate" placeholder="ڕێکەوت">
+            <input type="text" id="filterEmployee" placeholder="ناوی کارمەند">
+            <button class="export-btn" onclick="exportToCSV()">📎 Export to CSV</button>
+            <button onclick="loadRecords()" style="background:#2d4a7a; color:white; border:none; padding:8px 16px; border-radius:5px;">🔍 گەڕان</button>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="attendance-table" id="attendanceTable">
+                <thead>
+                    <tr><th>#</th><th>جۆر</th><th>ناوی کارمەند</th><th>کۆد</th><th>شوێن</th><th>کات</th><th>ڕێکەوت</th><th>تێبینی</th><th>کردار</th></tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadRecords() {
+        let records = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+        const filterType = document.getElementById('filterType').value;
+        const filterDate = document.getElementById('filterDate').value;
+        const filterEmployee = document.getElementById('filterEmployee').value.trim().toLowerCase();
+        
+        let filtered = records;
+        if (filterType !== 'all') filtered = filtered.filter(r => r.type === filterType);
+        if (filterDate) filtered = filtered.filter(r => r.date === filterDate);
+        if (filterEmployee) filtered = filtered.filter(r => r.employee.toLowerCase().includes(filterEmployee));
+        
+        filtered.sort((a, b) => b.id - a.id);
+        
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        filtered.forEach((record, index) => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = index + 1;
+            row.insertCell(1).innerHTML = `<span class="${record.type === 'checkin' ? 'checkin' : 'checkout'}">${record.type === 'checkin' ? '✅ هاتن' : '❌ دەرچوون'}</span>`;
+            row.insertCell(2).innerText = record.employee;
+            row.insertCell(3).innerText = record.employeeCode;
+            row.insertCell(4).innerText = record.location;
+            row.insertCell(5).innerText = record.time;
+            row.insertCell(6).innerText = record.date;
+            row.insertCell(7).innerText = record.note || '—';
+            row.insertCell(8).innerHTML = `<button class="delete-btn" onclick="deleteRecord(${record.id})">🗑</button>`;
+        });
+    }
+    
+    function deleteRecord(id) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم تۆمارە؟')) {
+            let records = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+            records = records.filter(r => r.id !== id);
+            localStorage.setItem('attendanceRecords', JSON.stringify(records));
+            loadRecords();
+            alert('تۆمار سڕایەوە!');
+        }
+    }
+    
+    function exportToCSV() {
+        const records = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+        if (records.length === 0) { alert('هیچ تۆمارێک نیە بۆ هەناردن!'); return; }
+        
+        let csv = "جۆر,ناوی کارمەند,کۆدی کارمەند,شوێن,کات,ڕێکەوت,تێبینی\n";
+        records.forEach(r => { csv += `${r.type === 'checkin' ? 'هاتن' : 'دەرچوون'},${r.employee},${r.employeeCode},${r.location},${r.time},${r.date},${r.note || ''}\n`; });
+        
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'attendance_records.csv';
+        link.click();
+        alert('فایل CSV داونلۆد کرا!');
+    }
+    
+    loadRecords();
+</script>
+</body>
+</html>
