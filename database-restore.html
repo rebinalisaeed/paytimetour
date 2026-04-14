@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restore - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: center; }
+        .file-input { margin: 15px 0; }
+        .restore-btn { background: #ff9800; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+        .restore-btn:hover { background: #f57c00; }
+        .warning { color: #d32f2f; font-size: 12px; margin-top: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔄 Restore - گەڕاندنەوەی داتاکان</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>📂 هەڵبژاردنی فایلی Backup</h3>
+            <p>تکایە فایلێکی Backup (.json) کە پێشتر دروستکراوە هەڵبژێرە</p>
+            <input type="file" id="backupFile" accept=".json" class="file-input">
+            <button class="restore-btn" onclick="restoreFromFile()">🔄 گەڕاندنەوە</button>
+            <div class="warning">⚠️ ئاگاداری: گەڕاندنەوە هەموو داتاکانی ئێستا دەسڕێتەوە!</div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 Backupەکان لە سیستەم</h3>
+            <div id="backupList"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function restoreFromFile() {
+        const fileInput = document.getElementById('backupFile');
+        const file = fileInput.files[0];
+        if (!file) { alert('تکایە فایلێک هەڵبژێرە!'); return; }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const backup = JSON.parse(e.target.result);
+                if (confirm('ئاگادار! ئەمە هەموو داتاکانی ئێستا دەسڕێتەوە. دڵنیای؟')) {
+                    localStorage.setItem('attendanceRecords', JSON.stringify(backup.attendanceRecords || []));
+                    localStorage.setItem('lateRecords', JSON.stringify(backup.lateRecords || []));
+                    localStorage.setItem('absenceRecords', JSON.stringify(backup.absenceRecords || []));
+                    localStorage.setItem('otRecords', JSON.stringify(backup.otRecords || []));
+                    localStorage.setItem('leaveRequests', JSON.stringify(backup.leaveRequests || []));
+                    alert('✅ داتاکان بە سەرکەوتوویی گەڕێنرایەوە!');
+                }
+            } catch(err) { alert('فایلەکە دروست نیە!'); }
+        };
+        reader.readAsText(file);
+    }
+    
+    function restoreFromBackup(backup) {
+        if (confirm(`دڵنیای لە گەڕاندنەوەی Backup "${backup.name}"؟`)) {
+            localStorage.setItem('attendanceRecords', JSON.stringify(backup.data.attendanceRecords || []));
+            localStorage.setItem('lateRecords', JSON.stringify(backup.data.lateRecords || []));
+            localStorage.setItem('absenceRecords', JSON.stringify(backup.data.absenceRecords || []));
+            localStorage.setItem('otRecords', JSON.stringify(backup.data.otRecords || []));
+            localStorage.setItem('leaveRequests', JSON.stringify(backup.data.leaveRequests || []));
+            alert('✅ داتاکان گەڕێنرایەوە!');
+            loadBackupList();
+        }
+    }
+    
+    function loadBackupList() {
+        const backups = JSON.parse(localStorage.getItem('databaseBackups') || '[]');
+        const container = document.getElementById('backupList');
+        if (backups.length === 0) { container.innerHTML = '<p style="color:#999;">هیچ Backupێک نیە</p>'; return; }
+        
+        container.innerHTML = backups.map(b => `
+            <div style="background:#f5f5f5;padding:12px;border-radius:5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+                <div><strong>📁 ${b.name}</strong><br><small>${b.createdAt}</small></div>
+                <button onclick='restoreFromBackup(${JSON.stringify(b)})' style="background:#ff9800;color:white;border:none;padding:5px12px;border-radius:3px;">🔄 گەڕاندنەوە</button>
+            </div>
+        `).join('');
+    }
+    
+    loadBackupList();
+</script>
+</body>
+</html>
