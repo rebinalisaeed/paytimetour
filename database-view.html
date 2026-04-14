@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بینینی داتاکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 1px solid #ccc; flex-wrap: wrap; }
+        .tab-btn { padding: 10px 20px; background: #e0e0e0; border: none; border-radius: 6px 6px 0 0; cursor: pointer; font-family: inherit; font-size: 13px; }
+        .tab-btn.active { background: #2d4a7a; color: white; }
+        .data-table { width: 100%; border-collapse: collapse; overflow-x: auto; display: block; }
+        .data-table th, .data-table td { border: 1px solid #ddd; padding: 8px; text-align: center; font-size: 12px; }
+        .data-table th { background: #2d4a7a; color: white; position: sticky; top: 0; }
+        .table-container { overflow-x: auto; max-height: 500px; overflow-y: auto; }
+        .stats { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-card { background: #e8e8e8; padding: 15px; border-radius: 8px; flex: 1; text-align: center; }
+        .stat-card h3 { color: #2d4a7a; margin-bottom: 5px; }
+        .stat-card .number { font-size: 24px; font-weight: bold; color: #2e7d32; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📊 بینینی داتاکان (View Data)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="stats">
+            <div class="stat-card"><h3>👥 کارمەندان</h3><div class="number" id="empCount">0</div></div>
+            <div class="stat-card"><h3>✅ هاتن و دەرچوون</h3><div class="number" id="attCount">0</div></div>
+            <div class="stat-card"><h3>⏰ دواکەوتن</h3><div class="number" id="lateCount">0</div></div>
+            <div class="stat-card"><h3>📋 مۆڵەت</h3><div class="number" id="leaveCount">0</div></div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="employees">👥 کارمەندان</button>
+            <button class="tab-btn" data-tab="attendance">✅ هاتن و دەرچوون</button>
+            <button class="tab-btn" data-tab="late">⏰ دواکەوتنەکان</button>
+            <button class="tab-btn" data-tab="absence">🚫 غیابەکان</button>
+            <button class="tab-btn" data-tab="ot">⏱️ Overtime</button>
+            <button class="tab-btn" data-tab="leave">📋 مۆڵەتەکان</button>
+        </div>
+        
+        <div id="employees" class="tab-content active">
+            <div class="table-container"><table class="data-table" id="employeesTable"><thead><tr><th>کۆد</th><th>ناو</th><th>گروپ</th><th>جۆر</th><th>شوێن</th><th>پلە</th><th>مۆبایل</th></tr></thead><tbody id="employeesBody"></tbody></table></div>
+        </div>
+        <div id="attendance" class="tab-content"><div class="table-container"><table class="data-table" id="attTable"><thead><tr><th>#</th><th>جۆر</th><th>ناو</th><th>کۆد</th><th>شوێن</th><th>کات</th><th>ڕێکەوت</th></tr></thead><tbody id="attBody"></tbody></table></div></div>
+        <div id="late" class="tab-content"><div class="table-container"><table class="data-table" id="lateTable"><thead><tr><th>#</th><th>ناو</th><th>ڕێکەوت</th><th>کاتی شەفت</th><th>کاتی هاتن</th><th>ماوەی دواکەوتن</th></tr></thead><tbody id="lateBody"></tbody></table></div></div>
+        <div id="absence" class="tab-content"><div class="table-container"><table class="data-table" id="absenceTable"><thead><tr><th>#</th><th>ناو</th><th>دەستپێک</th><th>کۆتایی</th><th>ڕۆژ</th><th>جۆر</th></tr></thead><tbody id="absenceBody"></tbody></table></div></div>
+        <div id="ot" class="tab-content"><div class="table-container"><table class="data-table" id="otTable"><thead><tr><th>#</th><th>ناو</th><th>ڕێکەوت</th><th>کاتژمێر</th><th>نرخ</th><th>کۆی گشتی</th></tr></thead><tbody id="otBody"></tbody></table></div></div>
+        <div id="leave" class="tab-content"><div class="table-container"><table class="data-table" id="leaveTable"><thead><tr><th>#</th><th>ناو</th><th>جۆر</th><th>دەستپێک</th><th>کۆتایی</th><th>ڕۆژ</th><th>دۆخ</th></tr></thead><tbody id="leaveBody"></tbody></table></div></div>
+    </div>
+</div>
+
+<script>
+    const employees = [
+        { name:'ئەحمەد علی', code:'1001', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی', position:'ئەندازیار', mobile:'07501234567' },
+        { name:'سارا محمد', code:'1002', group:'گروپ B', type:'بەکارهاتوو', location:'لقی باکور', position:'بەڕێوەبەر', mobile:'07701234567' },
+        { name:'کارزان حسێن', code:'1003', group:'گروپ A', type:'بەردەوام', location:'شاخەی سەرەکی', position:'تەکنیکار', mobile:'07801234567' }
+    ];
+    
+    function loadData() {
+        document.getElementById('empCount').innerText = employees.length;
+        
+        const attendance = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+        const late = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+        const absence = JSON.parse(localStorage.getItem('absenceRecords') || '[]');
+        const ot = JSON.parse(localStorage.getItem('otRecords') || '[]');
+        const leave = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+        
+        document.getElementById('attCount').innerText = attendance.length;
+        document.getElementById('lateCount').innerText = late.length;
+        document.getElementById('leaveCount').innerText = leave.length;
+        
+        // Employees Table
+        document.getElementById('employeesBody').innerHTML = employees.map(e => `<tr><td>${e.code}</td><td>${e.name}</td><td>${e.group}</td><td>${e.type}</td><td>${e.location}</td><td>${e.position}</td><td>${e.mobile}</td></tr>`).join('');
+        
+        // Attendance Table
+        document.getElementById('attBody').innerHTML = attendance.map((a,i) => `<tr><td>${i+1}</td><td>${a.type === 'checkin' ? '✅ هاتن' : '❌ دەرچوون'}</td><td>${a.employee}</td><td>${a.employeeCode}</td><td>${a.location}</td><td>${a.time}</td><td>${a.date}</td></tr>`).join('');
+        
+        // Late Table
+        document.getElementById('lateBody').innerHTML = late.map((l,i) => `<tr><td>${i+1}</td><td>${l.employee}</td><td>${l.date}</td><td>${l.shiftStart}</td><td>${l.actualArrival}</td><td class="late-minute">${l.lateMinutes} خولەک</td></tr>`).join('');
+        
+        // Absence Table
+        document.getElementById('absenceBody').innerHTML = absence.map((a,i) => `<tr><td>${i+1}</td><td>${a.employee}</td><td>${a.startDate}</td><td>${a.endDate}</td><td>${a.days}</td><td>${a.absenceType}</td></tr>`).join('');
+        
+        // OT Table
+        document.getElementById('otBody').innerHTML = ot.map((o,i) => `<tr><td>${i+1}</td><td>${o.employee}</td><td>${o.date}</td><td>${o.hours}</td><td>${o.rate || '—'}</td><td>${o.total ? o.total + ' IQD' : '—'}</td></tr>`).join('');
+        
+        // Leave Table
+        document.getElementById('leaveBody').innerHTML = leave.map((l,i) => `<tr><td>${i+1}</td><td>${l.employee}</td><td>${l.leaveType}</td><td>${l.startDate}</td><td>${l.endDate}</td><td>${l.days}</td><td class="${l.status}">${l.status === 'pending' ? 'چاوەڕوان' : l.status === 'approved' ? 'پەسەندکراو' : 'ڕەتکراو'}</td></tr>`).join('');
+    }
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
+        });
+    });
+    
+    loadData();
+</script>
+</body>
+</html>
