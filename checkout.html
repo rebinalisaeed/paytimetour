@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تۆمارکردنی دەرچوون (Check-out) - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 140px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; }
+        .checkout-btn { background: #ff9800; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; width: 100%; margin-top: 10px; }
+        .checkout-btn:hover { background: #f57c00; }
+        .datetime { font-size: 24px; font-weight: 700; color: #2d4a7a; text-align: center; margin-bottom: 20px; }
+        .success-box { background: #c8e6c9; border: 1px solid #2e7d32; border-radius: 8px; padding: 15px; margin-bottom: 20px; display: none; }
+        .success-box.show { display: block; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>❌ تۆمارکردنی دەرچوون (Check-out)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="datetime" id="currentDateTime"></div>
+        
+        <div class="success-box" id="successBox">
+            <p style="color:#2e7d32; text-align:center;">✅ دەرچوون بە سەرکەوتوویی تۆمار کرا!</p>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 زانیاری کارمەند</h3>
+            <div class="info-row">
+                <div class="info-label">ناوی کارمەند:</div>
+                <div class="info-value">
+                    <select id="employeeSelect">
+                        <option value="">-- هەڵبژاردنی کارمەند --</option>
+                        <option value="ئەحمەد علی">ئەحمەد علی (1001)</option>
+                        <option value="سارا محمد">سارا محمد (1002)</option>
+                        <option value="کارزان حسێن">کارزان حسێن (1003)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">کۆدی کارمەند:</div>
+                <div class="info-value"><input type="text" id="employeeCode" placeholder="کۆدی کارمەند"></div>
+            </div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📍 شوێنی دەرچوون</h3>
+            <div class="info-row">
+                <div class="info-label">شوێن:</div>
+                <div class="info-value">
+                    <select id="locationSelect">
+                        <option value="ئۆفیسی سەرەکی">ئۆفیسی سەرەکی</option>
+                        <option value="لقی باکور">لقی باکور</option>
+                        <option value="Remote (لە ماڵەوە)">Remote (لە ماڵەوە)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>⏰ کاتی دەرچوون</h3>
+            <div class="info-row">
+                <div class="info-label">کات (ئۆتۆماتیک):</div>
+                <div class="info-value"><span id="checkoutTime">--:--:--</span></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">ڕێکەوت:</div>
+                <div class="info-value"><span id="checkoutDate">--/--/----</span></div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">تێبینی:</div>
+                <div class="info-value"><textarea id="checkoutNote" rows="2" placeholder="تێبینی (ئەگەر هەیە)..."></textarea></div>
+            </div>
+        </div>
+        
+        <button class="checkout-btn" onclick="saveCheckout()">❌ تۆمارکردنی دەرچوون (Check-out)</button>
+    </div>
+</div>
+
+<script>
+    function updateDateTime() {
+        const now = new Date();
+        document.getElementById('currentDateTime').innerHTML = `${now.toLocaleDateString('ckb')} | ${now.toLocaleTimeString('ckb')}`;
+        document.getElementById('checkoutTime').innerText = now.toLocaleTimeString('ckb');
+        document.getElementById('checkoutDate').innerText = now.toLocaleDateString('ckb');
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+    
+    document.getElementById('employeeSelect').addEventListener('change', function() {
+        const codeMap = { 'ئەحمەد علی': '1001', 'سارا محمد': '1002', 'کارزان حسێن': '1003' };
+        document.getElementById('employeeCode').value = codeMap[this.value] || '';
+    });
+    
+    function saveCheckout() {
+        const employee = document.getElementById('employeeSelect').value;
+        if (!employee) { alert('تکایە کارمەندێک هەڵبژێرە!'); return; }
+        
+        const checkoutData = {
+            id: Date.now(),
+            type: 'checkout',
+            employee: employee,
+            employeeCode: document.getElementById('employeeCode').value,
+            location: document.getElementById('locationSelect').value,
+            time: document.getElementById('checkoutTime').innerText,
+            date: document.getElementById('checkoutDate').innerText,
+            note: document.getElementById('checkoutNote').value,
+            timestamp: new Date().toISOString()
+        };
+        
+        let records = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+        records.push(checkoutData);
+        localStorage.setItem('attendanceRecords', JSON.stringify(records));
+        
+        document.getElementById('successBox').classList.add('show');
+        setTimeout(() => {
+            document.getElementById('successBox').classList.remove('show');
+            document.getElementById('employeeSelect').value = '';
+            document.getElementById('employeeCode').value = '';
+            document.getElementById('checkoutNote').value = '';
+        }, 2000);
+        
+        alert(`✅ دەرچوون بۆ کارمەندی ${employee} لە کاتی ${checkoutData.time}دا تۆمار کرا!`);
+    }
+</script>
+</body>
+</html>
