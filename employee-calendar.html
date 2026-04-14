@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendarی کارمەندان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .calendar-nav button { background: #2d4a7a; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .calendar-day-header { background: #2d4a7a; color: white; padding: 10px; text-align: center; font-weight: bold; border-radius: 5px; }
+        .calendar-day { background: #f5f5f5; min-height: 100px; padding: 8px; border-radius: 5px; position: relative; }
+        .calendar-day.today { background: #B8CFF0; border: 2px solid #2d4a7a; }
+        .day-number { font-weight: bold; color: #2d4a7a; margin-bottom: 5px; }
+        .event { font-size: 10px; padding: 2px 4px; margin-top: 2px; border-radius: 3px; cursor: pointer; }
+        .event-checkin { background: #c8e6c9; color: #2e7d32; }
+        .event-checkout { background: #ffe0b2; color: #ff9800; }
+        .event-leave { background: #ffcdd2; color: #d32f2f; }
+        .event-ot { background: #e1bee7; color: #7b1fa2; }
+        .filters { margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .filters select, .filters input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .legend { display: flex; gap: 15px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
+        .legend span { display: inline-block; width: 20px; height: 12px; margin-left: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📅 Calendarی کارمەندان</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="filters">
+            <select id="employeeSelect">
+                <option value="">-- هەموو کارمەندان --</option>
+                <option value="ئەحمەد علی">ئەحمەد علی</option>
+                <option value="سارا محمد">سارا محمد</option>
+                <option value="کارزان حسێن">کارزان حسێن</option>
+            </select>
+            <select id="yearSelect"></select>
+            <select id="monthSelect"></select>
+        </div>
+        
+        <div class="calendar-nav">
+            <button onclick="changeMonth(-1)">◀ مانگی پێشوو</button>
+            <h2 id="monthYearDisplay"></h2>
+            <button onclick="changeMonth(1)">مانگی دواتر ▶</button>
+        </div>
+        
+        <div class="calendar-grid" id="calendarGrid"></div>
+        
+        <div class="legend">
+            <div><span style="background:#c8e6c9;"></span> هاتن (Check-in)</div>
+            <div><span style="background:#ffe0b2;"></span> دەرچوون (Check-out)</div>
+            <div><span style="background:#ffcdd2;"></span> مۆڵەت (Leave)</div>
+            <div><span style="background:#e1bee7;"></span> Overtime (OT)</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentDate = new Date();
+    
+    function populateYearMonth() {
+        const yearSelect = document.getElementById('yearSelect');
+        const monthSelect = document.getElementById('monthSelect');
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth();
+        
+        yearSelect.innerHTML = '';
+        for (let y = 2020; y <= 2030; y++) {
+            const option = document.createElement('option');
+            option.value = y;
+            option.textContent = y;
+            if (y === currentYear) option.selected = true;
+            yearSelect.appendChild(option);
+        }
+        
+        monthSelect.innerHTML = '';
+        const months = ['کانوونی دووەم', 'شوبات', 'ئازار', 'نیسان', 'مایس', 'حوزەیران', 'تەمموز', 'ئاب', 'ئەیلول', 'تشرینی یەکەم', 'تشرینی دووەم', 'کانوونی یەکەم'];
+        months.forEach((month, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = month;
+            if (index === currentMonth) option.selected = true;
+            monthSelect.appendChild(option);
+        });
+        
+        yearSelect.addEventListener('change', () => updateCalendar());
+        monthSelect.addEventListener('change', () => updateCalendar());
+    }
+    
+    function changeMonth(delta) {
+        let year = parseInt(document.getElementById('yearSelect').value);
+        let month = parseInt(document.getElementById('monthSelect').value);
+        month += delta;
+        if (month < 0) { month = 11; year--; }
+        if (month > 11) { month = 0; year++; }
+        document.getElementById('yearSelect').value = year;
+        document.getElementById('monthSelect').value = month;
+        updateCalendar();
+    }
+    
+    function getEventsForDate(year, month, day) {
+        const employee = document.getElementById('employeeSelect').value;
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const events = [];
+        
+        const attendance = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+        attendance.forEach(record => {
+            if (record.date === dateStr && (!employee || record.employee === employee)) {
+                events.push({ type: record.type, text: record.type === 'checkin' ? '✅ هاتن' : '❌ دەرچوون', time: record.time });
+            }
+        });
+        
+        const leaves = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+        leaves.forEach(leave => {
+            if (leave.status === 'approved' && (!employee || leave.employee === employee)) {
+                const start = new Date(leave.startDate);
+                const end = new Date(leave.endDate);
+                const current = new Date(year, month, day);
+                if (current >= start && current <= end) {
+                    events.push({ type: 'leave', text: `📋 مۆڵەت (${leave.leaveType})` });
+                }
+            }
+        });
+        
+        const otRecords = JSON.parse(localStorage.getItem('otRecords') || '[]');
+        otRecords.forEach(ot => {
+            if (ot.date === dateStr && (!employee || ot.employee === employee)) {
+                events.push({ type: 'ot', text: `⏱️ OT: ${ot.hours} کاتژمێر` });
+            }
+        });
+        
+        return events;
+    }
+    
+    function updateCalendar() {
+        const year = parseInt(document.getElementById('yearSelect').value);
+        const month = parseInt(document.getElementById('monthSelect').value);
+        currentDate = new Date(year, month, 1);
+        
+        document.getElementById('monthYearDisplay').innerText = `${document.getElementById('monthSelect').options[month].text} ${year}`;
+        
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const today = new Date();
+        const isToday = (y, m, d) => y === today.getFullYear() && m === today.getMonth() && d === today.getDate();
+        
+        let gridHtml = '';
+        const weekdays = ['شەممە', 'یەکشەممە', 'دووشەممە', 'سێشەممە', 'چوارشەممە', 'پێنجشەممە', 'هەینی'];
+        weekdays.forEach(day => { gridHtml += `<div class="calendar-day-header">${day}</div>`; });
+        
+        for (let i = 0; i < firstDay; i++) { gridHtml += `<div class="calendar-day"></div>`; }
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+            const events = getEventsForDate(year, month, day);
+            let eventsHtml = '';
+            events.forEach(event => {
+                let className = '';
+                if (event.type === 'checkin') className = 'event-checkin';
+                else if (event.type === 'checkout') className = 'event-checkout';
+                else if (event.type === 'leave') className = 'event-leave';
+                else if (event.type === 'ot') className = 'event-ot';
+                eventsHtml += `<div class="event ${className}" title="${event.time || ''}">${event.text}</div>`;
+            });
+            
+            gridHtml += `<div class="calendar-day ${isToday(year, month, day) ? 'today' : ''}">
+                            <div class="day-number">${day}</div>
+                            ${eventsHtml}
+                         </div>`;
+        }
+        
+        document.getElementById('calendarGrid').innerHTML = gridHtml;
+    }
+    
+    document.getElementById('employeeSelect').addEventListener('change', () => updateCalendar());
+    populateYearMonth();
+    updateCalendar();
+</script>
+</body>
+</html>
