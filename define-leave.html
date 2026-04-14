@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پێناسەکردنی مۆڵەت - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 200px; font-weight: 700; color: #2d4a7a; font-size: 13px; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select, .info-value textarea { width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 13px; }
+        .info-value input[type="checkbox"] { width: auto; margin-left: 10px; }
+        .info-value .checkbox-label { display: inline-flex; align-items: center; gap: 8px; }
+        .info-value input[type="number"] { max-width: 120px; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-size: 14px; margin-top: 10px; }
+        .save-btn:hover { background: #1b5e20; }
+        .leave-list { margin-top: 20px; }
+        .leave-item { background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .leave-info h4 { color: #2d4a7a; margin-bottom: 5px; }
+        .leave-info p { font-size: 12px; color: #666; }
+        .delete-btn { background: #d32f2f; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; }
+        h3 { color: #2d4a7a; margin-bottom: 20px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+        hr { margin: 15px 0; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; border-bottom: 1px solid #ccc; }
+        .tab-btn { padding: 8px 16px; background: #e0e0e0; border: none; border-radius: 6px 6px 0 0; cursor: pointer; font-family: inherit; font-size: 13px; }
+        .tab-btn.active { background: #2d4a7a; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 پێناسەکردنی مۆڵەت (Leave Definition)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <!-- تابەکان -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('addTab')">➕ زیادکردنی مۆڵەتی نوێ</button>
+            <button class="tab-btn" onclick="showTab('listTab')">📋 لیستی مۆڵەتەکان</button>
+        </div>
+
+        <!-- تاب 1: زیادکردنی مۆڵەتی نوێ -->
+        <div id="addTab" class="tab-content">
+            <form id="leaveForm">
+                <!-- 1. زانیاری سەرەکی مۆڵەت -->
+                <div class="silver-box">
+                    <h3>🔹 1. زانیاری سەرەکی مۆڵەت</h3>
+                    <div class="info-row">
+                        <div class="info-label">ناوی مۆڵەت:</div>
+                        <div class="info-value"><input type="text" id="leaveName" placeholder="مثال: مۆڵەتی ساڵانە" required></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">کۆدی مۆڵەت:</div>
+                        <div class="info-value"><input type="text" id="leaveCode" placeholder="مثال: AL-001"></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">جۆری مۆڵەت:</div>
+                        <div class="info-value">
+                            <select id="leaveType">
+                                <option value="annual">ساڵانە (Annual Leave)</option>
+                                <option value="sick">نەخۆشی (Sick Leave)</option>
+                                <option value="unpaid">بێ مووچە (Unpaid Leave)</option>
+                                <option value="emergency">فریاکەوتن (Emergency Leave)</option>
+                                <option value="maternity">مۆڵەتی منداڵبوون (Maternity Leave)</option>
+                                <option value="paternity">بابەتی (Paternity Leave)</option>
+                                <option value="study">خوێندن (Study Leave)</option>
+                                <option value="other">هیتر (Other)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">ڕەنگ (بۆ نیشاندان):</div>
+                        <div class="info-value"><input type="color" id="leaveColor" value="#4a6fa5" style="width:80px;"></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">وەسف:</div>
+                        <div class="info-value"><textarea id="leaveDesc" rows="2" placeholder="وەسفی مۆڵەت..."></textarea></div>
+                    </div>
+                </div>
+
+                <!-- 2. ژمارە و کۆبوونەوە (Accrual) -->
+                <div class="silver-box">
+                    <h3>🔹 2. ژمارە و کۆبوونەوە (Accrual)</h3>
+                    <div class="info-row">
+                        <div class="info-label">ژمارەی ڕۆژەکان لە ساڵدا:</div>
+                        <div class="info-value"><input type="number" id="daysPerYear" value="21" min="0" max="365" style="width:120px;"> ڕۆژ</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">کۆبوونەوە (Accrual):</div>
+                        <div class="info-value">
+                            <select id="accrualType">
+                                <option value="yearly">ساڵانە (لە سەرەتای ساڵدا)</option>
+                                <option value="monthly">مانگانە (1.75 ڕۆژ لە هەر مانگدا)</option>
+                                <option value="quarterly">سێ مانگانە</option>
+                                <option value="none">کۆنابێتەوە (بەکارناهێنرێت)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">زیاترین ڕۆژ (Maximum):</div>
+                        <div class="info-value"><input type="number" id="maxDays" value="30" min="0" max="365" style="width:120px;"> ڕۆژ</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">گواستنەوە بۆ ساڵی داهاتوو:</div>
+                        <div class="info-value">
+                            <select id="carryOver">
+                                <option value="yes">بەڵێ (تاوەکو 10 ڕۆژ)</option>
+                                <option value="no">نا (لە کۆتایی ساڵدا دەسڕێتەوە)</option>
+                                <option value="partial">بەشێکی (تاوەکو 5 ڕۆژ)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. مەرجەکان -->
+                <div class="silver-box">
+                    <h3>🔹 3. مەرجەکان (Eligibility Rules)</h3>
+                    <div class="info-row">
+                        <div class="info-label">کەمترین ماوەی کارکردن پێش مۆڵەت:</div>
+                        <div class="info-value"><input type="number" id="minServiceMonths" value="3" style="width:100px;"> مانگ</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">پێویستی بە بەڵگە:</div>
+                        <div class="info-value">
+                            <label class="checkbox-label"><input type="checkbox" id="requiresDocument"> بەڵێ (پێویستی بە بەڵگە هەیە)</label>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">جۆری بەڵگە:</div>
+                        <div class="info-value"><input type="text" id="documentType" placeholder="مثال: ڕاپۆرتی پزیشکی" disabled></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">پێویستی بە پەسەندکردنی بەڕێوەبەر:</div>
+                        <div class="info-value">
+                            <label class="checkbox-label"><input type="checkbox" id="requiresApproval" checked> بەڵێ</label>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">ئاستی پەسەندکردن:</div>
+                        <div class="info-value">
+                            <select id="approvalLevel">
+                                <option value="manager">سەرپەرشتیاری ڕاستەوخۆ</option>
+                                <option value="hr">بەشی کارمەندان (HR)</option>
+                                <option value="both">هەردووکیان</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. مۆڵەتی بە مووچە و بێ مووچە -->
+                <div class="silver-box">
+                    <h3>🔹 4. مۆڵەتی بە مووچە و بێ مووچە</h3>
+                    <div class="info-row">
+                        <div class="info-label">جۆری مووچە لەم مۆڵەتەدا:</div>
+                        <div class="info-value">
+                            <select id="payType">
+                                <option value="full">بە مووچەی تەواو</option>
+                                <option value="partial">بەشێک لە مووچە (50%)</option>
+                                <option value="unpaid">بێ مووچە</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="info-row" id="partialPayRow" style="display:none;">
+                        <div class="info-label">ڕێژەی مووچە:</div>
+                        <div class="info-value"><input type="number" id="partialPayPercent" value="50" min="0" max="100" style="width:100px;"> %</div>
+                    </div>
+                </div>
+
+                <!-- 5. پەیوەندی بە سیستەم -->
+                <div class="silver-box">
+                    <h3>🔹 5. پەیوەندی بە سیستەم</h3>
+                    <div class="info-row">
+                        <div class="info-label">دەتوانرێت لە ڕێگەی ئەپڵیکەیشنەوە داوا بکرێت:</div>
+                        <div class="info-value">
+                            <label class="checkbox-label"><input type="checkbox" id="mobileRequest" checked> بەڵێ</label>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">ئاگادارکردنەوە بە ئیمەیڵ:</div>
+                        <div class="info-value">
+                            <label class="checkbox-label"><input type="checkbox" id="emailNotification" checked> بەڵێ</label>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">دەستکاری بۆ هەموو کارمەندان:</div>
+                        <div class="info-value">
+                            <label class="checkbox-label"><input type="checkbox" id="applyToAll" checked> بەڵێ</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. تێبینی -->
+                <div class="silver-box">
+                    <h3>🔹 6. تێبینی</h3>
+                    <div class="info-row">
+                        <div class="info-label">تێبینی:</div>
+                        <div class="info-value"><textarea id="leaveNotes" rows="3" placeholder="تێبینی تایبەتی بۆ ئەم مۆڵەتە..."></textarea></div>
+                    </div>
+                </div>
+
+                <button type="button" class="save-btn" onclick="saveLeaveDefinition()">💾 پاشەکەوتکردنی مۆڵەت</button>
+            </form>
+        </div>
+
+        <!-- تاب 2: لیستی مۆڵەتەکان -->
+        <div id="listTab" class="tab-content" style="display:none;">
+            <div class="silver-box">
+                <h3>📋 لیستی مۆڵەتە پێناسەکراوەکان</h3>
+                <div id="leaveListContainer" class="leave-list">
+                    <div style="color:#999; text-align:center; padding:20px;">هیچ مۆڵەتێک زیاد نەکراوە</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Array بۆ هەڵگرتنی مۆڵەتەکان
+    let leaveDefinitions = [];
+
+    // بارکردنی مۆڵەتەکان لە localStorage
+    function loadLeavesFromStorage() {
+        const stored = localStorage.getItem('leaveDefinitions');
+        if (stored) {
+            leaveDefinitions = JSON.parse(stored);
+            displayLeaveList();
+        }
+    }
+
+    // پاشەکەوتکردنی مۆڵەتەکان بۆ localStorage
+    function saveLeavesToStorage() {
+        localStorage.setItem('leaveDefinitions', JSON.stringify(leaveDefinitions));
+    }
+
+    // نمایش کردنی لیستی مۆڵەتەکان
+    function displayLeaveList() {
+        const container = document.getElementById('leaveListContainer');
+        if (!container) return;
+        
+        if (leaveDefinitions.length === 0) {
+            container.innerHTML = '<div style="color:#999; text-align:center; padding:20px;">هیچ مۆڵەتێک زیاد نەکراوە</div>';
+            return;
+        }
+        
+        let html = '';
+        leaveDefinitions.forEach((leave, index) => {
+            html += `
+                <div class="leave-item">
+                    <div class="leave-info">
+                        <h4 style="color:${leave.color};">📌 ${leave.name} (${leave.code})</h4>
+                        <p>جۆر: ${leave.leaveType} | ڕۆژ لە ساڵدا: ${leave.daysPerYear} | ماکس: ${leave.maxDays}</p>
+                        <p>کۆبوونەوە: ${leave.accrualType} | گواستنەوە: ${leave.carryOver}</p>
+                        <p>${leave.description ? 'وەسف: ' + leave.description.substring(0, 50) : ''}</p>
+                    </div>
+                    <button class="delete-btn" onclick="deleteLeave(${index})">🗑 سڕینەوە</button>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // زیادکردنی مۆڵەتی نوێ
+    function saveLeaveDefinition() {
+        const name = document.getElementById('leaveName').value.trim();
+        if (!name) {
+            alert('تکایە ناوی مۆڵەت پڕ بکەوە!');
+            return;
+        }
+
+        const leaveData = {
+            name: name,
+            code: document.getElementById('leaveCode').value || '--',
+            leaveType: document.getElementById('leaveType').options[document.getElementById('leaveType').selectedIndex].text,
+            leaveTypeValue: document.getElementById('leaveType').value,
+            color: document.getElementById('leaveColor').value,
+            description: document.getElementById('leaveDesc').value,
+            daysPerYear: document.getElementById('daysPerYear').value,
+            accrualType: document.getElementById('accrualType').options[document.getElementById('accrualType').selectedIndex].text,
+            maxDays: document.getElementById('maxDays').value,
+            carryOver: document.getElementById('carryOver').options[document.getElementById('carryOver').selectedIndex].text,
+            minServiceMonths: document.getElementById('minServiceMonths').value,
+            requiresDocument: document.getElementById('requiresDocument').checked,
+            documentType: document.getElementById('documentType').value,
+            requiresApproval: document.getElementById('requiresApproval').checked,
+            approvalLevel: document.getElementById('approvalLevel').options[document.getElementById('approvalLevel').selectedIndex].text,
+            payType: document.getElementById('payType').options[document.getElementById('payType').selectedIndex].text,
+            partialPayPercent: document.getElementById('partialPayPercent').value,
+            mobileRequest: document.getElementById('mobileRequest').checked,
+            emailNotification: document.getElementById('emailNotification').checked,
+            applyToAll: document.getElementById('applyToAll').checked,
+            notes: document.getElementById('leaveNotes').value,
+            createdDate: new Date().toLocaleString()
+        };
+
+        leaveDefinitions.push(leaveData);
+        saveLeavesToStorage();
+        displayLeaveList();
+        
+        // ڕوونکردنەوەی فۆڕم
+        document.getElementById('leaveForm').reset();
+        document.getElementById('leaveCode').value = '';
+        document.getElementById('leaveColor').value = '#4a6fa5';
+        document.getElementById('daysPerYear').value = '21';
+        document.getElementById('maxDays').value = '30';
+        document.getElementById('minServiceMonths').value = '3';
+        
+        alert(`✅ مۆڵەتی "${name}" بە سەرکەوتوویی زیاد کرا!`);
+        
+        // چوون بۆ تابی لیست
+        showTab('listTab');
+    }
+
+    // سڕینەوەی مۆڵەت
+    function deleteLeave(index) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم مۆڵەتە؟')) {
+            leaveDefinitions.splice(index, 1);
+            saveLeavesToStorage();
+            displayLeaveList();
+            alert('مۆڵەت سڕایەوە!');
+        }
+    }
+
+    // گۆڕینی تابەکان
+    function showTab(tabId) {
+        const addTab = document.getElementById('addTab');
+        const listTab = document.getElementById('listTab');
+        const tabs = document.querySelectorAll('.tab-btn');
+        
+        if (tabId === 'addTab') {
+            addTab.style.display = 'block';
+            listTab.style.display = 'none';
+            tabs[0].classList.add('active');
+            tabs[1].classList.remove('active');
+        } else {
+            addTab.style.display = 'none';
+            listTab.style.display = 'block';
+            tabs[0].classList.remove('active');
+            tabs[1].classList.add('active');
+            displayLeaveList();
+        }
+    }
+
+    // چالاککردن/ناچالاککردنی خانەی جۆری بەڵگە
+    document.getElementById('requiresDocument').addEventListener('change', function(e) {
+        document.getElementById('documentType').disabled = !e.target.checked;
+    });
+
+    // نمایش کردنی ڕێژەی مووچە بۆ partial pay
+    document.getElementById('payType').addEventListener('change', function(e) {
+        const partialRow = document.getElementById('partialPayRow');
+        partialRow.style.display = e.target.value === 'partial' ? 'flex' : 'none';
+    });
+
+    // بارکردنی مۆڵەتەکان کە پەڕە بار دەبێت
+    loadLeavesFromStorage();
+</script>
+</body>
+</html>
