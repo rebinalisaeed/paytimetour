@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Settings - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .notif-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #ccc; }
+        .notif-item:last-child { border-bottom: none; }
+        .notif-item label { font-weight: 600; color: #2d4a7a; }
+        .save-btn { background: #2e7d32; color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔔 ڕێکخستنەکانی ئاگادارکردنەوە (Notification Settings)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="silver-box">
+            <h3>📧 ئاگادارکردنەوە بە ئیمەیڵ</h3>
+            <div class="notif-item"><label>ئاگادارکردنەوە بۆ دواکەوتن:</label><input type="checkbox" id="notifLate"></div>
+            <div class="notif-item"><label>ئاگادارکردنەوە بۆ غیاب:</label><input type="checkbox" id="notifAbsence"></div>
+            <div class="notif-item"><label>ئاگادارکردنەوە بۆ داواکاری مۆڵەت:</label><input type="checkbox" id="notifLeaveRequest"></div>
+            <div class="notif-item"><label>ئاگادارکردنەوە بۆ پەسەندکردنی مۆڵەت:</label><input type="checkbox" id="notifLeaveApproved"></div>
+            <div class="notif-item"><label>ڕاپۆرتی هەفتانە:</label><input type="checkbox" id="notifWeeklyReport"></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📱 ئاگادارکردنەوە لە ناو سیستەم</h3>
+            <div class="notif-item"><label>پیشاندانی ئاگاداری لە ناوەوە:</label><input type="checkbox" id="inAppNotifications" checked></div>
+            <div class="notif-item"><label>پۆپ-ئەپ بۆ هاتن و دەرچوون:</label><input type="checkbox" id="popupAttendance"></div>
+        </div>
+        
+        <button class="save-btn" onclick="saveNotificationSettings()">💾 پاشەکەوتکردن</button>
+    </div>
+</div>
+
+<script>
+    function loadNotificationSettings() {
+        const settings = JSON.parse(localStorage.getItem('notificationSettings') || '{}');
+        document.getElementById('notifLate').checked = settings.notifLate !== false;
+        document.getElementById('notifAbsence').checked = settings.notifAbsence !== false;
+        document.getElementById('notifLeaveRequest').checked = settings.notifLeaveRequest !== false;
+        document.getElementById('notifLeaveApproved').checked = settings.notifLeaveApproved !== false;
+        document.getElementById('notifWeeklyReport').checked = settings.notifWeeklyReport || false;
+        document.getElementById('inAppNotifications').checked = settings.inAppNotifications !== false;
+        document.getElementById('popupAttendance').checked = settings.popupAttendance || false;
+    }
+    
+    function saveNotificationSettings() {
+        const settings = {
+            notifLate: document.getElementById('notifLate').checked,
+            notifAbsence: document.getElementById('notifAbsence').checked,
+            notifLeaveRequest: document.getElementById('notifLeaveRequest').checked,
+            notifLeaveApproved: document.getElementById('notifLeaveApproved').checked,
+            notifWeeklyReport: document.getElementById('notifWeeklyReport').checked,
+            inAppNotifications: document.getElementById('inAppNotifications').checked,
+            popupAttendance: document.getElementById('popupAttendance').checked,
+            updatedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('notificationSettings', JSON.stringify(settings));
+        alert('✅ ڕێکخستنەکانی ئاگادارکردنەوە پاشەکەوت کرا!');
+    }
+    
+    loadNotificationSettings();
+</script>
+</body>
+</html>
