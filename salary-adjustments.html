@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زیادکردن و کەمکردنی مووچە - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 160px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .adjustment-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .adjustment-table th, .adjustment-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .adjustment-table th { background: #2d4a7a; color: white; }
+        .add-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
+        .edit-btn { background: #ff9800; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; }
+        .delete-btn { background: #d32f2f; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 25px; border-radius: 10px; width: 500px; max-width: 90%; }
+        .modal-content input, .modal-content select { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>➕➖ زیادکردن و کەمکردنی مووچە (Salary Adjustments)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <button class="add-btn" onclick="openAdjustmentModal()">➕ زیادکردنی ڕێکخستنی نوێ</button>
+        
+        <div style="overflow-x: auto;">
+            <table class="adjustment-table" id="adjustmentsTable">
+                <thead>
+                    <tr><th>#</th><th>ناوی کارمەند</th><th>جۆر</th><th>نرخ</th><th>هۆکار</th><th>ڕێکەوت</th><th>کردار</th></tr>
+                </thead>
+                <tbody id="adjustmentsBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="adjustmentModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">زیادکردنی ڕێکخستن</h3>
+        <input type="hidden" id="editAdjustmentId">
+        <select id="adjustmentEmployee">
+            <option value="">-- هەڵبژاردنی کارمەند --</option>
+            <option value="ئەحمەد علی">ئەحمەد علی (1001)</option>
+            <option value="سارا محمد">سارا محمد (1002)</option>
+            <option value="کارزان حسێن">کارزان حسێن (1003)</option>
+        </select>
+        <select id="adjustmentType">
+            <option value="increase">➕ زیادکردن (Bonus / Promotion)</option>
+            <option value="decrease">➖ کەمکردن (Deduction / Penalty)</option>
+        </select>
+        <input type="number" id="adjustmentAmount" placeholder="نرخ (IQD یان %)" required>
+        <select id="adjustmentUnit">
+            <option value="fixed">بڕی دیاریکراو (IQD)</option>
+            <option value="percentage">ڕێژەیی (لەسەد)</option>
+        </select>
+        <input type="text" id="adjustmentReason" placeholder="هۆکار" required>
+        <input type="date" id="adjustmentDate" required>
+        <button class="save-btn" onclick="saveAdjustment()">💾 پاشەکەوتکردن</button>
+        <button class="close-modal" onclick="closeAdjustmentModal()">داخستن</button>
+    </div>
+</div>
+
+<script>
+    let adjustments = [];
+    
+    function loadAdjustments() {
+        adjustments = JSON.parse(localStorage.getItem('salaryAdjustments') || '[]');
+        displayAdjustments();
+    }
+    
+    function displayAdjustments() {
+        const tbody = document.getElementById('adjustmentsBody');
+        if (adjustments.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">هیچ ڕێکخستنێک نیە</td></tr>';
+            return;
+        }
+        tbody.innerHTML = adjustments.map((adj, idx) => `
+            <tr>
+                <td>${idx+1}</td>
+                <td>${adj.employee}</td>
+                <td style="color:${adj.type === 'increase' ? '#2e7d32' : '#d32f2f'}">${adj.type === 'increase' ? '➕ زیادکردن' : '➖ کەمکردن'}</td>
+                <td>${adj.amount.toLocaleString()} ${adj.unit === 'percentage' ? '%' : 'IQD'}</td>
+                <td>${adj.reason}</td>
+                <td>${adj.date}</td>
+                <td>
+                    <button class="edit-btn" onclick="editAdjustment(${adj.id})">✏️</button>
+                    <button class="delete-btn" onclick="deleteAdjustment(${adj.id})">🗑</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    function openAdjustmentModal() {
+        document.getElementById('modalTitle').innerText = 'زیادکردنی ڕێکخستن';
+        document.getElementById('editAdjustmentId').value = '';
+        document.getElementById('adjustmentEmployee').value = '';
+        document.getElementById('adjustmentType').value = 'increase';
+        document.getElementById('adjustmentAmount').value = '';
+        document.getElementById('adjustmentUnit').value = 'fixed';
+        document.getElementById('adjustmentReason').value = '';
+        document.getElementById('adjustmentDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('adjustmentModal').style.display = 'flex';
+    }
+    
+    function closeAdjustmentModal() {
+        document.getElementById('adjustmentModal').style.display = 'none';
+    }
+    
+    function editAdjustment(id) {
+        const adj = adjustments.find(a => a.id === id);
+        if (adj) {
+            document.getElementById('modalTitle').innerText = 'دەستکاری ڕێکخستن';
+            document.getElementById('editAdjustmentId').value = adj.id;
+            document.getElementById('adjustmentEmployee').value = adj.employee;
+            document.getElementById('adjustmentType').value = adj.type;
+            document.getElementById('adjustmentAmount').value = adj.amount;
+            document.getElementById('adjustmentUnit').value = adj.unit;
+            document.getElementById('adjustmentReason').value = adj.reason;
+            document.getElementById('adjustmentDate').value = adj.date;
+            document.getElementById('adjustmentModal').style.display = 'flex';
+        }
+    }
+    
+    function saveAdjustment() {
+        const id = document.getElementById('editAdjustmentId').value;
+        const adjustmentData = {
+            id: id ? parseInt(id) : Date.now(),
+            employee: document.getElementById('adjustmentEmployee').value,
+            type: document.getElementById('adjustmentType').value,
+            amount: parseFloat(document.getElementById('adjustmentAmount').value),
+            unit: document.getElementById('adjustmentUnit').value,
+            reason: document.getElementById('adjustmentReason').value,
+            date: document.getElementById('adjustmentDate').value,
+            createdAt: new Date().toISOString()
+        };
+        
+        if (!adjustmentData.employee || !adjustmentData.amount || !adjustmentData.reason || !adjustmentData.date) {
+            alert('تکایە هەموو خانەکان پڕ بکەوە!');
+            return;
+        }
+        
+        if (id) {
+            const index = adjustments.findIndex(a => a.id === parseInt(id));
+            if (index !== -1) adjustments[index] = adjustmentData;
+        } else {
+            adjustments.push(adjustmentData);
+        }
+        
+        localStorage.setItem('salaryAdjustments', JSON.stringify(adjustments));
+        closeAdjustmentModal();
+        displayAdjustments();
+        alert('✅ ڕێکخستن پاشەکەوت کرا!');
+    }
+    
+    function deleteAdjustment(id) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم ڕێکخستنە؟')) {
+            adjustments = adjustments.filter(a => a.id !== id);
+            localStorage.setItem('salaryAdjustments', JSON.stringify(adjustments));
+            displayAdjustments();
+            alert('ڕێکخستن سڕایەوە!');
+        }
+    }
+    
+    loadAdjustments();
+</script>
+</body>
+</html>
