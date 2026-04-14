@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پێناسەکردنی فەرمانەکانی مووچە - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .silver-box { background: #e8e8e8; border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .info-row { display: flex; margin-bottom: 15px; align-items: center; flex-wrap: wrap; }
+        .info-label { width: 160px; font-weight: 700; color: #2d4a7a; }
+        .info-value { flex: 1; }
+        .info-value input, .info-value select { width: 100%; max-width: 300px; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .salary-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .salary-table th, .salary-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .salary-table th { background: #2d4a7a; color: white; }
+        .add-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-bottom: 15px; }
+        .edit-btn { background: #ff9800; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; margin: 2px; }
+        .delete-btn { background: #d32f2f; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 25px; border-radius: 10px; width: 500px; max-width: 90%; }
+        .modal-content input, .modal-content select { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 پێناسەکردنی فەرمانەکانی مووچە (Salary Commands)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <button class="add-btn" onclick="openCommandModal()">➕ زیادکردنی فەرمانی نوێ</button>
+        
+        <div style="overflow-x: auto;">
+            <table class="salary-table" id="commandsTable">
+                <thead>
+                    <tr><th>#</th><th>ناوی فەرمان</th><th>جۆر</th><th>نرخ</th><th>یەکە</th><th>پەسەندکراوە</th><th>کردار</th></tr>
+                </thead>
+                <tbody id="commandsBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="commandModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">زیادکردنی فەرمان</h3>
+        <input type="hidden" id="editCommandId">
+        <input type="text" id="commandName" placeholder="ناوی فەرمان (مثال: خواردنەوە، گواستنەوە)" required>
+        <select id="commandType">
+            <option value="increase">زیادکردن (+) بۆ مووچە</option>
+            <option value="decrease">کەمکردن (-) لە مووچە</option>
+        </select>
+        <input type="number" id="commandAmount" placeholder="نرخ" required>
+        <select id="commandUnit">
+            <option value="fixed">بڕی دیاریکراو (IQD)</option>
+            <option value="percentage">ڕێژەیی (لەسەد)</option>
+        </select>
+        <select id="commandStatus">
+            <option value="active">چالاک</option>
+            <option value="inactive">ناچالاک</option>
+        </select>
+        <button class="save-btn" onclick="saveCommand()">💾 پاشەکەوتکردن</button>
+        <button class="close-modal" onclick="closeCommandModal()">داخستن</button>
+    </div>
+</div>
+
+<script>
+    let commands = [];
+    
+    function loadCommands() {
+        commands = JSON.parse(localStorage.getItem('salaryCommands') || '[]');
+        if (commands.length === 0) {
+            commands = [
+                { id: 1, name: 'خواردنەوە (Meal)', type: 'increase', amount: 50000, unit: 'fixed', status: 'active' },
+                { id: 2, name: 'گواستنەوە (Transport)', type: 'increase', amount: 100000, unit: 'fixed', status: 'active' },
+                { id: 3, name: 'باج (Tax)', type: 'decrease', amount: 5, unit: 'percentage', status: 'active' }
+            ];
+            localStorage.setItem('salaryCommands', JSON.stringify(commands));
+        }
+        displayCommands();
+    }
+    
+    function displayCommands() {
+        const tbody = document.getElementById('commandsBody');
+        tbody.innerHTML = commands.map((cmd, idx) => `
+            <tr>
+                <td>${idx+1}</td>
+                <td>${cmd.name}</td>
+                <td style="color:${cmd.type === 'increase' ? '#2e7d32' : '#d32f2f'}">${cmd.type === 'increase' ? '➕ زیادکردن' : '➖ کەمکردن'}</td>
+                <td>${cmd.amount.toLocaleString()} ${cmd.unit === 'percentage' ? '%' : 'IQD'}</td>
+                <td>${cmd.unit === 'percentage' ? 'لەسەد' : 'بڕی دیاریکراو'}</td>
+                <td style="color:${cmd.status === 'active' ? '#2e7d32' : '#999'}">${cmd.status === 'active' ? 'چالاک' : 'ناچالاک'}</td>
+                <td>
+                    <button class="edit-btn" onclick="editCommand(${cmd.id})">✏️</button>
+                    <button class="delete-btn" onclick="deleteCommand(${cmd.id})">🗑</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    function openCommandModal() {
+        document.getElementById('modalTitle').innerText = 'زیادکردنی فەرمان';
+        document.getElementById('editCommandId').value = '';
+        document.getElementById('commandName').value = '';
+        document.getElementById('commandType').value = 'increase';
+        document.getElementById('commandAmount').value = '';
+        document.getElementById('commandUnit').value = 'fixed';
+        document.getElementById('commandStatus').value = 'active';
+        document.getElementById('commandModal').style.display = 'flex';
+    }
+    
+    function closeCommandModal() {
+        document.getElementById('commandModal').style.display = 'none';
+    }
+    
+    function editCommand(id) {
+        const cmd = commands.find(c => c.id === id);
+        if (cmd) {
+            document.getElementById('modalTitle').innerText = 'دەستکاری فەرمان';
+            document.getElementById('editCommandId').value = cmd.id;
+            document.getElementById('commandName').value = cmd.name;
+            document.getElementById('commandType').value = cmd.type;
+            document.getElementById('commandAmount').value = cmd.amount;
+            document.getElementById('commandUnit').value = cmd.unit;
+            document.getElementById('commandStatus').value = cmd.status;
+            document.getElementById('commandModal').style.display = 'flex';
+        }
+    }
+    
+    function saveCommand() {
+        const id = document.getElementById('editCommandId').value;
+        const commandData = {
+            id: id ? parseInt(id) : Date.now(),
+            name: document.getElementById('commandName').value,
+            type: document.getElementById('commandType').value,
+            amount: parseFloat(document.getElementById('commandAmount').value),
+            unit: document.getElementById('commandUnit').value,
+            status: document.getElementById('commandStatus').value
+        };
+        
+        if (!commandData.name || !commandData.amount) {
+            alert('تکایە هەموو خانەکان پڕ بکەوە!');
+            return;
+        }
+        
+        if (id) {
+            const index = commands.findIndex(c => c.id === parseInt(id));
+            if (index !== -1) commands[index] = commandData;
+        } else {
+            commands.push(commandData);
+        }
+        
+        localStorage.setItem('salaryCommands', JSON.stringify(commands));
+        closeCommandModal();
+        displayCommands();
+        alert('✅ فەرمان پاشەکەوت کرا!');
+    }
+    
+    function deleteCommand(id) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم فەرمانە؟')) {
+            commands = commands.filter(c => c.id !== id);
+            localStorage.setItem('salaryCommands', JSON.stringify(commands));
+            displayCommands();
+            alert('فەرمان سڕایەوە!');
+        }
+    }
+    
+    loadCommands();
+</script>
+</body>
+</html>
