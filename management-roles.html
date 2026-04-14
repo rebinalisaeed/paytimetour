@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بەکارهێنەران - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .add-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
+        .user-table { width: 100%; border-collapse: collapse; }
+        .user-table th, .user-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .user-table th { background: #2d4a7a; color: white; }
+        .edit-btn { background: #ff9800; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; margin: 2px; }
+        .delete-btn { background: #d32f2f; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; margin: 2px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 25px; border-radius: 10px; width: 400px; max-width: 90%; }
+        .modal-content input, .modal-content select { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        .modal-btn { background: #2d4a7a; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .close-modal { background: #999; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>👥 بەڕێوەبردنی بەکارهێنەران (Users Management)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <button class="add-btn" onclick="openUserModal()">➕ زیادکردنی بەکارهێنەری نوێ</button>
+        
+        <div style="overflow-x: auto;">
+            <table class="user-table" id="userTable">
+                <thead><tr><th>#</th><th>ناوی بەکارهێنەر</th><th>ناوی تەواو</th><th>ئیمەیڵ</th><th>ڕۆڵ</th><th>دۆخ</th><th>کردار</th></tr></thead>
+                <tbody id="userTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="userModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">زیادکردنی بەکارهێنەر</h3>
+        <input type="hidden" id="editUserId">
+        <input type="text" id="username" placeholder="ناوی بەکارهێنەر" required>
+        <input type="text" id="fullname" placeholder="ناوی تەواو" required>
+        <input type="email" id="email" placeholder="ئیمەیڵ" required>
+        <input type="password" id="password" placeholder="وشەی نهێنی">
+        <select id="role">
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+            <option value="user">User</option>
+            <option value="viewer">Viewer</option>
+        </select>
+        <select id="status">
+            <option value="active">چالاک</option>
+            <option value="inactive">ناچالاک</option>
+        </select>
+        <button class="modal-btn" onclick="saveUser()">💾 پاشەکەوتکردن</button>
+        <button class="modal-btn close-modal" onclick="closeUserModal()">داخستن</button>
+    </div>
+</div>
+
+<script>
+    let users = [];
+    
+    function loadUsers() {
+        users = JSON.parse(localStorage.getItem('systemUsers') || '[]');
+        if (users.length === 0) {
+            users = [
+                { id: 1, username: 'admin', fullname: 'Administrator', email: 'admin@paytime.com', role: 'admin', status: 'active', password: 'admin123' },
+                { id: 2, username: 'manager1', fullname: 'سەرپەرشتیار', email: 'manager@paytime.com', role: 'manager', status: 'active', password: '123456' }
+            ];
+            localStorage.setItem('systemUsers', JSON.stringify(users));
+        }
+        displayUsers();
+    }
+    
+    function displayUsers() {
+        const tbody = document.getElementById('userTableBody');
+        tbody.innerHTML = users.map((user, idx) => `
+            <tr>
+                <td>${idx+1}</td>
+                <td>${user.username}</td>
+                <td>${user.fullname}</td>
+                <td>${user.email}</td>
+                <td>${user.role}</td>
+                <td style="color:${user.status === 'active' ? '#2e7d32' : '#d32f2f'}">${user.status === 'active' ? 'چالاک' : 'ناچالاک'}</td>
+                <td>
+                    <button class="edit-btn" onclick="editUser(${user.id})">✏️ دەستکاری</button>
+                    <button class="delete-btn" onclick="deleteUser(${user.id})">🗑 سڕینەوە</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    function openUserModal() {
+        document.getElementById('modalTitle').innerText = 'زیادکردنی بەکارهێنەر';
+        document.getElementById('editUserId').value = '';
+        document.getElementById('username').value = '';
+        document.getElementById('fullname').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('role').value = 'user';
+        document.getElementById('status').value = 'active';
+        document.getElementById('userModal').style.display = 'flex';
+    }
+    
+    function closeUserModal() {
+        document.getElementById('userModal').style.display = 'none';
+    }
+    
+    function editUser(id) {
+        const user = users.find(u => u.id === id);
+        if (user) {
+            document.getElementById('modalTitle').innerText = 'دەستکاری بەکارهێنەر';
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('username').value = user.username;
+            document.getElementById('fullname').value = user.fullname;
+            document.getElementById('email').value = user.email;
+            document.getElementById('password').value = '';
+            document.getElementById('role').value = user.role;
+            document.getElementById('status').value = user.status;
+            document.getElementById('userModal').style.display = 'flex';
+        }
+    }
+    
+    function saveUser() {
+        const id = document.getElementById('editUserId').value;
+        const userData = {
+            id: id ? parseInt(id) : Date.now(),
+            username: document.getElementById('username').value,
+            fullname: document.getElementById('fullname').value,
+            email: document.getElementById('email').value,
+            role: document.getElementById('role').value,
+            status: document.getElementById('status').value,
+            password: document.getElementById('password').value || 'default123'
+        };
+        
+        if (!userData.username || !userData.fullname || !userData.email) {
+            alert('تکایە هەموو خانە پێویستەکان پڕ بکەوە!');
+            return;
+        }
+        
+        if (id) {
+            const index = users.findIndex(u => u.id === parseInt(id));
+            if (index !== -1) users[index] = userData;
+        } else {
+            users.push(userData);
+        }
+        
+        localStorage.setItem('systemUsers', JSON.stringify(users));
+        closeUserModal();
+        displayUsers();
+        alert('✅ بەکارهێنەر پاشەکەوت کرا!');
+    }
+    
+    function deleteUser(id) {
+        if (confirm('دڵنیای لە سڕینەوەی ئەم بەکارهێنەرە؟')) {
+            users = users.filter(u => u.id !== id);
+            localStorage.setItem('systemUsers', JSON.stringify(users));
+            displayUsers();
+            alert('بەکارهێنەر سڕایەوە!');
+        }
+    }
+    
+    loadUsers();
+</script>
+</body>
+</html>
