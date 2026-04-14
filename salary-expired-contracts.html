@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیستی گرێبەستە بەسەرچووەکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .contract-table { width: 100%; border-collapse: collapse; }
+        .contract-table th, .contract-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .contract-table th { background: #2d4a7a; color: white; }
+        .renew-btn { background: #ff9800; color: white; border: none; padding: 4px 10px; border-radius: 3px; cursor: pointer; }
+        .expired { color: #d32f2f; font-weight: bold; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 لیستی گرێبەستە بەسەرچووەکان (Expired Contracts)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div style="overflow-x: auto;">
+            <table class="contract-table" id="expiredContractsTable">
+                <thead>
+                    <tr><th>#</th><th>ناوی کارمەند</th><th>جۆری گرێبەست</th><th>مووچە</th><th>ڕێکەوتی کۆتایی</th><th>دۆخ</th><th>کردار</th></tr>
+                </thead>
+                <tbody id="expiredContractsBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function loadExpiredContracts() {
+        const contracts = JSON.parse(localStorage.getItem('employeeContracts') || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        const expired = contracts.filter(c => c.endDate && c.endDate < today && c.status !== 'terminated');
+        
+        const tbody = document.getElementById('expiredContractsBody');
+        if (expired.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">هیچ گرێبەستێکی بەسەرچوو نیە</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = expired.map((contract, idx) => `
+            <tr>
+                <td>${idx+1}</td>
+                <td>${contract.employee}</td>
+                <td>${contract.type === 'permanent' ? 'دائمی' : contract.type === 'fixed' ? 'ماوەی دیاریکراو' : 'ماوەی تاقیکردنەوە'}</td>
+                <td>${parseInt(contract.salary).toLocaleString()} IQD</td>
+                <td class="expired">${contract.endDate}</td>
+                <td class="expired">بەسەرچوو</td>
+                <td><button class="renew-btn" onclick="renewContract(${contract.id})">🔄 نوێکردنەوە</button></td>
+            </tr>
+        `).join('');
+    }
+    
+    function renewContract(id) {
+        const contracts = JSON.parse(localStorage.getItem('employeeContracts') || '[]');
+        const index = contracts.findIndex(c => c.id === id);
+        if (index !== -1) {
+            const newEndDate = new Date(contracts[index].endDate);
+            newEndDate.setFullYear(newEndDate.getFullYear() + 1);
+            contracts[index].endDate = newEndDate.toISOString().split('T')[0];
+            contracts[index].status = 'active';
+            localStorage.setItem('employeeContracts', JSON.stringify(contracts));
+            loadExpiredContracts();
+            alert('✅ گرێبەست نوێ کرایەوە!');
+        }
+    }
+    
+    loadExpiredContracts();
+</script>
+</body>
+</html>
