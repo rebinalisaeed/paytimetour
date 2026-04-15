@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕاپۆرتی پاداشتەکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table th, .report-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .report-table th { background: #2d4a7a; color: white; }
+        .export-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🎁 ڕاپۆرتی پاداشتە تۆمارکراوەکان (Rewards Report)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="filters">
+            <input type="date" id="startDate">
+            <input type="date" id="endDate">
+            <input type="text" id="filterEmployee" placeholder="ناوی کارمەند">
+            <button class="export-btn" onclick="exportReport()">📎 Export to CSV</button>
+            <button onclick="loadReport()" style="background:#2d4a7a; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🔍 نمایش</button>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="report-table" id="reportTable">
+                <thead><tr><th>#</th><th>ڕێکەوت</th><th>ناوی کارمەند</th><th>جۆری پاداشت</th><th>نرخ (IQD)</th><th>هۆکار</th></tr></thead>
+                <tbody id="reportBody"></tbody>
+                <tfoot id="reportFooter"></tfoot>
+            </table>
+        </div>
+    </div>
+</div>
 
+<script>
+    function loadReport() {
+        let rewards = JSON.parse(localStorage.getItem('employeeRewards') || '[]');
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const filterEmployee = document.getElementById('filterEmployee').value.trim().toLowerCase();
+        
+        if (startDate) rewards = rewards.filter(r => r.date >= startDate);
+        if (endDate) rewards = rewards.filter(r => r.date <= endDate);
+        if (filterEmployee) rewards = rewards.filter(r => r.employee.toLowerCase().includes(filterEmployee));
+        
+        let totalAmount = 0;
+        
+        const tbody = document.getElementById('reportBody');
+        if (rewards.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">هیچ تۆمارێک نەدۆزرایەوە</td></tr>';
+            document.getElementById('reportFooter').innerHTML = '';
+            return;
+        }
+        
+        tbody.innerHTML = rewards.map((r, idx) => {
+            totalAmount += r.amount;
+            return `<tr><td>${idx+1}</td><td>${r.date}</td><td>${r.employee}</td><td>${r.rewardType}</td><td>${r.amount.toLocaleString()}</td><td>${r.reason || '—'}</td></tr>`;
+        }).join('');
+        
+        document.getElementById('reportFooter').innerHTML = `<tr class="total-row"><td colspan="4"><strong>کۆی گشتی</strong></td><td><strong>${totalAmount.toLocaleString()} IQD</strong></td><td></td></tr>`;
+    }
+    
+    function exportReport() {
+        const rewards = JSON.parse(localStorage.getItem('employeeRewards') || '[]');
+        let csv = "ژمارە,ڕێکەوت,ناوی کارمەند,جۆری پاداشت,نرخ,هۆکار\n";
+        rewards.forEach((r, idx) => {
+            csv += `${idx+1},${r.date},${r.employee},${r.rewardType},${r.amount},${r.reason || ''}\n`;
+        });
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `rewards_${new Date().toISOString().slice(0,19)}.csv`;
+        link.click();
+        alert('ڕاپۆرت Export کرا!');
+    }
+    
+    if (!localStorage.getItem('employeeRewards')) {
+        localStorage.setItem('employeeRewards', JSON.stringify([]));
+    }
+    
+    loadReport();
+</script>
+</body>
+</html>
