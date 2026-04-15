@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دەرچوون - Pay Time Tour</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            background: linear-gradient(135deg, #1a3060 0%, #2d4a7a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logout-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .logout-card h2 { color: #2d4a7a; margin-bottom: 15px; }
+        .logout-card p { color: #666; margin-bottom: 25px; }
+        .login-btn {
+            background: #2d4a7a;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        .login-btn:hover { background: #1a3060; }
+    </style>
+</head>
+<body>
+<div class="logout-card">
+    <h2>👋 دەرچوون لە سیستەم</h2>
+    <p>ئێستا لە سیستەمەکە دەرچوویت. دەتوانیت دووبارە بچیتە ژوورەوە.</p>
+    <button class="login-btn" onclick="window.location.href='login.html'">🔓 چوونە ژوورەوە</button>
+</div>
+
+<script>
+    // لابردنی زانیاری بەکارهێنەری ئێستا
+    localStorage.removeItem('currentUser');
+    
+    // زیادکردنی لۆگی دەرچوون
+    let logs = JSON.parse(localStorage.getItem('auditLogs') || '[]');
+    logs.unshift({
+        id: Date.now(),
+        timestamp: new Date().toLocaleString(),
+        user: 'System',
+        action: 'logout',
+        section: 'سیستەم',
+        details: 'دەرچوون لە سیستەم'
+    });
+    localStorage.setItem('auditLogs', JSON.stringify(logs));
+</script>
+</body>
+</html>
