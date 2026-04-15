@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چوونە ژوورەوە - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            background: linear-gradient(135deg, #1a3060 0%, #2d4a7a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            background: #2d4a7a;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .login-body {
+            padding: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #2d4a7a;
+            box-shadow: 0 0 0 3px rgba(45, 74, 122, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #1b5e20;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 13px;
+            display: none;
+            border-right: 3px solid #d32f2f;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .remember-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .remember-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: #2d4a7a;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f5f5f5;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .demo-info {
+            background: #e8e8e8;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .demo-info h4 {
+            color: #2d4a7a;
+            margin-bottom: 10px;
+        }
+
+        .demo-info p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .demo-info code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>⏰ Pay Time Tour</h1>
+            <p>سیستەمی بەڕێوەبردنی دەوام و مووچە</p>
+        </div>
+        
+        <div class="login-body">
+            <div class="error-message" id="errorMessage">
+                ⚠️ ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!
+            </div>
+            
+            <div class="input-group">
+                <label>👤 ناوی بەکارهێنەر</label>
+                <input type="text" id="username" placeholder="ناوی بەکارهێنەر" autocomplete="off">
+            </div>
+            
+            <div class="input-group">
+                <label>🔒 وشەی نهێنی</label>
+                <input type="password" id="password" placeholder="وشەی نهێنی" onkeypress="if(event.key === 'Enter') login()">
+            </div>
+            
+            <div class="remember-group">
+                <label>
+                    <input type="checkbox" id="rememberMe"> لەبیرم مەکە
+                </label>
+                <a href="#" class="forgot-link" onclick="forgotPassword(); return false;">وشەی نهێنی لەبیرت چووە؟</a>
+            </div>
+            
+            <button class="login-btn" onclick="login()">🔓 چوونە ژوورەوە</button>
+        </div>
+        
+        <div class="footer">
+            &copy; 2026 Pay Time Tour - هەموو مافەکان پارێزراوە
+        </div>
+    </div>
+    
+    <div class="demo-info">
+        <h4>📋 بۆ تاقیکردنەوە:</h4>
+        <p>👤 ناوی بەکارهێنەر: <code>admin</code></p>
+        <p>🔒 وشەی نهێنی: <code>admin123</code></p>
+        <p>👤 یان: <code>user</code> / <code>user123</code></p>
+    </div>
+</div>
+
+<script>
+    // بەکارهێنەرە دیفۆڵتەکان
+    const defaultUsers = [
+        { username: 'admin', password: 'admin123', role: 'admin', name: 'Administrator' },
+        { username: 'user', password: 'user123', role: 'user', name: 'کارمەند' }
+    ];
+    
+    // بارکردنی بەکارهێنەرەکان لە localStorage
+    function loadUsers() {
+        let users = JSON.parse(localStorage.getItem('systemUsers'));
+        if (!users || users.length === 0) {
+            localStorage.setItem('systemUsers', JSON.stringify(defaultUsers));
+            return defaultUsers;
+        }
+        return users;
+    }
+    
+    // پاشەکەوتکردنی بەکارهێنەری ئێستا
+    function setCurrentUser(user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+    }
+    
+    // چوونە ژوورەوە
+    function login() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+        const errorMsg = document.getElementById('errorMessage');
+        
+        if (!username || !password) {
+            errorMsg.textContent = '⚠️ تکایە ناوی بەکارهێنەر و وشەی نهێنی پڕ بکەوە!';
+            errorMsg.classList.add('show');
+            return;
+        }
+        
+        const users = loadUsers();
+        const user = users.find(u => u.username === username && u.password === password);
+        
+        if (user) {
+            // پاشەکەوتکردنی زانیاری بەکارهێنەر
+            setCurrentUser({
+                username: user.username,
+                role: user.role,
+                name: user.name,
+                loginTime: new Date().toISOString()
+            });
+            
+            // ئەگەر "لەبیرم مەکە" هەڵبژێردرابێت
+            if (rememberMe) {
+                localStorage.setItem('rememberedUser', username);
+            } else {
+                localStorage.removeItem('rememberedUser');
+            }
+            
+            // زیادکردنی لۆگ
+            addLoginLog(user.username);
+            
+            // ڕەوانەکردن بۆ پەڕەی سەرەکی
+            window.location.href = 'index.html';
+        } else {
+            errorMsg.textContent = '⚠️ ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە!';
+            errorMsg.classList.add('show');
+            
+            // تۆمارکردنی هەوڵی هەڵە
+            recordFailedAttempt(username);
+        }
+    }
+    
+    // تۆمارکردنی هەوڵی هەڵە
+    function recordFailedAttempt(username) {
+        let failedAttempts = JSON.parse(localStorage.getItem('failedLoginAttempts') || '[]');
+        failedAttempts.push({
+            username: username,
+            time: new Date().toLocaleString(),
+            ip: 'local'
+        });
+        // تەنها 50 دوایین تۆمار بهێڵەوە
+        if (failedAttempts.length > 50) failedAttempts.shift();
+        localStorage.setItem('failedLoginAttempts', JSON.stringify(failedAttempts));
+    }
+    
+    // زیادکردنی لۆگی چوونە ژوورەوە
+    function addLoginLog(username) {
+        let logs = JSON.parse(localStorage.getItem('auditLogs') || '[]');
+        logs.unshift({
+            id: Date.now(),
+            timestamp: new Date().toLocaleString(),
+            user: username,
+            action: 'login',
+            section: 'سیستەم',
+            details: 'چوونە ناو سیستەم'
+        });
+        if (logs.length > 500) logs.pop();
+        localStorage.setItem('auditLogs', JSON.stringify(logs));
+    }
+    
+    // وشەی نهێنی لەبیرچوو
+    function forgotPassword() {
+        alert('تکایە پەیوەندی بە بەڕێوەبەری سیستەمەوە بکە بۆ گێڕانەوەی وشەی نهێنی.');
+    }
+    
+    // بارکردنی ناوی بەکارهێنەری یادکراو
+    function loadRememberedUser() {
+        const remembered = localStorage.getItem('rememberedUser');
+        if (remembered) {
+            document.getElementById('username').value = remembered;
+            document.getElementById('rememberMe').checked = true;
+        }
+    }
+    
+    // پشکنینی ئەگەر بەکارهێنەر پێشتر چووبێتە ژوورەوە
+    function checkAlreadyLoggedIn() {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser && window.location.pathname.includes('login.html')) {
+            // ئەگەر لەسەر پەڕەی چوونە ژوورەوە بوو و بەکارهێنەر چووبووە ژوورەوە
+            window.location.href = 'index.html';
+        }
+    }
+    
+    loadRememberedUser();
+    checkAlreadyLoggedIn();
+</script>
+</body>
+</html>
