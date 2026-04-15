@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕاپۆرتی فەرمانەکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input, .filters select { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table th, .report-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .report-table th { background: #2d4a7a; color: white; }
+        .export-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 ڕاپۆرتی فەرمانە تۆمارکراوەکان (Commands Report)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="filters">
+            <select id="filterType">
+                <option value="all">هەموو فەرمانەکان</option>
+                <option value="increase">تەنها زیادکردن</option>
+                <option value="decrease">تەنها کەمکردن</option>
+            </select>
+            <select id="filterStatus">
+                <option value="all">هەموو دۆخەکان</option>
+                <option value="active">چالاک</option>
+                <option value="inactive">ناچالاک</option>
+            </select>
+            <button class="export-btn" onclick="exportReport()">📎 Export to CSV</button>
+            <button onclick="loadReport()" style="background:#2d4a7a; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🔍 نمایش</button>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="report-table" id="reportTable">
+                <thead><tr><th>#</th><th>ناوی فەرمان</th><th>جۆر</th><th>نرخ</th><th>یەکە</th><th>دۆخ</th></tr></thead>
+                <tbody id="reportBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
+<script>
+    function loadReport() {
+        let commands = JSON.parse(localStorage.getItem('salaryCommands') || '[]');
+        const filterType = document.getElementById('filterType').value;
+        const filterStatus = document.getElementById('filterStatus').value;
+        
+        if (filterType !== 'all') commands = commands.filter(c => c.type === filterType);
+        if (filterStatus !== 'all') commands = commands.filter(c => c.status === filterStatus);
+        
+        const tbody = document.getElementById('reportBody');
+        if (commands.length === 0) {
+            tbody.innerHTML = '<td><td colspan="6" style="text-align:center;">هیچ فەرمانێک نەدۆزرایەوە</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = commands.map((c, idx) => `<tr>
+            <td>${idx+1}</td>
+            <td>${c.name}</td>
+            <td style="color:${c.type === 'increase' ? '#2e7d32' : '#d32f2f'}">${c.type === 'increase' ? '➕ زیادکردن' : '➖ کەمکردن'}</td>
+            <td>${c.amount.toLocaleString()}</td>
+            <td>${c.unit === 'percentage' ? '%' : 'IQD'}</td>
+            <td style="color:${c.status === 'active' ? '#2e7d32' : '#999'}">${c.status === 'active' ? 'چالاک' : 'ناچالاک'}</td>
+        </tr>`);
+    }
+    
+    function exportReport() {
+        const commands = JSON.parse(localStorage.getItem('salaryCommands') || '[]');
+        let csv = "ژمارە,ناوی فەرمان,جۆر,نرخ,یەکە,دۆخ\n";
+        commands.forEach((c, idx) => {
+            csv += `${idx+1},${c.name},${c.type === 'increase' ? 'زیادکردن' : 'کەمکردن'},${c.amount},${c.unit === 'percentage' ? '%' : 'IQD'},${c.status === 'active' ? 'چالاک' : 'ناچالاک'}\n`;
+        });
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `commands_${new Date().toISOString().slice(0,19)}.csv`;
+        link.click();
+        alert('ڕاپۆرت Export کرا!');
+    }
+    
+    loadReport();
+</script>
+</body>
+</html>
