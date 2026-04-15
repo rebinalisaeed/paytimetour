@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕاپۆرتی دەرچوونە فەرمییەکان - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table th, .report-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .report-table th { background: #2d4a7a; color: white; }
+        .export-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📤 ڕاپۆرتی دەرچوونە فەرمییە ڕۆژانەکان (Official Exit Report)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="filters">
+            <input type="date" id="startDate">
+            <input type="date" id="endDate">
+            <input type="text" id="filterEmployee" placeholder="ناوی کارمەند">
+            <button class="export-btn" onclick="exportReport()">📎 Export to CSV</button>
+            <button onclick="loadReport()" style="background:#2d4a7a; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🔍 نمایش</button>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="report-table" id="reportTable">
+                <thead><tr><th>#</th><th>ڕێکەوت</th><th>ناوی کارمەند</th><th>کۆد</th><th>جۆری دەرچوون</th><th>کاتی دەستپێک</th><th>کاتی کۆتایی</th><th>ماوە</th><th>هۆکار</th></tr></thead>
+                <tbody id="reportBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
+<script>
+    function loadReport() {
+        let exits = JSON.parse(localStorage.getItem('officialExits') || '[]');
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const filterEmployee = document.getElementById('filterEmployee').value.trim().toLowerCase();
+        
+        if (startDate) exits = exits.filter(e => e.date >= startDate);
+        if (endDate) exits = exits.filter(e => e.date <= endDate);
+        if (filterEmployee) exits = exits.filter(e => e.employee.toLowerCase().includes(filterEmployee));
+        
+        const tbody = document.getElementById('reportBody');
+        if (exits.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;">هیچ تۆمارێک نەدۆزرایەوە</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = exits.map((e, idx) => `<tr>
+            <td>${idx+1}</td><td>${e.date}</td><td>${e.employee}</td><td>${e.employeeCode}‎
+            <td>${e.exitType}‎<td>${e.startTime || '—'}‎<td>${e.endTime || '—'}‎<td>${e.duration || '—'}‎<td>${e.reason || '—'}‎
+        </tr>`).join('');
+    }
+    
+    function exportReport() {
+        const exits = JSON.parse(localStorage.getItem('officialExits') || '[]');
+        let csv = "ژمارە,ڕێکەوت,ناوی کارمەند,کۆد,جۆری دەرچوون,کاتی دەستپێک,کاتی کۆتایی,ماوە,هۆکار\n";
+        exits.forEach((e, idx) => {
+            csv += `${idx+1},${e.date},${e.employee},${e.employeeCode},${e.exitType},${e.startTime || ''},${e.endTime || ''},${e.duration || ''},${e.reason || ''}\n`;
+        });
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `official_exit_${new Date().toISOString().slice(0,19)}.csv`;
+        link.click();
+        alert('ڕاپۆرت Export کرا!');
+    }
+    
+    if (!localStorage.getItem('officialExits')) {
+        localStorage.setItem('officialExits', JSON.stringify([]));
+    }
+    
+    loadReport();
+</script>
+</body>
+</html>
