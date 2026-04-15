@@ -1,1 +1,108 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕاپۆرتی گشتی - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: #e8e8e8; border-radius: 10px; padding: 20px; text-align: center; }
+        .stat-card h3 { color: #2d4a7a; margin-bottom: 10px; font-size: 14px; border: none; }
+        .stat-number { font-size: 32px; font-weight: bold; color: #2e7d32; }
+        .export-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📊 ڕاپۆرتی گشتی (General Report)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <button class="export-btn" onclick="exportAllData()">📎 Export هەموو داتاکان (CSV)</button>
+        
+        <div class="stats-grid">
+            <div class="stat-card"><h3>👥 کۆی کارمەندان</h3><div class="stat-number" id="totalEmployees">0</div></div>
+            <div class="stat-card"><h3>✅ تۆمارەکانی هاتن/دەرچوون</h3><div class="stat-number" id="totalAttendance">0</div></div>
+            <div class="stat-card"><h3>⏰ دواکەوتنەکان</h3><div class="stat-number" id="totalLate">0</div></div>
+            <div class="stat-card"><h3>🚫 غیابەکان</h3><div class="stat-number" id="totalAbsence">0</div></div>
+            <div class="stat-card"><h3>⏱️ Overtime</h3><div class="stat-number" id="totalOT">0</div></div>
+            <div class="stat-card"><h3>📋 مۆڵەتەکان</h3><div class="stat-number" id="totalLeave">0</div></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 پوختەی دواکەوتنەکان بەپێی کارمەند</h3>
+            <div id="lateSummary"></div>
+        </div>
+        
+        <div class="silver-box">
+            <h3>📋 پوختەی غیابەکان بەپێی کارمەند</h3>
+            <div id="absenceSummary"></div>
+        </div>
+    </div>
+</div>
 
+<script>
+    function loadGeneralReport() {
+        const employees = JSON.parse(localStorage.getItem('employeesData')) || 
+            [{ name: 'ئەحمەد علی', code: '1001' }, { name: 'سارا محمد', code: '1002' }, { name: 'کارزان حسێن', code: '1003' }];
+        
+        const attendance = JSON.parse(localStorage.getItem('attendanceRecords') || '[]');
+        const late = JSON.parse(localStorage.getItem('lateRecords') || '[]');
+        const absence = JSON.parse(localStorage.getItem('absenceRecords') || '[]');
+        const ot = JSON.parse(localStorage.getItem('otRecords') || '[]');
+        const leave = JSON.parse(localStorage.getItem('leaveRequests') || '[]');
+        
+        document.getElementById('totalEmployees').innerText = employees.length;
+        document.getElementById('totalAttendance').innerText = attendance.length;
+        document.getElementById('totalLate').innerText = late.length;
+        document.getElementById('totalAbsence').innerText = absence.length;
+        document.getElementById('totalOT').innerText = ot.length;
+        document.getElementById('totalLeave').innerText = leave.length;
+        
+        // Late summary by employee
+        const lateByEmployee = {};
+        late.forEach(l => { lateByEmployee[l.employee] = (lateByEmployee[l.employee] || 0) + 1; });
+        document.getElementById('lateSummary').innerHTML = Object.entries(lateByEmployee).length ? 
+            `<table class="report-table"><thead><tr><th>ناوی کارمەند</th><th>ژمارەی دواکەوتن</th></tr></thead><tbody>${Object.entries(lateByEmployee).map(([name, count]) => `<tr><td>${name}</td><td>${count}</td></tr>`).join('')}</tbody></table>` :
+            '<p style="color:#999;">هیچ دواکەوتنێک نیە</p>';
+        
+        // Absence summary by employee
+        const absenceByEmployee = {};
+        absence.forEach(a => { absenceByEmployee[a.employee] = (absenceByEmployee[a.employee] || 0) + a.days; });
+        document.getElementById('absenceSummary').innerHTML = Object.entries(absenceByEmployee).length ?
+            `<table class="report-table"><thead><tr><th>ناوی کارمەند</th><th>کۆی ڕۆژەکانی غیاب</th></tr></thead><tbody>${Object.entries(absenceByEmployee).map(([name, days]) => `<tr><td>${name}</td><td>${days}</td></tr>`).join('')}</tbody></table>` :
+            '<p style="color:#999;">هیچ غیابێک نیە</p>';
+    }
+    
+    function exportAllData() {
+        const data = {
+            attendance: JSON.parse(localStorage.getItem('attendanceRecords') || '[]'),
+            late: JSON.parse(localStorage.getItem('lateRecords') || '[]'),
+            absence: JSON.parse(localStorage.getItem('absenceRecords') || '[]'),
+            ot: JSON.parse(localStorage.getItem('otRecords') || '[]'),
+            leave: JSON.parse(localStorage.getItem('leaveRequests') || '[]')
+        };
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `general_report_${new Date().toISOString().slice(0,19)}.json`;
+        link.click();
+        alert('هەموو داتاکان Export کرا!');
+    }
+    
+    loadGeneralReport();
+</script>
+</body>
+</html>
