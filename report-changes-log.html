@@ -1,1 +1,118 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیستی گۆڕانکاری لە هاتن و چوونەکاندا - Pay Time Tour</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Noto Sans Arabic', sans-serif; background: #dce8f8; padding: 20px; direction: rtl; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: #2d4a7a; color: white; padding: 15px 20px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 20px; }
+        .back-btn { background: #d32f2f; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; text-decoration: none; }
+        .back-btn:hover { background: #b71c1c; }
+        .content { background: white; padding: 25px; border-radius: 0 0 10px 10px; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filters input, .filters select { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table th, .report-table td { border: 1px solid #ddd; padding: 10px; text-align: center; font-size: 12px; }
+        .report-table th { background: #2d4a7a; color: white; }
+        .export-btn { background: #2e7d32; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; }
+        .create { color: #2e7d32; }
+        .update { color: #ff9800; }
+        .delete { color: #d32f2f; }
+        h3 { color: #2d4a7a; margin-bottom: 15px; border-right: 4px solid #2d4a7a; padding-right: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📝 لیستی گۆڕانکاری لە هاتن و چوونەکاندا (Changes Log)</h1>
+        <a href="index.html" class="back-btn">◀ گەڕانەوە بۆ سەرەکی</a>
+    </div>
+    <div class="content">
+        <div class="filters">
+            <input type="date" id="startDate">
+            <input type="date" id="endDate">
+            <input type="text" id="filterUser" placeholder="بەکارهێنەر">
+            <select id="filterAction">
+                <option value="all">هەموو کردارەکان</option>
+                <option value="create">دروستکردن</option>
+                <option value="update">گۆڕانکاری</option>
+                <option value="delete">سڕینەوە</option>
+            </select>
+            <button class="export-btn" onclick="exportReport()">📎 Export to CSV</button>
+            <button onclick="loadReport()" style="background:#2d4a7a; color:white; border:none; padding:8px 16px; border-radius:5px; cursor:pointer;">🔍 نمایش</button>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="report-table" id="reportTable">
+                <thead><tr><th>#</th><th>کات</th><th>بەکارهێنەر</th><th>کردار</th><th>بەش</th><th>وردەکاری</th></tr></thead>
+                <tbody id="reportBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
+<script>
+    function loadReport() {
+        let logs = JSON.parse(localStorage.getItem('auditLogs') || '[]');
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const filterUser = document.getElementById('filterUser').value.trim().toLowerCase();
+        const filterAction = document.getElementById('filterAction').value;
+        
+        if (startDate) logs = logs.filter(l => l.timestamp.split(' ')[0] >= startDate);
+        if (endDate) logs = logs.filter(l => l.timestamp.split(' ')[0] <= endDate);
+        if (filterUser) logs = logs.filter(l => l.user.toLowerCase().includes(filterUser));
+        if (filterAction !== 'all') logs = logs.filter(l => l.action === filterAction);
+        
+        logs.sort((a, b) => b.id - a.id);
+        
+        const tbody = document.getElementById('reportBody');
+        if (logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">هیچ تۆمارێک نەدۆزرایەوە</td></tr>';
+            return;
+        }
+        
+        let actionClass = '';
+        tbody.innerHTML = logs.map((l, idx) => {
+            if (l.action === 'create') actionClass = 'create';
+            else if (l.action === 'update') actionClass = 'update';
+            else if (l.action === 'delete') actionClass = 'delete';
+            else actionClass = '';
+            return `<tr>
+                <td>${idx+1}</td><td>${l.timestamp}</td><td>${l.user}</td>
+                <td class="${actionClass}">${l.action === 'create' ? '➕ دروستکردن' : l.action === 'update' ? '✏️ گۆڕانکاری' : l.action === 'delete' ? '🗑 سڕینەوە' : l.action}</td>
+                <td>${l.section}</td>
+                <td>${l.details}</td>
+            </tr>`;
+        }).join('');
+    }
+    
+    function exportReport() {
+        const logs = JSON.parse(localStorage.getItem('auditLogs') || '[]');
+        let csv = "ژمارە,کات,بەکارهێنەر,کردار,بەش,وردەکاری\n";
+        logs.forEach((l, idx) => {
+            csv += `${idx+1},${l.timestamp},${l.user},${l.action},${l.section},${l.details}\n`;
+        });
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `changes_log_${new Date().toISOString().slice(0,19)}.csv`;
+        link.click();
+        alert('ڕاپۆرت Export کرا!');
+    }
+    
+    if (!localStorage.getItem('auditLogs')) {
+        localStorage.setItem('auditLogs', JSON.stringify([
+            { id: 1, timestamp: new Date().toLocaleString(), user: 'Admin', action: 'create', section: 'سیستەم', details: 'دروستکردنی ڕاپۆرت' }
+        ]));
+    }
+    
+    loadReport();
+</script>
+</body>
+</html>
